@@ -1,0 +1,194 @@
+.eventListContainer {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: linear-gradient(135deg, #e0f7da 25%, #daf1e0 75%);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sortButton,
+.filterButton {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.sortButton:hover,
+.filterButton:hover {
+  background-color: #45a049;
+}
+
+.sortButton span {
+  margin-left: 10px;
+}
+
+.eventsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.eventCard {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: calc(33.333% - 20px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.eventCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.eventImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 2px solid #4caf50;
+}
+
+.eventDetails {
+  padding: 15px;
+}
+
+.eventCategory {
+  color: #4caf50;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.eventTitle {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.eventDate,
+.eventLocation {
+  color: #777;
+  font-size: 14px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  width: 80%;
+  max-width: 500px;
+}
+
+.modal-header {
+  padding: 10px;
+  cursor: grab;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header-text {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-button {
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.modalImage {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+
+.modalDetails {
+  margin-bottom: 20px;
+  text-align: left;
+  width: 100%;
+}
+
+.modalDetails h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.modalDetails p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.modalMap {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+.paginationControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.paginationControls button {
+  margin: 0 10px;
+  padding: 5px 10px;
+}
+
+.paginationControls span {
+  margin: 0 10px;
+  font-size: 1.2em;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.filterLabel {
+  margin-right: 5px;
+  font-weight: bold;
+}

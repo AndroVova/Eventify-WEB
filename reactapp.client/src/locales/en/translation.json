@@ -1,0 +1,122 @@
+{
+  "name": "Name",
+  "username": "Username",
+  "password": "Password",
+  "submit": "Submit",
+  "login": "Log in",
+
+  "profile": "Profile",
+  "workers": "Workers",
+
+
+  "log_out": "Log out",
+
+  "city": "City",
+  "address": "Address",
+  "description": "Description",
+  "create": "Create",
+
+  "age": "Age",
+  "email": "Email",
+  "birth_date": "Birth date",
+  "repeat_password": "Repeat password",
+  "sign_up": "Sign up",
+
+  "old_password": "Old password",
+  "new_password": "New password",
+  "repeat_new_password": "Repeat new password",
+  "reset_password": "Reset password",
+
+  "change": "Change",
+
+  "update": "Update",
+
+  "id": "Id",
+  "create_at": "created at",
+  "boarding_date_less": "boarding date",
+  "device_less": "device",
+  "update_at": "update at",
+
+  "create_worker": "Create worker",
+  "worker": "Worker",
+
+  "get_data": "Get data",
+
+  "days": "Days",
+  "temperature_less": "temperature",
+
+  "create_at_upper": "Created at",
+
+  "help_label": "Support data",
+  "phone_number": "Phone number",
+  "support": "Support",
+
+  "locale": "en-GB",
+
+  "successful_lessons": "Successful lessons",
+  "certificates": "Certificates",
+  "date": "Date",
+  "number_of_successful_lessons_to_get": "Number of Successful Lessons to get",
+  "max_depth": "Max Depth",
+  "completed": "Completed",
+  "yes": "Yes",
+  "no": "No",
+  "statistics": "Statistics",
+
+  "lessons": "Lessons",
+  "admin": "Admin",
+  "users": "Users",
+  "clubs": "Dive Clubs",
+  "certs": "Certificates",
+  "sensors": "Sensors",
+
+  "place_of_residence": "Place of Residence",
+  "dive_club": "Dive Club",
+
+  "delete": "Delete",
+  "create_user": "Create User",
+
+  "country": "Country",
+  "create_club": "Create Club",
+  "update_club": "Update Club",
+
+  "completion": "Completion",
+  "complete": "Completed",
+  "not_completed": "Not Completed",
+  "user": "User",
+  "instructor": "Instructor",
+  "create_cert": "Create Certificate",
+  "update_cert": "Update Certificate",
+
+  "max_heart_rate": "Max heart rate",
+  "max_time": "Max Time",
+  "create_sensor": "Create Sensor",
+  "update_sensor": "Update Sensor",
+
+  "select_intructor": "Select Intructor",
+  "select_user": "Select User",
+  "select_club": "Select Club",
+
+  "create_lesson": "Create Lesson",
+  "heartRate": "Heart Rate",
+  "depth": "Depth",
+  "time": "Time",
+  "All": "All",
+  "Completed": "Completed",
+  "Incomplete": "Incomplete",
+  "Search by name": "Search by name",
+  "Add New Lesson": "Add New Lesson",
+  "Starts at": "Starts at",
+  "Duration": "Duration",
+  "duration": "Duration",
+  "task": "Task",
+  "min": "min",
+  "Status": "Status",
+  "Go to lesson": "Go to lesson",
+  "no_data_certificates":"User hasn`t got any completed certificate",
+  "no_data_statistics":"There is no data about lessons statisctics",
+  "back": "Back",
+  "Change Profile Image": "Change Profile Image",
+  "home_message" : "DiveLicencePro is a software system designed to automate the process of obtaining diving licenses. On the homepage of the website, you can find information about the system and its functionalities. You can register or log in to access the main features. DiveLicencePro enables you to acquire diving certificates by completing practical tasks and receiving training recommendations for safety. The user-friendly and intuitive interface of the system allows you to efficiently manage your data and track your progress in diving.",
+  "lesson_test" : "Lesson test"
+}

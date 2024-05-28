@@ -1,0 +1,15 @@
+.btn{
+    background-color: var(--main-color);
+    color: var(--main-light-background-color);
+    outline: none;
+    border: none;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 10px;
+    transition: .3s;
+}
+
+.btn:hover{
+    background-color: var(--main-some-light-color);
+    transition: .3s;
+}

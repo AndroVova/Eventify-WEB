@@ -1,0 +1,45 @@
+.Center {
+    text-align: center;
+  }
+  
+  .ShowText {
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+  }
+
+  .Center h1 {
+    font-size: 90px;
+  }
+  
+  .Center p {
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+    text-align: justify;
+  text-justify: inter-word;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fade-in {
+    opacity: 0;
+    animation: fade-in 2s forwards;
+  }
+  
+  .show-text {
+    animation-delay: 1s; /* Adjust this value as needed */
+  }
+
+  .text-box{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width:65%
+  }
