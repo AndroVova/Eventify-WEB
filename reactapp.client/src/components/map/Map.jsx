@@ -85,7 +85,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         }
       );
     }
-  }, [map]);
+  }, [map, user.image]);
 
   useEffect(() => {
     if (isLoaded && map && window.google && markersData) {
