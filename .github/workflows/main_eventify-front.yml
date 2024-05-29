@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: node-app
-          path: ${{ github.workspace }}
+          path: ${{ github.workspace }}/reactapp.client
 
   deploy:
     runs-on: ubuntu-latest
