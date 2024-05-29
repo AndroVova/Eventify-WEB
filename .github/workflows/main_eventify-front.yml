@@ -30,8 +30,8 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: build
-          path: build/
+          name: node-app
+          path: reactapp.client/build/
 
   deploy:
     runs-on: ubuntu-latest
