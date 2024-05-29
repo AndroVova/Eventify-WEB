@@ -47,7 +47,6 @@ const App = () => {
     return () => clearInterval(interval);
   }, [handleAuth]);
 
-
   return (
     <BrowserRouter>
       <Routes>
@@ -79,7 +78,15 @@ const App = () => {
                 }
               />
               <Route path="chat" element={<p>chat</p>} />
-              <Route path="profile" element={<ProfilePage></ProfilePage>} />
+              <Route
+                path="profile"
+                element={
+                  <ProfilePage
+                    eventsData={eventsData}
+                    setEventsData={setEventsData}
+                  ></ProfilePage>
+                }
+              />
               <Route path="*" element={<Navigate to="/map" />} />
             </Route>
             <Route path="*" element={<Navigate to="/map" />} />

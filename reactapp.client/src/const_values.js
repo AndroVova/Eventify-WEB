@@ -12,7 +12,7 @@ export const events = [
       "Jazz Night is a musical event featuring live performances by renowned jazz artists. The evening promises an enchanting blend of classic and contemporary jazz tunes in a cozy, intimate setting. Attendees will have the opportunity to enjoy a variety of jazz styles, from smooth and soulful melodies to upbeat and energetic rhythms.\n\nHighlights:\n- Live performances by top jazz musicians.\n- Special guest appearances.\n- A diverse selection of jazz genres.\n\nLocation Details:\nThe event will be held at the Jazz Club, a well-known venue famous for its excellent acoustics and comfortable seating. The club offers a perfect ambiance for enjoying live jazz music, with its dim lighting and stylish decor.\n\nVisitor Information:\n- Opening Hours: 7:00 PM - 10:00 PM\n- Admission: $30 for adults, $20 for students and seniors, free for children under 12.\n- Tickets can be purchased online or at the venue.\n- Refreshments and light snacks available at the club.\n\nWhether you are a jazz aficionado or a casual listener, Jazz Night offers a memorable experience filled with delightful music and a vibrant atmosphere.",
     position: { lat: 50.4501, lng: 30.5234 },
     likes: 120,
-    isLiked: false,
+    isLiked: true,
   },
   {
     id: 123,
@@ -27,11 +27,11 @@ export const events = [
       "The Art Exhibition\n is a curated event showcasing the works of contemporary artists from around the world. This exhibition aims to provide a platform for artists to present their latest creations and for art enthusiasts to experience diverse artistic expressions. Visitors will have the opportunity to view a wide range of mediums, including paintings, sculptures, installations, and digital art.\n\nHighlights:\n- Featuring renowned and emerging artists.\n- Special guided tours and artist talks.\n- Interactive installations and digital art displays.\n- Art pieces available for purchase.\n\nLocation Details:\nThe exhibition will be held at the prestigious Art Gallery, known for its spacious halls and excellent facilities for displaying artwork. The gallery is centrally located, making it easily accessible for visitors. The ambiance of the gallery provides a perfect setting for appreciating the fine details of each piece of art.\n\nVisitor Information:\n- Opening Hours: 10:00 AM - 7:00 PM\n- Admission: $20 for adults, $15 for students and seniors, free for children under 12.\n- Tickets can be purchased online or at the venue.\n- Refreshments available at the gallery café.\n\nWhether you are an art collector, a casual visitor, or someone looking to explore the art world, the Art Exhibition promises an enriching and inspiring experience.",
     position: { lat: 50.4547, lng: 30.5238 },
     likes: 33220,
-    isLiked: false,
+    isLiked: true,
   },
   {
     id: 124,
-    category: "Writers",
+    category: "Art",
     title: "Art Exhibition",
     tags: ["poetry"],
     date: "28 May 2024",
@@ -72,7 +72,7 @@ export const events = [
   },
   {
     "id": 4,
-    "category": "Film",
+    "category": "Theater",
     "title": "Outdoor Movie Night",
     "tags": ["film", "outdoor"],
     "date": "29 May 2024",
@@ -85,7 +85,7 @@ export const events = [
   },
   {
     "id": 5,
-    "category": "Dance",
+    "category": "Carnival",
     "title": "Salsa Dance Party",
     "tags": ["dance", "salsa"],
     "date": "31 May 2024",
@@ -124,7 +124,7 @@ export const events = [
   },
   {
     "id": 8,
-    "category": "Festival",
+    "category": "Carnival",
     "title": "Summer Food Festival",
     "tags": ["food", "festival"],
     "date": "10 June 2024",
@@ -137,7 +137,7 @@ export const events = [
   },
   {
     "id": 9,
-    "category": "Sports",
+    "category": "Sport",
     "title": "Beach Volleyball Tournament",
     "tags": ["sports", "volleyball"],
     "date": "15 June 2024",
@@ -150,7 +150,7 @@ export const events = [
   },
   {
     "id": 10,
-    "category": "Culture",
+    "category": "Carnival",
     "title": "Ukrainian Folk Music Festival",
     "tags": ["music", "folk"],
     "date": "20 June 2024",

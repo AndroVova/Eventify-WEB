@@ -1,0 +1,31 @@
+.likedEventsContainer {
+    margin-top: 20px;
+  }
+  
+  .likedEventsContainer h3 {
+    margin-bottom: 10px;
+  }
+  
+  .eventCard {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .eventImage {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin: 15px;
+  }
+  
+  .eventDetails {
+    padding: 10px;
+    flex: 1;
+  }
+  

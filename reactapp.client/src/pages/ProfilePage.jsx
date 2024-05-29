@@ -1,18 +1,27 @@
 import React, { useState } from "react";
+import { changeProfile, updateUserImage } from "../reducers/auth.reducer";
 import { useDispatch, useSelector } from "react-redux";
 
+import AvatarSection from "../components/profile/AvatarSection";
+import LikedEvents from "../components/profile/LikedEvents";
+import Preferences from "../components/profile/Preferences";
+import UserDetails from "../components/profile/UserDetails";
 import avatar1 from "../resources/1.png";
 import avatar2 from "../resources/2.png";
 import avatar3 from "../resources/3.png";
 import styles from "./ProfilePage.module.css";
-import { updateUserImage } from "../reducers/auth.reducer";
 
 const avatars = [avatar1, avatar2, avatar3];
 
-const ProfilePage = () => {
+const ProfilePage = ({ eventsData }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(user.name || "Default Name");
+  const [login, setLogin] = useState(user.email);
+  const [phone, setPhone] = useState(user.phone || "");
+  const [selectedCategories, setSelectedCategories] = useState(user.categories || []);
 
   if (!user) return null;
 
@@ -25,45 +34,62 @@ const ProfilePage = () => {
     setShowAvatarOptions(false);
   };
 
+  const handleSave = () => {
+    dispatch(changeProfile({ name, email: login, phone, categories: selectedCategories }));
+    setIsEditing(false);
+  };
+
+  const handleAddCategory = (event) => {
+    const newCategory = event.target.value;
+    if (newCategory && !selectedCategories.includes(newCategory)) {
+      setSelectedCategories([...selectedCategories, newCategory]);
+    }
+  };
+
+  const handleRemoveCategory = (category) => {
+    setSelectedCategories(selectedCategories.filter(cat => cat !== category));
+  };
+
+  const likedEvents = eventsData.filter(event => event.isLiked);
+
   return (
     <div className={styles.profileContainer}>
       <div className={styles.userInfo}>
-        <div className={styles.userDetails}>
-          <p>Name: {user.name || "Default Name"}</p>
-          <p>Login: {user.email}</p>
-        </div>
-        <div className={styles.avatarSection}>
-          <img
-            src={user.image || avatar1}
-            alt="Profile"
-            className={styles.profileImage}
-            onClick={handleAvatarClick}
-          />
-          {showAvatarOptions && (
-            <div className={styles.avatarOptions}>
-              {avatars.map((avatar, index) => (
-                <img
-                  key={index}
-                  src={avatar}
-                  alt={`Avatar ${index + 1}`}
-                  className={styles.avatarOption}
-                  onClick={() => handleAvatarSelect(avatar)}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        <UserDetails
+          isEditing={isEditing}
+          name={name}
+          login={login}
+          phone={phone}
+          setName={setName}
+          setLogin={setLogin}
+          setPhone={setPhone}
+        />
+        <AvatarSection
+          user={user}
+          avatars={avatars}
+          showAvatarOptions={showAvatarOptions}
+          handleAvatarClick={handleAvatarClick}
+          handleAvatarSelect={handleAvatarSelect}
+        />
       </div>
       <div className={styles.settings}>
-        <div className={styles.settingItem}>
-          <span>Preferences:</span>
-          <button className={styles.preferenceButton}>Music</button>
-        </div>
-        <a href="https://www.google.com/" className={styles.likedEventsLink}>
-          Liked Events
-        </a>
+        <Preferences
+          isEditing={isEditing}
+          selectedCategories={selectedCategories}
+          handleAddCategory={handleAddCategory}
+          handleRemoveCategory={handleRemoveCategory}
+        />
+        <LikedEvents events={likedEvents} />
       </div>
-      <button className={styles.saveButton}>Save & Exit</button>
+      {isEditing ? (
+        <button className={styles.saveButton} onClick={handleSave}>
+          Save & Exit
+        </button>
+      ) : (
+        <button className={styles.editButton} onClick={() => setIsEditing(true)}>
+          Edit Profile
+        </button>
+      )}
     </div>
   );
 };

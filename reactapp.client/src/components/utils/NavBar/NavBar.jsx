@@ -1,17 +1,33 @@
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link } from "react-router-dom";
+import {SelectLang} from "../SelectLang/SelectLang";
+import { SelectTheme } from '../SelectTheme/SelectTheme';
 import { logout } from "../../../reducers/auth.reducer";
 import styles from './nav.bar.module.css';
 import { useTranslation } from "react-i18next";
 
 const NavBar = () => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const user = useSelector((state) => state.auth.user);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState('light');
 
   const handleLogOut = () => {
     dispatch(logout());
+    setIsMenuOpen(false); // Close the menu after logout
+  };
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleThemeChange = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
   };
 
   return (
@@ -23,12 +39,23 @@ const NavBar = () => {
         <Link className={styles.navLink} to={'../map'} replace={true}>{'map'}</Link>
         <Link className={styles.navLink} to={'../events'} replace={true}>{'events'}</Link>
         <Link className={styles.navLink} to={'../chat'} replace={true}>{'chat'}</Link>
-        <Link className={styles.navLink} to={null} onClick={handleLogOut}>{t('log_out')}</Link>
       </div>
       <div className={styles.rightSide}>
-        <Link className={styles.profileLink} to={'../profile'} replace={true}>
+        <div className={styles.profileLink} onClick={handleMenuToggle}>
           <img src={user.image} alt="Profile" className={styles.profileImage} />
-        </Link>
+        </div>
+        {isMenuOpen && (
+          <div className={styles.dropdownMenu}>
+            <Link className={styles.dropdownItem} to={'../profile'} replace={true} onClick={handleMenuToggle}>{t('profile')}</Link>
+            <div className={styles.dropdownItem}>
+              <SelectLang />
+            </div>
+            <div className={styles.dropdownItem}>
+              <SelectTheme />
+            </div>
+            <div className={styles.dropdownItem} onClick={handleLogOut}>{t('log_out')}</div>
+          </div>
+        )}
       </div>
     </nav>
   );

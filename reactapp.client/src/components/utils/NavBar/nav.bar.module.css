@@ -20,6 +20,7 @@
 .rightSide {
   display: flex;
   align-items: center;
+  position: relative;
 }
 
 .logo {
@@ -54,4 +55,29 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 80px;
+  right: 0;
+  background-color: var(--main-light-background-color);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+}
+
+.dropdownItem {
+  padding: 10px 20px;
+  text-align: left;
+  color: var(--main-color);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.dropdownItem:hover {
+  background-color: var(--main-color);
+  color: var(--main-light-background-color);
 }

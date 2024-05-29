@@ -20,15 +20,15 @@ export const LoginPage = () => {
 
 async function handleSubmit(e, dispatch, navigate) {
     e.preventDefault();
-    //const userForm = new FormData(e.target);
+    const userForm = new FormData(e.target);
 
-    //const email = userForm.get('email');
-    //const password = userForm.get('password');
+    const email = userForm.get('email');
+    const password = userForm.get('password');
 
-    // const loginData = {
-    //     email: email,
-    //     password: password
-    // };
+    const loginData = {
+        email: email,
+        password: password
+    };
 
     // const token = await fetchToken(loginData)
     const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2b3ZhQGdtYWlsLmNvbSIsInJvbGVzIjpbIlVTRVIiXSwiZXhwIjoxNzE0MDg4MTA0fQ.3MvLs2v_o5Ae8_PL2wdhnuu3AD9N4xXXmTN1yFHdElMTWkU2jm6k9v31HGtUdNLlSqm7sKnOXWfvOiP2MFl_CA";
