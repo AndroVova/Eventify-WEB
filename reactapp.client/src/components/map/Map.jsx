@@ -1,5 +1,5 @@
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DraggableModal from '../layout/DraggableModal/DraggableModal';
 import Event from '../events/Event';
@@ -31,7 +31,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
   const [isMarkersLoading, setIsMarkersLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(isModal);
 
-  const categoryIcons = {
+  const categoryIcons = useMemo(() => ({
     default: defaultIcon,
     art: artIcon,
     carnival: carnivalIcon,
@@ -41,7 +41,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
     sport: sportIcon,
     theater: theaterIcon,
     food: foodIcon,
-  };
+  }), []);
 
   const onLoad = useCallback((mapInstance) => {
     setMap(mapInstance);
@@ -83,7 +83,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
 
       setIsMarkersLoading(false);
     }
-  }, [isLoaded, map, markersData]);
+  }, [isLoaded, map, markersData, categoryIcons]);
 
   const handleStyleChange = (event) => {
     setMapStyle(event.target.value);

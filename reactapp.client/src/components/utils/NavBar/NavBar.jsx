@@ -10,24 +10,17 @@ import { useTranslation } from "react-i18next";
 
 const NavBar = () => {
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+  const { t} = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState('light');
 
   const handleLogOut = () => {
     dispatch(logout());
-    setIsMenuOpen(false); // Close the menu after logout
+    setIsMenuOpen(false);
   };
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleThemeChange = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
   };
 
   return (
