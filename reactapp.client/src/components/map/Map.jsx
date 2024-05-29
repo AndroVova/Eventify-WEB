@@ -8,21 +8,23 @@ import artIcon from "../../resources/icons/art-design-paint-pallet-format-text-s
 import carnivalIcon from "../../resources/icons/carnival-symbol-svgrepo-com.svg";
 import concertIcon from "../../resources/icons/concert-piano-orchestra-classic-instrument-svgrepo-com.svg";
 import defaultIcon from "../../resources/icons/marker-pin-01-svgrepo-com.svg";
-import foodIcon from "../../resources/icons/food-restaurant-svgrepo-com.svg"
+import foodIcon from "../../resources/icons/food-restaurant-svgrepo-com.svg";
 import musicIcon from "../../resources/icons/music-notes-svgrepo-com.svg";
 import sportIcon from "../../resources/icons/running-svgrepo-com.svg";
 import styles from './map.module.css';
 import techIcon from "../../resources/icons/computer-code-svgrepo-com.svg";
 import theaterIcon from "../../resources/icons/theater-svgrepo-com.svg";
+import { useSelector } from "react-redux";
 
 const libraries = ['marker'];
 
-const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, setEventsData }) => {
+const Map = ({ center, markersData, mapContainerStyle, options, isModal = false, setEventsData }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries
   });
 
+  const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [map, setMap] = useState(null);
   const [mapStyle, setMapStyle] = useState("light");
@@ -30,6 +32,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [isMarkersLoading, setIsMarkersLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(isModal);
+  const [userLocation, setUserLocation] = useState(center);
 
   const categoryIcons = useMemo(() => ({
     default: defaultIcon,
@@ -51,12 +54,46 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
   }, []);
 
   useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const userLocation = { lat: latitude, lng: longitude };
+          setUserLocation(userLocation);
+          if (map) {
+            map.setCenter(userLocation);
+  
+            const iconElement = document.createElement('div');
+            iconElement.className = styles['marker-icon'];
+  
+            const img = document.createElement('img');
+            img.src = user.image;
+            img.alt = 'Your location';
+  
+            iconElement.appendChild(img);
+  
+            new window.google.maps.marker.AdvancedMarkerElement({
+              position: userLocation,
+              title: "You are here",
+              map,
+              content: iconElement
+            });
+          }
+        },
+        () => {
+          console.error("Error getting user location");
+        }
+      );
+    }
+  }, [map]);
+
+  useEffect(() => {
     if (isLoaded && map && window.google && markersData) {
       const markers = markersData.map(marker => {
         const iconElement = document.createElement('div');
         iconElement.className = styles['marker-icon'];
 
-        const markerIcon = categoryIcons[marker.category.toLowerCase()] || defaultIcon; // Default to music icon if category not found
+        const markerIcon = categoryIcons[marker.category.toLowerCase()] || defaultIcon;
         const img = document.createElement('img');
         img.src = markerIcon;
         img.alt = marker.name;
@@ -117,8 +154,8 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
       <GoogleMap
         key={key}
         mapContainerStyle={mapContainerStyle || { width: '100%', height: '100%' }}
-        center={center}
-        zoom={12}
+        center={userLocation}
+        zoom={10.5}
         onLoad={onLoad}
         options={{
           ...options,
@@ -128,7 +165,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal=false, s
       >
         {selectedMarker && !modalIsOpen && (
           <DraggableModal isVisible={true} onClose={closeModal} headerText="Event Details">
-            <Event event={selectedMarker} onClose={closeModal} setEventsData ={setEventsData} />
+            <Event event={selectedMarker} onClose={closeModal} setEventsData={setEventsData} />
           </DraggableModal>
         )}
       </GoogleMap>

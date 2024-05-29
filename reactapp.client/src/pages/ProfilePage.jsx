@@ -13,7 +13,7 @@ import styles from "./ProfilePage.module.css";
 
 const avatars = [avatar1, avatar2, avatar3];
 
-const ProfilePage = ({ eventsData }) => {
+const ProfilePage = ({ eventsData, setEventsData }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
@@ -79,7 +79,7 @@ const ProfilePage = ({ eventsData }) => {
           handleAddCategory={handleAddCategory}
           handleRemoveCategory={handleRemoveCategory}
         />
-        <LikedEvents events={likedEvents} />
+        <LikedEvents events={likedEvents} setEventsData={setEventsData} />
       </div>
       {isEditing ? (
         <button className={styles.saveButton} onClick={handleSave}>
