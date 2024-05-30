@@ -1,6 +1,5 @@
-import { fetchToken, fetchUser } from "../clients/auth.client";
-
 import { Login } from "../components/auth/Login/Login";
+import { fetchToken } from "../clients/auth.client";
 import { login } from "../reducers/auth.reducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
