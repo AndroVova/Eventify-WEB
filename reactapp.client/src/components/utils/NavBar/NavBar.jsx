@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 
 const NavBar = () => {
   const dispatch = useDispatch();
-  const { t} = useTranslation();
+  const {t} = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -29,9 +29,9 @@ const NavBar = () => {
         <Link to={'../map'} className={styles.logo}>Eventify</Link>
       </div>
       <div className={styles.centerLinks}>
-        <Link className={styles.navLink} to={'../map'} replace={true}>{'map'}</Link>
-        <Link className={styles.navLink} to={'../events'} replace={true}>{'events'}</Link>
-        <Link className={styles.navLink} to={'../chat'} replace={true}>{'chat'}</Link>
+        <Link className={styles.navLink} to={'../map'} replace={true}>{t('map')}</Link>
+        <Link className={styles.navLink} to={'../events'} replace={true}>{t('events')}</Link>
+        <Link className={styles.navLink} to={'../chat'} replace={true}>{t('chat')}</Link>
       </div>
       <div className={styles.rightSide}>
         <div className={styles.profileLink} onClick={handleMenuToggle}>

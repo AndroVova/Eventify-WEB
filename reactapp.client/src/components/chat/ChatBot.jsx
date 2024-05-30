@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import AI_URL from "../../clients/app.const"
 import InputMessageBox from "./InputMessageBox";
 import Message from "./Message";
 import axios from "axios";
@@ -26,7 +27,7 @@ const ChatBot = () => {
       setIsTyping(true);
   
       try {
-        const res = await axios.post("http://localhost:5000/api/chatbot", {
+        const res = await axios.post(`${AI_URL}/api/chatbot`, {
           message,
           history: updatedConversation,
         });
