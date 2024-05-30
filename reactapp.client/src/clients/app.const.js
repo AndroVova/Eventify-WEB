@@ -1,4 +1,4 @@
-export const SERVICE_URL = 'http://127.0.0.1:8080'
+export const SERVICE_URL = 'https://eventify-backend.azurewebsites.net/api'
 export const JSON_HEADERS = {
     headers: {
         'Content-Type': 'application/json'

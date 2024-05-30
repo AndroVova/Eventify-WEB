@@ -1,9 +1,9 @@
 import {SERVICE_URL} from "./app.const";
 import axios from "axios";
 
-const GET_TOKEN = SERVICE_URL + '/authenticate'
+const GET_TOKEN = SERVICE_URL + "/Auth/login";
 
-const GET_PROFILE = SERVICE_URL + '/profile/username/'
+const GET_PROFILE = SERVICE_URL + '/profile/username/';
 
 export async function fetchToken(userForm){
 

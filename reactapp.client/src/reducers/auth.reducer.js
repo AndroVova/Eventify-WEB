@@ -61,11 +61,12 @@ export default createReducer(initialState, (builder) => {
             state.tokenValue = null;
             state.tokenExpirationTime = null;
 
-            localStorage.removeItem(storageName);
+            localStorage.clear();
         })
         .addCase(changeProfile, (state, action) => {
             state.user = { ...state.user, ...action.payload.user };
 
+            console.log("Changing profile:", state);
             localStorage.setItem(storageName, JSON.stringify(state));
         })
         .addCase(updateUserImage, (state, action) => {
@@ -73,6 +74,7 @@ export default createReducer(initialState, (builder) => {
                 state.user.image = action.payload;
             }
 
+            console.log("Updating user image:", state);
             localStorage.setItem(storageName, JSON.stringify(state));
         });
 });
