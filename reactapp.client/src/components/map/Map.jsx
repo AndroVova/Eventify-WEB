@@ -23,7 +23,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries
   });
-
+  console.log('Google Maps API Key:', process.env.REACT_APP_GOOGLE_MAPS_API);
   const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [map, setMap] = useState(null);
