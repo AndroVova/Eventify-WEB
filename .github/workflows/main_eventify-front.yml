@@ -23,6 +23,12 @@ jobs:
           echo "REACT_APP_GOOGLE_MAPS_API=${{ secrets.REACT_APP_GOOGLE_MAPS_API }}" >> $GITHUB_ENV
           echo "REACT_APP_MAP_ID=${{ secrets.REACT_APP_MAP_ID }}" >> $GITHUB_ENV
           echo "REACT_APP_NIGHT_MAP_ID=${{ secrets.REACT_APP_NIGHT_MAP_ID }}" >> $GITHUB_ENV
+          
+      - name: Display environment variables for debugging
+        run: |
+          echo "REACT_APP_GOOGLE_MAPS_API: $REACT_APP_GOOGLE_MAPS_API"
+          echo "REACT_APP_MAP_ID: $REACT_APP_MAP_ID"
+          echo "REACT_APP_NIGHT_MAP_ID: $REACT_APP_NIGHT_MAP_ID"
 
       - name: npm install, build, and test
         run: |
