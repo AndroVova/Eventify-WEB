@@ -27,7 +27,7 @@ const ChatBot = () => {
       setIsTyping(true);
   
       try {
-        const res = await axios.post(/*"http://localhost:8000/api/chatbot", {*/ `${AI_URL}/chatbot`, {
+        const res = await axios.post(`${AI_URL}/chatbot`, {
           message,
           history: updatedConversation,
         });
