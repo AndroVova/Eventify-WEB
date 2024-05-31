@@ -24,6 +24,10 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
     libraries
   });
   console.log('Google Maps API Key:', process.env.REACT_APP_GOOGLE_MAPS_API);
+  console.log('Map ID:', process.env.REACT_APP_MAP_ID);
+  console.log('Night Map ID:', process.env.REACT_APP_NIGHT_MAP_ID);
+  
+
   const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [map, setMap] = useState(null);
