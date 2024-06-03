@@ -40,6 +40,7 @@ async function handleSubmit(e, dispatch, navigate) {
 
     // const user = await fetchUser(token, loginData)
     const user = {
+        id:"vovaIDlolKEK",
         ...loginData,
         image: "/static/media/1.42848f1e65ff889f9e2f.png",
     };

@@ -11,6 +11,7 @@ import { LoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/Home/MainPage";
 import MapPage from "./pages/MapPage";
 import ProfilePage from "./pages/ProfilePage";
+import { Register } from "./components/auth/Register/Register";
 import { logout } from "./reducers/auth.reducer";
 
 const ONE_MINUTE = 1000 * 60;
@@ -54,6 +55,7 @@ const App = () => {
         {!isAuthenticated || !authState.user ? (
           <>
             <Route path="/auth/login" element={<LoginPage />} />
+            <Route path="/registration" element={<Register />} />
             <Route path="/*" element={<Navigate to="/auth/login" />} />
           </>
         ) : (

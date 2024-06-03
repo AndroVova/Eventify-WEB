@@ -50,10 +50,6 @@ export default class Response {
     }
 }
 
-const DEFAULT_GET_CONFIG = {
-    token: null
-}
-
 export async function fetchGet(url, query = {}, token) {
     const response = new Response();
 
@@ -74,23 +70,25 @@ export async function fetchGet(url, query = {}, token) {
 
 const DEFAULT_CONFIG =  {
     method: 'POST',
-    headers: {},
+    headers: {
+        "Content-Type": "application/json"
+      },
     body: null
 }
 
-const middleWear = (config,token) =>{
-
-    if(config?.headers?.Authorization){
-        return
+const middleWear = (config, token) => {
+    if (config?.headers?.Authorization) {
+      return;
     }
-    if(config.headers && token ){
-        config.headers.Authorization = `Bearer ${token}`
-    }else {
-        config.headers =  !token ? '' : {
-            Authorization: `Bearer ${token}`
-        }
+    if (config.headers && token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      config.headers = !token ? { "Content-Type": "application/json" } : {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      };
     }
-}
+  };
 
 const toConfig = (c) =>{
     return {
@@ -108,6 +106,38 @@ export async function fetchPost(url,token = null, config = DEFAULT_CONFIG) {
             response.handleError(error)
         })
     )
+    return response;
+}
+
+export async function fetchPostEvent(url, token = null, config) {
+    const response = new Response();
+
+    const middleWear = (config, token) => {
+        if (config?.headers?.Authorization) {
+            return;
+        }
+        if (config.headers && token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        } else {
+            config.headers = !token ? {} : {
+                Authorization: `Bearer ${token}`
+            };
+        }
+    };
+
+    middleWear(config, token);
+
+    try {
+        const axiosResponse = await axios.post(url, config.body, {
+            headers: {
+                ...config.headers
+            }
+        });
+        response.handleResult(axiosResponse);
+    } catch (error) {
+        response.handleError(error);
+    }
+
     return response;
 }
 

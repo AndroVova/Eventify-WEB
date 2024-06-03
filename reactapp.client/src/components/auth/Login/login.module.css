@@ -8,7 +8,9 @@
   overflow: hidden;
 }
 
-.loginCircle2, .loginCircle3 {
+.loginCircle2,
+.loginCircle3,
+.registerCircle3 {
   position: absolute;
   border-radius: 50%;
 }
@@ -42,29 +44,29 @@
   color: white;
   background-color: #66bb6a;
   padding: 12.5px 25px;
-  border-radius: 12.5px;  
-  margin: 0 auto 25px;  
+  border-radius: 12.5px;
+  margin: 0 auto 25px;
 }
 
 .loginInput {
-  width: 87.5%;  
-  padding: 12.5px;  
-  margin-bottom: 18.75px;  
+  width: 87.5%;
+  padding: 12.5px;
+  margin-bottom: 18.75px;
   border: none;
-  border-radius: 6.25px;  
-  font-size: 20px;  
+  border-radius: 6.25px;
+  font-size: 20px;
   background-color: #cfcfcf;
   color: #666;
 }
 
 .loginButton {
-  width: 93.75%;  
-  padding: 12.5px;  
+  width: 93.75%;
+  padding: 12.5px;
   border: none;
-  border-radius: 6.25px;  
+  border-radius: 6.25px;
   background: #4caf50;
   color: white;
-  font-size: 20px;  
+  font-size: 20px;
   cursor: pointer;
 }
 
@@ -74,7 +76,7 @@
 
 .loginLink {
   display: block;
-  margin-top: 15px;  
+  margin-top: 15px;
   color: #4caf50;
   text-decoration: none;
 }
@@ -84,10 +86,23 @@
 }
 
 @keyframes breath {
-  0%, 100% {
-      transform: scale(1);
+  0%,
+  100% {
+    transform: scale(1);
   }
   50% {
-      transform: scale(1.2);
+    transform: scale(1.2);
   }
+}
+
+.error {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.registerCircle3 {
+  width: 700px;
+  height: 700px;
+  background-color: #ffffff;
+  z-index: 3;
 }
