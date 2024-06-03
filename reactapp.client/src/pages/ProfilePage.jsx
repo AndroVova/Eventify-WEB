@@ -50,7 +50,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
     setSelectedCategories(selectedCategories.filter(cat => cat !== category));
   };
 
-  const likedEvents = eventsData.filter(event => event.isLiked);
+  const likedEvents = eventsData.filter(event => event.isLiked); // TODO: get reacted events request
 
   return (
     <div className={styles.profileContainer}>

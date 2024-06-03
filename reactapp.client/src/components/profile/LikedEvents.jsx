@@ -21,10 +21,10 @@ const LikedEvents = ({ events, setEventsData }) => {
       {events.length > 0 ? (
         events.map(event => (
           <div key={event.id} className={styles.eventCard} onClick={() => handleEventClick(event)}>
-            <img src={event.image} alt={event.title} className={styles.eventImage} />
+            <img src={event.img} alt={event.name} className={styles.eventImage} />
             <div className={styles.eventDetails}>
-              <h4>{event.title}</h4>
-              <p>{event.date} at {event.location}</p>
+              <h4>{event.name}</h4>
+              <p>{new Date(event.date).toLocaleDateString()} at {`Lat: ${event.locations.pointY}, Lng: ${event.locations.pointX}`}</p>
             </div>
           </div>
         ))

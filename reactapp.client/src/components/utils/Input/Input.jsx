@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-const Input = ({ label, id, type, className, placeholder, name, value, onChange }) => (
+const Input = ({ label, id, type = 'text', className, placeholder, name, value, onChange }) => (
   <div>
     {label && <label htmlFor={id} className="form-label">{label}</label>}
     <input
       type={type}
-      className= {className}
+      className={className}
       id={id}
       name={name}
       value={value}
@@ -27,10 +27,6 @@ Input.propTypes = {
     PropTypes.number
   ]),
   onChange: PropTypes.func.isRequired
-};
-
-Input.defaultProps = {
-  type: 'text'
 };
 
 export default Input;

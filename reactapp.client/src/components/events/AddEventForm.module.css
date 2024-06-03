@@ -1,0 +1,32 @@
+.addEventForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.addEventForm input,
+.addEventForm textarea,
+.addEventForm button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.addEventForm button {
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.addEventForm button:hover {
+  background-color: #45a049;
+}
+
+.mapContainer {
+  width: 100%;
+  height: 300px;
+  margin-top: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}

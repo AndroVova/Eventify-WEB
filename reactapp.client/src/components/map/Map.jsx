@@ -1,4 +1,4 @@
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import { Autocomplete, GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DraggableModal from '../layout/DraggableModal/DraggableModal';
@@ -16,21 +16,18 @@ import techIcon from "../../resources/icons/computer-code-svgrepo-com.svg";
 import theaterIcon from "../../resources/icons/theater-svgrepo-com.svg";
 import { useSelector } from "react-redux";
 
-const libraries = ['marker'];
+const libraries = ['places', 'marker'];
 
-const Map = ({ center, markersData, mapContainerStyle, options, isModal = false, setEventsData }) => {
+const Map = ({ center, markersData, mapContainerStyle, options, isModal = false, setEventsData, onMarkerPositionChange }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries
-  });
-  console.log('Google Maps API Key:', process.env.REACT_APP_GOOGLE_MAPS_API);
-  console.log('Map ID:', process.env.REACT_APP_MAP_ID);
-  console.log('Night Map ID:', process.env.REACT_APP_NIGHT_MAP_ID);
-  
+  });  
 
   const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [map, setMap] = useState(null);
+  const [autocomplete, setAutocomplete] = useState(null);
   const [mapStyle, setMapStyle] = useState("light");
   const [key, setKey] = useState(1);
   const [isMapLoading, setIsMapLoading] = useState(true);
@@ -40,14 +37,14 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
 
   const categoryIcons = useMemo(() => ({
     default: defaultIcon,
-    art: artIcon,
-    carnival: carnivalIcon,
-    technology: techIcon,
-    concert: concertIcon,
-    music: musicIcon,
-    sport: sportIcon,
-    theater: theaterIcon,
-    food: foodIcon,
+    1: musicIcon,
+    2: artIcon,
+    3: theaterIcon,
+    4: carnivalIcon,
+    5: techIcon,
+    6: concertIcon,    
+    7: sportIcon,
+    8: foodIcon,    
   }), []);
 
   const onLoad = useCallback((mapInstance) => {
@@ -56,6 +53,42 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
       setIsMapLoading(false);
     }, 1300);
   }, []);
+
+  const onLoadAutocomplete = (autocomplete) => {
+    setAutocomplete(autocomplete);
+  };
+
+  const onPlaceChanged = () => {
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.geometry && place.geometry.location) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        console.log(lat + " " + lng);
+        if (map) {
+          map.setCenter({ lat, lng });
+          map.setZoom(15);
+
+          const markerElement = document.createElement('div');
+          markerElement.className = styles['marker-icon'];
+          markerElement.innerHTML = `<img src=${defaultIcon} alt="Event Location" />`;
+
+          new window.google.maps.marker.AdvancedMarkerElement({
+            position: { lat, lng },
+            map: map,
+            title: "Event Location",
+            content: markerElement
+          });
+
+          if (onMarkerPositionChange) {
+            onMarkerPositionChange({ lat, lng });
+          }
+        }
+      }
+    } else {
+      console.log('Autocomplete is not loaded yet!');
+    }
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -66,16 +99,16 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
           setUserLocation(userLocation);
           if (map) {
             map.setCenter(userLocation);
-  
+
             const iconElement = document.createElement('div');
             iconElement.className = styles['marker-icon'];
-  
+
             const img = document.createElement('img');
             img.src = user.image;
             img.alt = 'Your location';
-  
+
             iconElement.appendChild(img);
-  
+
             new window.google.maps.marker.AdvancedMarkerElement({
               position: userLocation,
               title: "You are here",
@@ -97,7 +130,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         const iconElement = document.createElement('div');
         iconElement.className = styles['marker-icon'];
 
-        const markerIcon = categoryIcons[marker.category.toLowerCase()] || defaultIcon;
+        const markerIcon = categoryIcons[marker.type] || defaultIcon;
         const img = document.createElement('img');
         img.src = markerIcon;
         img.alt = marker.name;
@@ -105,7 +138,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         iconElement.appendChild(img);
 
         const advancedMarker = new window.google.maps.marker.AdvancedMarkerElement({
-          position: marker.position,
+          position: { lat: marker.locations.pointY, lng: marker.locations.pointX },
           title: marker.name,
           map,
           content: iconElement
@@ -138,6 +171,32 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
     setModalIsOpen(false);
   };
 
+  const handleMapClick = (event) => {
+    if (event && event.latLng && map) {
+      const lat = event.latLng.lat();
+      const lng = event.latLng.lng();
+      console.log(lat + " " + lng);
+      if (window.marker) {
+        window.marker.setMap(null);
+      }
+  
+      const markerElement = document.createElement('div');
+      markerElement.className = styles['marker-icon'];
+      markerElement.innerHTML = `<img src="${defaultIcon}" alt="Event Location" />`;
+  
+      window.marker = new window.google.maps.marker.AdvancedMarkerElement({
+        position: { lat, lng },
+        map: map,
+        title: "Event Location",
+        content: markerElement
+      });
+      
+      if (onMarkerPositionChange) {
+        onMarkerPositionChange({ lat, lng });
+      }
+    }
+  };
+
   if (loadError) {
     return <div>Map loading error</div>;
   }
@@ -155,12 +214,21 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
           <div className={styles.loadingSpinner}></div>
         </div>
       )}
+      <Autocomplete onLoad={onLoadAutocomplete} onPlaceChanged={onPlaceChanged}>
+        <input
+          style={{width: '50%'}}
+          type="text"
+          placeholder="Search for places"
+          className={styles.searchBox}
+        />
+      </Autocomplete>
       <GoogleMap
         key={key}
         mapContainerStyle={mapContainerStyle || { width: '100%', height: '100%' }}
         center={userLocation}
         zoom={10.5}
         onLoad={onLoad}
+        onClick={handleMapClick}
         options={{
           ...options,
           mapId: mapId,

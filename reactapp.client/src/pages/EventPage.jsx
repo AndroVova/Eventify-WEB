@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 
+import AddEventForm from "../components/events/AddEventForm";
 import DraggableModal from "../components/layout/DraggableModal/DraggableModal";
 import Event from "../components/events/Event";
+import EventCard from "../components/events/EventCard";
+import EventFilters from "../components/events/EventFilters";
+import EventTypes from "../models/EventTypes";
+import PaginationControls from "../components/events/PaginationControls";
 import styles from "./EventPage.module.css";
 
 const EventPage = ({ eventsData, setEventsData }) => {
@@ -12,10 +17,12 @@ const EventPage = ({ eventsData, setEventsData }) => {
   const [selectedTag, setSelectedTag] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
   const itemsPerPage = 9;
 
   const categoryCounts = eventsData.reduce((acc, event) => {
-    acc[event.category] = (acc[event.category] || 0) + 1;
+    const category = Object.keys(EventTypes).find(key => EventTypes[key] === event.type);
+    acc[category] = (acc[category] || 0) + 1;
     return acc;
   }, {});
 
@@ -74,7 +81,10 @@ const EventPage = ({ eventsData, setEventsData }) => {
     let filteredEvents = eventsData;
 
     if (selectedCategory !== "All") {
-      filteredEvents = filteredEvents.filter(event => event.category === selectedCategory);
+      filteredEvents = filteredEvents.filter(event => {
+        const category = Object.keys(EventTypes).find(key => EventTypes[key] === event.type);
+        return category === selectedCategory;
+      });
     }
 
     if (selectedTag !== "All") {
@@ -82,7 +92,7 @@ const EventPage = ({ eventsData, setEventsData }) => {
     }
 
     if (searchQuery) {
-      filteredEvents = filteredEvents.filter(event => event.title.toLowerCase().includes(searchQuery.toLowerCase()));
+      filteredEvents = filteredEvents.filter(event => event.name.toLowerCase().includes(searchQuery.toLowerCase()));
     }
 
     setEvents(filteredEvents);
@@ -97,81 +107,54 @@ const EventPage = ({ eventsData, setEventsData }) => {
     setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
   };
 
+  const handleAddEvent = (newEvent) => {
+    setEventsData([...eventsData, newEvent]);
+    setShowAddEventModal(false);
+  };
+
   const paginatedEvents = events.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(events.length / itemsPerPage);
 
   return (
     <div className={styles.eventListContainer}>
-      <div className={styles.controls}>
-        <button className={styles.sortButton} onClick={handleSortByDate}>
-          Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
+      <EventFilters
+        uniqueCategories={uniqueCategories}
+        uniqueTags={uniqueTags}
+        selectedCategory={selectedCategory}
+        selectedTag={selectedTag}
+        onCategoryChange={handleCategoryChange}
+        onTagChange={handleTagChange}
+        onSearchKeyDown={handleSearchKeyDown}
+        onSortByDate={handleSortByDate}
+        sortOrder={sortOrder}
+        styles={styles}
+      />
+      <div className={styles.addEventContainer}>
+        <button onClick={() => setShowAddEventModal(true)}>
+          Add Event
         </button>
-        <div className={styles.filterGroup}>
-          <label htmlFor="categorySelect" className={styles.filterLabel}>Category:</label>
-          <select
-            id="categorySelect"
-            className={styles.filterButton}
-            onChange={handleCategoryChange}
-            value={selectedCategory}
-          >
-            {uniqueCategories.map((category, index) => (
-              <option key={index} value={category.split(' ')[0]}>{category}</option>
-            ))}
-          </select>
-        </div>
-        <div className={styles.filterGroup}>
-          <label htmlFor="tagSelect" className={styles.filterLabel}>Tag:</label>
-          <select
-            id="tagSelect"
-            className={styles.filterButton}
-            onChange={handleTagChange}
-            value={selectedTag}
-          >
-            {uniqueTags.map((tag, index) => (
-              <option key={index} value={tag.split(' ')[0]}>{tag}</option>
-            ))}
-          </select>
-        </div>
-        <input
-          type="text"
-          placeholder="Search by event title"
-          onKeyDown={handleSearchKeyDown}
-          className={styles.searchInput}
-        />
       </div>
+      {showAddEventModal && (
+        <DraggableModal isVisible={showAddEventModal} onClose={() => setShowAddEventModal(false)} headerText="Add New Event">
+          <AddEventForm onSubmit={handleAddEvent} />
+        </DraggableModal>
+      )}
       <div className={styles.eventsList}>
         {paginatedEvents.length > 0 ? (
           paginatedEvents.map((event) => (
-            <div key={event.id} className={styles.eventCard} onClick={() => handleEventClick(event)}>
-              <img
-                src={event.image}
-                alt={event.title}
-                className={styles.eventImage}
-              />
-              <div className={styles.eventDetails}>
-                <p className={styles.eventCategory}>{event.category}</p>
-                <h2 className={styles.eventTitle}>{event.title}</h2>
-                <p className={styles.eventDate}>
-                  {new Date(event.date).toLocaleDateString()}
-                </p>
-                <p className={styles.eventLocation}>{event.location}</p>
-              </div>
-            </div>
+            <EventCard key={event.id} event={event} onClick={handleEventClick} styles={styles} />
           ))
         ) : (
           <p className={styles.noEventsMessage}>No events found</p>
         )}
       </div>
-  
-      <div className={styles.paginationControls}>
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          Previous
-        </button>
-        <span>Page {currentPage}</span>
-        <button onClick={handleNextPage} disabled={currentPage * itemsPerPage >= events.length}>
-          Next
-        </button>
-      </div>
-  
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onNextPage={handleNextPage}
+        onPrevPage={handlePrevPage}
+        styles={styles}
+      />
       {selectedEvent && (
         <DraggableModal isVisible={true} onClose={closeModal} headerText="Event Details">
           <Event event={selectedEvent} onClose={closeModal} setEventsData={setEventsData} />
