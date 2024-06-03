@@ -4,7 +4,7 @@ import styles from "../../pages/ProfilePage.module.css";
 const AvatarSection = ({ user, avatars, showAvatarOptions, handleAvatarClick, handleAvatarSelect }) => (
   <div className={styles.avatarSection}>
     <img
-      src={user.image || avatars[0]}
+      src={user.img || avatars[0]}
       alt="Profile"
       className={styles.profileImage}
       onClick={handleAvatarClick}

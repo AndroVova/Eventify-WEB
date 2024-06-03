@@ -104,7 +104,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
             iconElement.className = styles['marker-icon'];
 
             const img = document.createElement('img');
-            img.src = user.image;
+            img.src = user.img;
             img.alt = 'Your location';
 
             iconElement.appendChild(img);
@@ -122,7 +122,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         }
       );
     }
-  }, [map, user.image]);
+  }, [map, user.img]);
 
   useEffect(() => {
     if (isLoaded && map && window.google && markersData) {

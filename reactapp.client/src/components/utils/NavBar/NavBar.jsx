@@ -32,10 +32,11 @@ const NavBar = () => {
         <Link className={styles.navLink} to={'../map'} replace={true}>{t('map')}</Link>
         <Link className={styles.navLink} to={'../events'} replace={true}>{t('events')}</Link>
         <Link className={styles.navLink} to={'../chat'} replace={true}>{t('chat')}</Link>
+        <Link className={styles.navLink} to={'../admin'} replace={true}>{t('admin')}</Link>
       </div>
       <div className={styles.rightSide}>
         <div className={styles.profileLink} onClick={handleMenuToggle}>
-          <img src={user.image} alt="Profile" className={styles.profileImage} />
+          <img src={user.img} alt="Profile" className={styles.profileImage} />
         </div>
         {isMenuOpen && (
           <div className={styles.dropdownMenu}>

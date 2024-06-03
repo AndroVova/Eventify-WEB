@@ -9,19 +9,20 @@ import UserDetails from "../components/profile/UserDetails";
 import avatar1 from "../resources/1.png";
 import avatar2 from "../resources/2.png";
 import avatar3 from "../resources/3.png";
+import defaultAvatar from "../resources/default.png"
 import styles from "./ProfilePage.module.css";
 
-const avatars = [avatar1, avatar2, avatar3];
+const avatars = [defaultAvatar, avatar1, avatar2, avatar3];
 
 const ProfilePage = ({ eventsData, setEventsData }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(user.name || "Default Name");
+  const [name, setName] = useState(user.userName || "Default Name");
   const [login, setLogin] = useState(user.email);
-  const [phone, setPhone] = useState(user.phone || "");
-  const [selectedCategories, setSelectedCategories] = useState(user.categories || []);
+  const [phone, setPhone] = useState(user.phoneNumber || "");
+  const [selectedCategories, setSelectedCategories] = useState(user.types || []);
 
   if (!user) return null;
 
@@ -35,7 +36,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
   };
 
   const handleSave = () => {
-    dispatch(changeProfile({ name, email: login, phone, categories: selectedCategories }));
+    dispatch(changeProfile({ name, email: login, phone, types: selectedCategories }));
     setIsEditing(false);
   };
 

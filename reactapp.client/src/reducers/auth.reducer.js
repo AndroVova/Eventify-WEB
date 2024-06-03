@@ -1,7 +1,9 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
+import defaultImage from "../resources/default.png";
+
 const storageName = 'auth';
-const defaultImage = "../resources/1.png";
+
 
 let data = JSON.parse(localStorage.getItem(storageName));
 
@@ -14,7 +16,8 @@ const initialState = {
     user: {
         email: data?.user?.email || '',
         password: data?.user?.password || '',
-        image: data?.user?.image || defaultImage,
+        img: data?.user?.img === null || data?.user?.img === undefined ? defaultImage : data?.user?.img,
+        name: data?.user?.userName || '',
     },
     tokenValue: data?.tokenValue || '',
     tokenExpirationTime: data?.tokenExpirationTime || 0,
@@ -24,7 +27,10 @@ export const login = createAction("LOGIN", (profile, token) => {
     const expirationTime = Date.now() + 3600000;
     return {
         payload: {
-            user: profile,
+            user: {
+                ...profile,
+                img: profile.img === null || profile.img === undefined ? defaultImage : profile.img,
+            },
             tokenValue: token,
             tokenExpirationTime: expirationTime,
         },
@@ -36,7 +42,10 @@ export const logout = createAction("LOGOUT");
 export const changeProfile = createAction("CHANGE_PROFILE", (d) => {
     return {
         payload: {
-            user: d,
+            user: {
+                ...d,
+                img: d.img === null || d.img === undefined ? defaultImage : d.img,
+            },
         },
     };
 });
@@ -70,7 +79,7 @@ export default createReducer(initialState, (builder) => {
         })
         .addCase(updateUserImage, (state, action) => {
             if (state.user) {
-                state.user.image = action.payload;
+                state.user.img = action.payload;
             }
 
             localStorage.setItem(storageName, JSON.stringify(state));

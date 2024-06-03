@@ -1,5 +1,6 @@
+import { fetchToken, fetchUser } from "../clients/auth.client";
+
 import { Login } from "../components/auth/Login/Login";
-import { fetchToken } from "../clients/auth.client";
 import { login } from "../reducers/auth.reducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -30,20 +31,14 @@ async function handleSubmit(e, dispatch, navigate) {
         password: password
     };
 
-     const token = await fetchToken(loginData)
-    // const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ2b3ZhQGdtYWlsLmNvbSIsInJvbGVzIjpbIlVTRVIiXSwiZXhwIjoxNzE0MDg4MTA0fQ.3MvLs2v_o5Ae8_PL2wdhnuu3AD9N4xXXmTN1yFHdElMTWkU2jm6k9v31HGtUdNLlSqm7sKnOXWfvOiP2MFl_CA";
-
+     const tokenRespone = await fetchToken(loginData)
+     const token = tokenRespone.token;
     if (token === undefined) {
         alert("Incorrect e-mail address and (or) password.");
         return;
     }
 
-    // const user = await fetchUser(token, loginData)
-    const user = {
-        id:"vovaIDlolKEK",
-        ...loginData,
-        image: "/static/media/1.42848f1e65ff889f9e2f.png",
-    };
+    const user = await fetchUser(token, loginData)
     
     dispatch(login(user, token));
     navigate('/map', { replace: true });
