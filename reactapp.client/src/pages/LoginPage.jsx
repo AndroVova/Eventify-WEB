@@ -39,7 +39,6 @@ async function handleSubmit(e, dispatch, navigate) {
     }
 
     const user = await fetchUser(token, loginData)
-    
     dispatch(login(user, token));
     navigate('/map', { replace: true });
 }

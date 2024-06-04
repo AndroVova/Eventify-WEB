@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import AddEventForm from "../components/events/AddEventForm";
 import DraggableModal from "../components/layout/DraggableModal/DraggableModal";
@@ -6,11 +6,14 @@ import Event from "../components/events/Event";
 import EventCard from "../components/events/EventCard";
 import EventFilters from "../components/events/EventFilters";
 import EventTypes from "../models/EventTypes";
+import Modal from 'react-modal';
 import PaginationControls from "../components/events/PaginationControls";
+import axios from "axios";
 import styles from "./EventPage.module.css";
 
-const EventPage = ({ eventsData, setEventsData }) => {
-  const [events, setEvents] = useState(eventsData);
+const EventPage = () => {
+  const [eventsData, setEventsData] = useState([]);
+  const [events, setEvents] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -18,18 +21,52 @@ const EventPage = ({ eventsData, setEventsData }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // состояние загрузки
   const itemsPerPage = 9;
+  const [totalPages, setTotalPages] = useState(1);
 
-  const uniqueCategories = ["All", ...new Set(eventsData.map(event => Object.keys(EventTypes).find(key => EventTypes[key] === event.type)).filter(Boolean))];
+  const fetchEvents = useCallback(async () => {
+    setIsLoading(true); // Начало загрузки
+    const postData = {
+      searchText: searchQuery,
+      page: currentPage,
+      pageSize: itemsPerPage,
+      sortBy: "date",
+      sortAscending: sortOrder === "asc",
+      types: selectedCategory !== "All" ? [EventTypes[selectedCategory]] : Object.values(EventTypes)
+    };
+
+    try {
+      const response = await axios.post("https://eventify-backend.azurewebsites.net/api/Event/get-events", postData);
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch events");
+      }
+      const data = response.data;
+      setEventsData(data);
+      setEvents(data);
+
+      const paginationHeader = response.headers['x-pagination'];
+      if (paginationHeader) {
+        const paginationData = JSON.parse(paginationHeader);
+        const totalPages = paginationData.totalPages;
+        setTotalPages(totalPages);
+        setTotalPages(3);
+      }
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setIsLoading(false); // Конец загрузки
+    }
+  }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
+
+  const uniqueCategories = ["All", ...Object.keys(EventTypes)];
   const uniqueTags = ["All", ...new Set(eventsData.flatMap(event => event.tags))];
 
   const handleSortByDate = () => {
-    const sortedEvents = [...events].sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-    });
-    setEvents(sortedEvents);
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
@@ -42,13 +79,11 @@ const EventPage = ({ eventsData, setEventsData }) => {
   };
 
   const handleCategoryChange = (e) => {
-    const selectedCategory = e.target.value;
-    setSelectedCategory(selectedCategory);
+    setSelectedCategory(e.target.value);
   };
 
   const handleTagChange = (e) => {
-    const selectedTag = e.target.value;
-    setSelectedTag(selectedTag);
+    setSelectedTag(e.target.value);
   };
 
   const handleSearchKeyDown = (e) => {
@@ -56,28 +91,6 @@ const EventPage = ({ eventsData, setEventsData }) => {
       setSearchQuery(e.target.value);
     }
   };
-
-  useEffect(() => {
-    let filteredEvents = eventsData;
-
-    if (selectedCategory !== "All") {
-      filteredEvents = filteredEvents.filter(event => {
-        const category = Object.keys(EventTypes).find(key => EventTypes[key] === event.type);
-        return category === selectedCategory;
-      });
-    }
-
-    if (selectedTag !== "All") {
-      filteredEvents = filteredEvents.filter(event => event.tags.includes(selectedTag));
-    }
-
-    if (searchQuery) {
-      filteredEvents = filteredEvents.filter(event => event.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    }
-
-    setEvents(filteredEvents);
-    setCurrentPage(1);
-  }, [selectedCategory, selectedTag, searchQuery, eventsData]);
 
   const handleNextPage = () => {
     setCurrentPage(prevPage => prevPage + 1);
@@ -88,12 +101,9 @@ const EventPage = ({ eventsData, setEventsData }) => {
   };
 
   const handleAddEvent = (newEvent) => {
-    setEventsData([...eventsData, newEvent]);
     setShowAddEventModal(false);
+    fetchEvents();
   };
-
-  const paginatedEvents = events.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  const totalPages = Math.ceil(events.length / itemsPerPage);
 
   return (
     <div className={styles.eventListContainer}>
@@ -115,17 +125,27 @@ const EventPage = ({ eventsData, setEventsData }) => {
         </button>
       </div>
       {showAddEventModal && (
-        <DraggableModal isVisible={showAddEventModal} onClose={() => setShowAddEventModal(false)} headerText="Add New Event">
-          <AddEventForm onSubmit={handleAddEvent} />
-        </DraggableModal>
+        <Modal
+          isOpen={showAddEventModal}
+          onRequestClose={() => setShowAddEventModal(false)}
+          contentLabel="Add New Event"
+        >
+          <div className={styles.modalHeader}>Add New Event</div>
+          <AddEventForm onSubmit={handleAddEvent} className={styles.modalForm} />
+          <button onClick={() => setShowAddEventModal(false)} className={styles.closeButton}>Close</button>
+        </Modal>
       )}
       <div className={styles.eventsList}>
-        {paginatedEvents.length > 0 ? (
-          paginatedEvents.map((event) => (
-            <EventCard key={event.id} event={event} onClick={handleEventClick} styles={styles} />
-          ))
+        {isLoading ? (
+          <div className={styles.loader}></div>
         ) : (
-          <p className={styles.noEventsMessage}>No events found</p>
+          events.length > 0 ? (
+            events.map((event) => (
+              <EventCard key={event.id} event={event} onClick={handleEventClick} styles={styles} />
+            ))
+          ) : (
+            <p className={styles.noEventsMessage}>No events found</p>
+          )
         )}
       </div>
       <PaginationControls
@@ -142,6 +162,6 @@ const EventPage = ({ eventsData, setEventsData }) => {
       )}
     </div>
   );
-}
+};
 
 export default EventPage;

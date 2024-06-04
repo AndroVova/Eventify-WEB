@@ -11,11 +11,13 @@ import EventPage from "./pages/EventPage";
 import { LoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/Home/MainPage";
 import MapPage from "./pages/MapPage";
+import Modal from 'react-modal';
 import ProfilePage from "./pages/ProfilePage";
 import { Register } from "./components/auth/Register/Register";
 import { logout } from "./reducers/auth.reducer";
 
 const ONE_MINUTE = 1000 * 60;
+Modal.setAppElement('#root');
 
 const App = () => {
   const [eventsData, setEventsData] = useState(events);
@@ -33,6 +35,7 @@ const App = () => {
       !authState.tokenExpirationTime ||
       currentTime >= authState.tokenExpirationTime
     ) {
+      console.log("LOGGING OUT");
       setAuthenticated(false);
       dispatch(logout());
       return;
@@ -72,21 +75,8 @@ const App = () => {
                   />
                 }
               />
-              <Route
-                path="events"
-                element={
-                  <EventPage
-                    eventsData={eventsData}
-                    setEventsData={setEventsData}
-                  />
-                }
-              />
-              <Route
-                path="admin"
-                element={
-                  <AdminPage                  />
-                }
-              />
+              <Route path="events" element={<EventPage />} />
+              <Route path="admin" element={<AdminPage />} />
               <Route path="chat" element={<ChatBot></ChatBot>} />
               <Route
                 path="profile"

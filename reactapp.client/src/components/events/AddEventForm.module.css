@@ -1,15 +1,22 @@
 .addEventForm {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px; /* Увеличиваем расстояние между элементами формы */
 }
 
 .addEventForm input,
 .addEventForm textarea,
-.addEventForm button {
+.addEventForm button,
+.addEventForm select {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.addEventForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Расстояние между меткой и элементом ввода */
 }
 
 .addEventForm button {
@@ -29,4 +36,44 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   overflow: hidden;
+}
+
+.addEventForm select {
+  height: auto;
+  min-height: 40px;
+}
+
+.addEventForm select option {
+  padding: 10px;
+}
+
+.preferencesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px; /* Отступ сверху */
+}
+
+.preferenceItem {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.preferenceItem button {
+  margin-left: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #ff0000;
+}
+
+.preferenceItem button:hover {
+  color: #ff5555;
+}
+
+.addCategory selectField {
+  margin-top: 10px;
 }

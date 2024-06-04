@@ -8,8 +8,8 @@ const storageName = 'auth';
 let data = JSON.parse(localStorage.getItem(storageName));
 
 if (data && Date.now() > data.tokenExpirationTime) {
+    console.error("Local Data is deleted")
     data = null;
-    localStorage.removeItem(storageName);
 }
 
 const initialState = {
@@ -17,7 +17,9 @@ const initialState = {
         email: data?.user?.email || '',
         password: data?.user?.password || '',
         img: data?.user?.img === null || data?.user?.img === undefined ? defaultImage : data?.user?.img,
-        name: data?.user?.userName || '',
+        userName: data?.user?.userName || '',
+        phoneNumber: data?.user?.phoneNumber || '',
+        id: data?.user?.id || ''
     },
     tokenValue: data?.tokenValue || '',
     tokenExpirationTime: data?.tokenExpirationTime || 0,

@@ -10,11 +10,11 @@ export const events = [
     ageLimit: 18,
     date: "2024-05-23",
     link: "http://example.com/buy-ticket",
-    locations: {
+    locations: [{
       id: "2a79cd85-e5cb-4b35-b154-9944b1763288",
       pointX: 30.5234,
       pointY: 50.4501,
-    },
+    }],
     tags: ["film", "outdoor"],
     isLiked: true,
   },
@@ -29,11 +29,11 @@ export const events = [
     ageLimit: 0,
     date: "2024-05-28",
     link: "http://example.com/buy-ticket",
-    locations: {
+    locations: [{
       id: "2a79cd85-e5cb-4b35-b154-9944b1763288",
       pointX: 30.5238,
       pointY: 50.4547,
-    },
+    }],
     tags: ["film", "outdoor"],
   },
   {
@@ -47,11 +47,11 @@ export const events = [
     ageLimit: 0,
     date: "2024-05-28",
     link: "http://example.com/buy-ticket",
-    locations: {
+    locations: [{
       id: "2a79cd85-e5cb-4b35-b154-9944b1763288",
       pointX: 30.527,
       pointY: 50.4519,
-    },
+    }],
     tags: ["film", "outdoor"],
   },
   {
@@ -65,11 +65,11 @@ export const events = [
     ageLimit: 0,
     date: "2024-05-25",
     link: "http://example.com/buy-ticket",
-    locations: {
+    locations: [{
       id: "2a79cd85-e5cb-4b35-b154-9944b1763288",
       pointX: -73.968285,
       pointY: 40.785091,
-    },
+    }],
     tags: ["film", "outdoor"],
   },
   {
@@ -83,11 +83,11 @@ export const events = [
     ageLimit: 0,
     date: "2024-05-27",
     link: "http://example.com/buy-ticket",
-    locations: {
+    locations: [{
       id: "2a79cd85-e5cb-4b35-b154-9944b1763288",
       pointX: -118.243683,
       pointY: 34.052235,
-    },
+    }],
     tags: ["film", "outdoor"],
   },
   

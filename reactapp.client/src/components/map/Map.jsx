@@ -64,7 +64,6 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
       if (place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
-        console.log(lat + " " + lng);
         if (map) {
           map.setCenter({ lat, lng });
           map.setZoom(15);
@@ -136,9 +135,8 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         img.alt = marker.name;
 
         iconElement.appendChild(img);
-
         const advancedMarker = new window.google.maps.marker.AdvancedMarkerElement({
-          position: { lat: marker.locations.pointY, lng: marker.locations.pointX },
+          position: { lat: marker.locations[0].pointY, lng: marker.locations[0].pointX },
           title: marker.name,
           map,
           content: iconElement
@@ -175,7 +173,6 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
     if (event && event.latLng && map) {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
-      console.log(lat + " " + lng);
       if (window.marker) {
         window.marker.setMap(null);
       }
