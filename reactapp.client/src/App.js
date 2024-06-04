@@ -1,7 +1,6 @@
 import "./App.css";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { center, events } from "./const_values";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,13 +10,14 @@ import EventPage from "./pages/EventPage";
 import { LoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/Home/MainPage";
 import MapPage from "./pages/MapPage";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import ProfilePage from "./pages/ProfilePage";
 import { Register } from "./components/auth/Register/Register";
+import { events } from "./const_values";
 import { logout } from "./reducers/auth.reducer";
 
 const ONE_MINUTE = 1000 * 60;
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const App = () => {
   const [eventsData, setEventsData] = useState(events);
@@ -65,16 +65,7 @@ const App = () => {
         ) : (
           <>
             <Route path="/" element={<MainPage />}>
-              <Route
-                path="map"
-                element={
-                  <MapPage
-                    eventsData={eventsData}
-                    center={center}
-                    setEventsData={setEventsData}
-                  />
-                }
-              />
+              <Route path="map" element={<MapPage />} />
               <Route path="events" element={<EventPage />} />
               <Route path="admin" element={<AdminPage />} />
               <Route path="chat" element={<ChatBot></ChatBot>} />

@@ -1,9 +1,13 @@
-import { Autocomplete, GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Autocomplete,
+  GoogleMap,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
-import DraggableModal from '../layout/DraggableModal/DraggableModal';
-import Event from '../events/Event';
-import { MarkerClusterer } from '@googlemaps/markerclusterer';
+import DraggableModal from "../layout/DraggableModal/DraggableModal";
+import Event from "../events/Event";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import artIcon from "../../resources/icons/art-design-paint-pallet-format-text-svgrepo-com.svg";
 import carnivalIcon from "../../resources/icons/carnival-symbol-svgrepo-com.svg";
 import concertIcon from "../../resources/icons/concert-piano-orchestra-classic-instrument-svgrepo-com.svg";
@@ -11,18 +15,26 @@ import defaultIcon from "../../resources/icons/marker-pin-01-svgrepo-com.svg";
 import foodIcon from "../../resources/icons/food-restaurant-svgrepo-com.svg";
 import musicIcon from "../../resources/icons/music-notes-svgrepo-com.svg";
 import sportIcon from "../../resources/icons/running-svgrepo-com.svg";
-import styles from './map.module.css';
+import styles from "./map.module.css";
 import techIcon from "../../resources/icons/computer-code-svgrepo-com.svg";
 import theaterIcon from "../../resources/icons/theater-svgrepo-com.svg";
 import { useSelector } from "react-redux";
 
-const libraries = ['places', 'marker'];
+const libraries = ["places", "marker"];
 
-const Map = ({ center, markersData, mapContainerStyle, options, isModal = false, setEventsData, onMarkerPositionChange }) => {
+const Map = ({
+  center = null,
+  markersData,
+  mapContainerStyle,
+  options,
+  isModal = false,
+  setEventsData,
+  onMarkerPositionChange,
+}) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
-    libraries
-  });  
+    libraries,
+  });
 
   const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -34,18 +46,22 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
   const [isMarkersLoading, setIsMarkersLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(isModal);
   const [userLocation, setUserLocation] = useState(center);
+  const [mapCenter, setMapCenter] = useState(center);
 
-  const categoryIcons = useMemo(() => ({
-    default: defaultIcon,
-    1: musicIcon,
-    2: artIcon,
-    3: theaterIcon,
-    4: carnivalIcon,
-    5: techIcon,
-    6: concertIcon,    
-    7: sportIcon,
-    8: foodIcon,    
-  }), []);
+  const categoryIcons = useMemo(
+    () => ({
+      default: defaultIcon,
+      1: musicIcon,
+      2: artIcon,
+      3: theaterIcon,
+      4: carnivalIcon,
+      5: techIcon,
+      6: concertIcon,
+      7: sportIcon,
+      8: foodIcon,
+    }),
+    []
+  );
 
   const onLoad = useCallback((mapInstance) => {
     setMap(mapInstance);
@@ -68,15 +84,15 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
           map.setCenter({ lat, lng });
           map.setZoom(15);
 
-          const markerElement = document.createElement('div');
-          markerElement.className = styles['marker-icon'];
+          const markerElement = document.createElement("div");
+          markerElement.className = styles["marker-icon"];
           markerElement.innerHTML = `<img src=${defaultIcon} alt="Event Location" />`;
 
           new window.google.maps.marker.AdvancedMarkerElement({
             position: { lat, lng },
             map: map,
             title: "Event Location",
-            content: markerElement
+            content: markerElement,
           });
 
           if (onMarkerPositionChange) {
@@ -85,11 +101,14 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         }
       }
     } else {
-      console.log('Autocomplete is not loaded yet!');
+      console.log("Autocomplete is not loaded yet!");
     }
   };
 
   useEffect(() => {
+    if (center) {
+      setMapCenter(center);
+    }
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -97,14 +116,14 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
           const userLocation = { lat: latitude, lng: longitude };
           setUserLocation(userLocation);
           if (map) {
-            map.setCenter(userLocation);
+            // map.setCenter(userLocation);
 
-            const iconElement = document.createElement('div');
-            iconElement.className = styles['marker-icon'];
+            const iconElement = document.createElement("div");
+            iconElement.className = styles["marker-icon"];
 
-            const img = document.createElement('img');
+            const img = document.createElement("img");
             img.src = user.img;
-            img.alt = 'Your location';
+            img.alt = "Your location";
 
             iconElement.appendChild(img);
 
@@ -112,7 +131,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
               position: userLocation,
               title: "You are here",
               map,
-              content: iconElement
+              content: iconElement,
             });
           }
         },
@@ -121,33 +140,41 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         }
       );
     }
-  }, [map, user.img]);
+  }, [map, user.img, center]);
 
   useEffect(() => {
     if (isLoaded && map && window.google && markersData) {
-      const markers = markersData.map(marker => {
-        const iconElement = document.createElement('div');
-        iconElement.className = styles['marker-icon'];
+      const markers = markersData
+        .map((marker) => {
+          if (!marker.locations || marker.locations.length === 0) return null;
 
-        const markerIcon = categoryIcons[marker.type] || defaultIcon;
-        const img = document.createElement('img');
-        img.src = markerIcon;
-        img.alt = marker.name;
+          const iconElement = document.createElement("div");
+          iconElement.className = styles["marker-icon"];
 
-        iconElement.appendChild(img);
-        const advancedMarker = new window.google.maps.marker.AdvancedMarkerElement({
-          position: { lat: marker.locations[0].pointY, lng: marker.locations[0].pointX },
-          title: marker.name,
-          map,
-          content: iconElement
-        });
+          const markerIcon = categoryIcons[marker.type] || defaultIcon;
+          const img = document.createElement("img");
+          img.src = markerIcon;
+          img.alt = marker.name;
 
-        advancedMarker.addListener('click', () => {
-          setSelectedMarker(marker);
-        });
+          iconElement.appendChild(img);
+          const advancedMarker =
+            new window.google.maps.marker.AdvancedMarkerElement({
+              position: {
+                lat: marker.locations[0].pointY,
+                lng: marker.locations[0].pointX,
+              },
+              title: marker.name,
+              map,
+              content: iconElement,
+            });
 
-        return advancedMarker;
-      });
+          advancedMarker.addListener("click", () => {
+            setSelectedMarker(marker);
+          });
+
+          return advancedMarker;
+        })
+        .filter((marker) => marker !== null);
 
       if (markers.length > 1) {
         new MarkerClusterer({ markers, map });
@@ -159,7 +186,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
 
   const handleStyleChange = (event) => {
     setMapStyle(event.target.value);
-    setKey(prevKey => prevKey + 1);
+    setKey((prevKey) => prevKey + 1);
     setIsMapLoading(true);
     setIsMarkersLoading(true);
   };
@@ -176,18 +203,18 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
       if (window.marker) {
         window.marker.setMap(null);
       }
-  
-      const markerElement = document.createElement('div');
-      markerElement.className = styles['marker-icon'];
+
+      const markerElement = document.createElement("div");
+      markerElement.className = styles["marker-icon"];
       markerElement.innerHTML = `<img src="${defaultIcon}" alt="Event Location" />`;
-  
+
       window.marker = new window.google.maps.marker.AdvancedMarkerElement({
         position: { lat, lng },
         map: map,
         title: "Event Location",
-        content: markerElement
+        content: markerElement,
       });
-      
+
       if (onMarkerPositionChange) {
         onMarkerPositionChange({ lat, lng });
       }
@@ -198,11 +225,22 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
     return <div>Map loading error</div>;
   }
 
-  const mapId = mapStyle === "light" ? process.env.REACT_APP_MAP_ID : process.env.REACT_APP_NIGHT_MAP_ID;
+  const mapId =
+    mapStyle === "light"
+      ? process.env.REACT_APP_MAP_ID
+      : process.env.REACT_APP_NIGHT_MAP_ID;
 
   return isLoaded ? (
-    <div className={`${styles.mapContainer} ${mapStyle === "light" ? "light-mode" : "dark-mode"}`}>
-      <select onChange={handleStyleChange} value={mapStyle} className={styles.styleSelector}>
+    <div
+      className={`${styles.mapContainer} ${
+        mapStyle === "light" ? "light-mode" : "dark-mode"
+      }`}
+    >
+      <select
+        onChange={handleStyleChange}
+        value={mapStyle}
+        className={styles.styleSelector}
+      >
         <option value="light">Light Mode</option>
         <option value="styled">Night Mode</option>
       </select>
@@ -213,7 +251,7 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
       )}
       <Autocomplete onLoad={onLoadAutocomplete} onPlaceChanged={onPlaceChanged}>
         <input
-          style={{width: '50%'}}
+          style={{ width: "50%" }}
           type="text"
           placeholder="Search for places"
           className={styles.searchBox}
@@ -221,8 +259,10 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
       </Autocomplete>
       <GoogleMap
         key={key}
-        mapContainerStyle={mapContainerStyle || { width: '100%', height: '100%' }}
-        center={userLocation}
+        mapContainerStyle={
+          mapContainerStyle || { width: "100%", height: "100%" }
+        }
+        center={mapCenter !== null ? mapCenter : userLocation }
         zoom={10.5}
         onLoad={onLoad}
         onClick={handleMapClick}
@@ -233,13 +273,23 @@ const Map = ({ center, markersData, mapContainerStyle, options, isModal = false,
         }}
       >
         {selectedMarker && !modalIsOpen && (
-          <DraggableModal isVisible={true} onClose={closeModal} headerText="Event Details">
-            <Event event={selectedMarker} onClose={closeModal} setEventsData={setEventsData} />
+          <DraggableModal
+            isVisible={true}
+            onClose={closeModal}
+            headerText="Event Details"
+          >
+            <Event
+              event={selectedMarker}
+              onClose={closeModal}
+              setEventsData={setEventsData}
+            />
           </DraggableModal>
         )}
       </GoogleMap>
     </div>
-  ) : <div>Loading...</div>;
+  ) : (
+    <div>Loading...</div>
+  );
 };
 
 export default Map;

@@ -23,6 +23,17 @@ const Event = ({ event, onClose, setEventsData }) => {
     });
   };
 
+  const eventDate = new Date(event.date).toLocaleString('en-GB', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).replace(',', '');
+
+
   if (!event) return null;
 
   return (
@@ -35,7 +46,7 @@ const Event = ({ event, onClose, setEventsData }) => {
             <p className={styles.eventCategory}>
               {Object.keys(EventTypes).find(key => EventTypes[key] === event.type)}
             </p>
-            <p>{new Date(event.date).toLocaleDateString()}</p>
+            <p>{eventDate}</p>
             <p>{`Lat: ${location[0].pointY}, Lng: ${location[0].pointX}`}</p>
             <div className={styles.likesContainer} onClick={toggleLike}>
               <span className={styles.likesCount}>{likes}</span>
@@ -54,7 +65,7 @@ const Event = ({ event, onClose, setEventsData }) => {
       </div>
       <div className={styles.modalMap}>
         <Map
-          center={{ lat: parseFloat(location.pointY), lng: parseFloat(location.pointX) }}
+          center={{ lat: location[0].pointY, lng: location[0].pointX }}
           markersData={[event]}
           mapContainerStyle={{ width: "100%", height: "100%" }}
           options={{
