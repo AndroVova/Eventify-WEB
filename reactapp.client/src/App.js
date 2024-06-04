@@ -5,6 +5,7 @@ import { center, events } from "./const_values";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import AdminPage from "./pages/AdminPage";
 import ChatBot from "./components/chat/ChatBot";
 import EventPage from "./pages/EventPage";
 import { LoginPage } from "./pages/LoginPage";
@@ -78,6 +79,12 @@ const App = () => {
                     eventsData={eventsData}
                     setEventsData={setEventsData}
                   />
+                }
+              />
+              <Route
+                path="admin"
+                element={
+                  <AdminPage                  />
                 }
               />
               <Route path="chat" element={<ChatBot></ChatBot>} />

@@ -9,7 +9,8 @@ import UserDetails from "../components/profile/UserDetails";
 import avatar1 from "../resources/1.png";
 import avatar2 from "../resources/2.png";
 import avatar3 from "../resources/3.png";
-import defaultAvatar from "../resources/default.png"
+import axios from "axios";
+import defaultAvatar from "../resources/default.png";
 import styles from "./ProfilePage.module.css";
 
 const avatars = [defaultAvatar, avatar1, avatar2, avatar3];
@@ -23,6 +24,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
   const [login, setLogin] = useState(user.email);
   const [phone, setPhone] = useState(user.phoneNumber || "");
   const [selectedCategories, setSelectedCategories] = useState(user.types || []);
+  const [selectedAvatar, setSelectedAvatar] = useState(user.img || defaultAvatar);
 
   if (!user) return null;
 
@@ -31,13 +33,27 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
   };
 
   const handleAvatarSelect = (avatar) => {
+    setSelectedAvatar(avatar);
     dispatch(updateUserImage(avatar));
     setShowAvatarOptions(false);
   };
 
-  const handleSave = () => {
-    dispatch(changeProfile({ name, email: login, phone, types: selectedCategories }));
-    setIsEditing(false);
+  const handleSave = async () => {
+    const updatedProfile = { 
+      userName: name, 
+      email: login, 
+      phoneNumber: phone, 
+      img: selectedAvatar, 
+      id: user.id 
+    };
+    
+    try {
+      await axios.post("https://eventify-backend.azurewebsites.net/api/Profile/update-profile", updatedProfile);
+      dispatch(changeProfile(updatedProfile));
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update profile", error);
+    }
   };
 
   const handleAddCategory = (event) => {
@@ -66,7 +82,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
           setPhone={setPhone}
         />
         <AvatarSection
-          user={user}
+          user={{ ...user, img: selectedAvatar }}
           avatars={avatars}
           showAvatarOptions={showAvatarOptions}
           handleAvatarClick={handleAvatarClick}

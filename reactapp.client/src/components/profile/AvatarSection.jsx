@@ -1,28 +1,30 @@
 import React from "react";
 import styles from "../../pages/ProfilePage.module.css";
 
-const AvatarSection = ({ user, avatars, showAvatarOptions, handleAvatarClick, handleAvatarSelect }) => (
-  <div className={styles.avatarSection}>
-    <img
-      src={user.img || avatars[0]}
-      alt="Profile"
-      className={styles.profileImage}
-      onClick={handleAvatarClick}
-    />
-    {showAvatarOptions && (
-      <div className={styles.avatarOptions}>
-        {avatars.map((avatar, index) => (
-          <img
-            key={index}
-            src={avatar}
-            alt={`Avatar ${index + 1}`}
-            className={styles.avatarOption}
-            onClick={() => handleAvatarSelect(avatar)}
-          />
-        ))}
-      </div>
-    )}
-  </div>
-);
+const AvatarSection = ({ user, avatars, showAvatarOptions, handleAvatarClick, handleAvatarSelect,}) => {
+  return (
+    <div className={styles.avatarSection}>
+      <img
+        src={user.img}
+        alt="User Avatar"
+        className={styles.profileImage}
+        onClick={handleAvatarClick}
+      />
+      {showAvatarOptions && (
+        <div className={styles.avatarOptions}>
+          {avatars.map((avatar, index) => (
+            <img
+              key={index}
+              src={avatar}
+              alt={`Avatar ${index}`}
+              className={styles.avatarOption}
+              onClick={() => handleAvatarSelect(avatar)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default AvatarSection;
