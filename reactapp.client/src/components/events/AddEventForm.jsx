@@ -15,11 +15,11 @@ const AddEventForm = ({ onSubmit }) => {
       description: "",
       type: 0,
       userId: user.id,
-      img: null,
+      imgUpload: null,
       ageLimit: 0,
       date: "",
       link: "",
-      locations: [{ pointX: 0, pointY: 0 }],
+      locations: [{ pointX: 0, pointY: 0 }]
     });
     const [error, setError] = useState("");
   
@@ -34,7 +34,7 @@ const AddEventForm = ({ onSubmit }) => {
     const handleImageChange = (e) => {
       setForm((prevState) => ({
         ...prevState,
-        img: e.target.files[0],
+        imgUpload: e.target.files[0],
       }));
     };
   
@@ -53,7 +53,7 @@ const AddEventForm = ({ onSubmit }) => {
       e.preventDefault();
       const formData = new FormData();
       for (let key in form) {
-        if (key === "img") {
+        if (key === "imgUpload") {
           formData.append(key, form[key]);
         } else if (key === "locations") {
           formData.append(key, JSON.stringify(form[key]));
@@ -119,10 +119,10 @@ const AddEventForm = ({ onSubmit }) => {
         />
         <Input
           label="Event Image"
-          id="img"
+          id="imgUpload"
           type="file"
           className={styles.input}
-          name="img"
+          name="imgUpload"
           onChange={handleImageChange}
           required
         />

@@ -25,7 +25,7 @@ const EventFilters = ({
         value={selectedCategory}
       >
         {uniqueCategories.map((category, index) => (
-          <option key={index} value={category.split(' ')[0]}>{category}</option>
+          <option key={index} value={category || "All"}>{category}</option>
         ))}
       </select>
     </div>
@@ -38,7 +38,7 @@ const EventFilters = ({
         value={selectedTag}
       >
         {uniqueTags.map((tag, index) => (
-          <option key={index} value={tag.split(' ')[0]}>{tag}</option>
+          <option key={index} value={tag || "All"}>{tag}</option>
         ))}
       </select>
     </div>

@@ -20,28 +20,8 @@ const EventPage = ({ eventsData, setEventsData }) => {
   const [showAddEventModal, setShowAddEventModal] = useState(false);
   const itemsPerPage = 9;
 
-  const categoryCounts = eventsData.reduce((acc, event) => {
-    const category = Object.keys(EventTypes).find(key => EventTypes[key] === event.type);
-    acc[category] = (acc[category] || 0) + 1;
-    return acc;
-  }, {});
-
-  const tagCounts = eventsData.reduce((acc, event) => {
-    event.tags.forEach(tag => {
-      acc[tag] = (acc[tag] || 0) + 1;
-    });
-    return acc;
-  }, {});
-
-  const uniqueCategories = ["All"];
-  for (let category in categoryCounts) {
-    uniqueCategories.push(`${category} (${categoryCounts[category]})`);
-  }
-
-  const uniqueTags = ["All"];
-  for (let tag in tagCounts) {
-    uniqueTags.push(`${tag} (${tagCounts[tag]})`);
-  }
+  const uniqueCategories = ["All", ...new Set(eventsData.map(event => Object.keys(EventTypes).find(key => EventTypes[key] === event.type)).filter(Boolean))];
+  const uniqueTags = ["All", ...new Set(eventsData.flatMap(event => event.tags))];
 
   const handleSortByDate = () => {
     const sortedEvents = [...events].sort((a, b) => {
@@ -62,12 +42,12 @@ const EventPage = ({ eventsData, setEventsData }) => {
   };
 
   const handleCategoryChange = (e) => {
-    const selectedCategory = e.target.value.split(' ')[0];
+    const selectedCategory = e.target.value;
     setSelectedCategory(selectedCategory);
   };
 
   const handleTagChange = (e) => {
-    const selectedTag = e.target.value.split(' ')[0];
+    const selectedTag = e.target.value;
     setSelectedTag(selectedTag);
   };
 
