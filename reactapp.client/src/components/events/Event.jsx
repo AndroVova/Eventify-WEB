@@ -3,23 +3,81 @@ import React, { useState } from "react";
 import EventTypes from "../../models/EventTypes";
 import LocationInfo from "./LocationInfo";
 import Map from "../map/Map";
+import axios from "axios";
 import styles from "./Event.module.css";
+import { useSelector } from "react-redux";
 
-const Event = ({ event, onClose, setEventsData }) => {
-  const [likes, setLikes] = useState(event.likes);
+const Event = ({ event, setEventsData }) => {
+  const user = useSelector((state) => state.auth.user);
   const [liked, setLiked] = useState(event.isLiked);
+  const [disliked, setDisliked] = useState(event.isDisliked); // Initialize dislike state
   const location = event.locations[0];
 
-  const toggleLike = () => {
-    const newLikes = likes + (liked ? -1 : 1);
-    event.likes = newLikes;
-    event.isLiked = !liked;
-    setLikes(newLikes);
+  const handleReaction = async (reaction, method) => {
+    const endpoints = {
+      add: 'https://eventify-backend.azurewebsites.net/api/Reaction/add-reaction',
+      update: 'https://eventify-backend.azurewebsites.net/api/Reaction/update-reaction',
+      delete: 'https://eventify-backend.azurewebsites.net/api/Reaction/delete-reaction'
+    };
+
+    try {
+      const response = await axios({
+        method: method,
+        url: endpoints[method],
+        data: {
+          eventId: event.id,
+          userID: user.id,
+          reaction: reaction,
+        },
+      });
+
+      if (response.data.IsSuccess) {
+        console.log(response.data.message);
+      } else {
+        console.error('Error: ', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  };
+
+  const toggleLike = async () => {
+    if (liked) {
+      await handleReaction(0, 'delete');
+    } else {
+      if (disliked) {
+        await handleReaction(0, 'update');
+        setDisliked(false);
+      } else {
+        await handleReaction(0, 'add');
+      }
+    }
     setLiked(!liked);
 
     setEventsData(prevEvents => {
       const updatedEvents = prevEvents.map(ev =>
-        ev.id === event.id ? event : ev
+        ev.id === event.id ? { ...event, isLiked: !liked, isDisliked: false } : ev
+      );
+      return updatedEvents;
+    });
+  };
+
+  const toggleDislike = async () => {
+    if (disliked) {
+      await handleReaction(1, 'delete');
+    } else {
+      if (liked) {
+        await handleReaction(1, 'update');
+        setLiked(false);
+      } else {
+        await handleReaction(1, 'add');
+      }
+    }
+    setDisliked(!disliked);
+
+    setEventsData(prevEvents => {
+      const updatedEvents = prevEvents.map(ev =>
+        ev.id === event.id ? { ...event, isDisliked: !disliked, isLiked: false } : ev
       );
       return updatedEvents;
     });
@@ -58,9 +116,13 @@ const Event = ({ event, onClose, setEventsData }) => {
                 ))}
               </div>
             )}
-            <div className={styles.likesContainer} onClick={toggleLike}>
-              <span className={styles.likesCount}>{likes}</span>
-              <span className={liked ? styles.liked : styles.likeButton}>❤</span>
+            <div className={styles.reactionsContainer}>
+              <div className={styles.likesContainer} onClick={toggleLike}>
+                <span className={liked ? styles.liked : styles.likeButton}>❤</span>
+              </div>
+              <div className={styles.likesContainer} onClick={toggleDislike}>
+                <span className={disliked ? styles.liked : styles.likeButton}>👎</span>
+              </div>
             </div>
           </div>
           <button className={styles.ticketButton} onClick={() => window.open(event.link, "_blank")}>

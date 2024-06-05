@@ -1,3 +1,4 @@
+import CustomSelect from "../utils/CustomSelect/CustomSelect"
 import React from 'react';
 
 const EventFilters = ({ 
@@ -11,44 +12,71 @@ const EventFilters = ({
   onSortByDate,
   sortOrder,
   styles
-}) => (
-  <div className={styles.controls}>
-    <button className={styles.sortButton} onClick={onSortByDate}>
-      Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
-    </button>
-    <div className={styles.filterGroup}>
-      <label htmlFor="categorySelect" className={styles.filterLabel}>Category:</label>
-      <select
-        id="categorySelect"
-        className={styles.filterButton}
-        onChange={onCategoryChange}
-        value={selectedCategory}
-      >
-        {uniqueCategories.map((category, index) => (
-          <option key={index} value={category || "All"}>{category}</option>
-        ))}
-      </select>
+}) => {
+  const categoryOptions = uniqueCategories.map(category => ({
+    value: category,
+    label: category
+  }));
+
+  const tagOptions = uniqueTags.map(tag => ({
+    value: tag,
+    label: tag
+  }));
+
+  const handleCategoryChange = selectedOption => {
+    onCategoryChange({
+      target: {
+        value: selectedOption ? selectedOption.value : ''
+      }
+    });
+  };
+
+  const handleTagChange = selectedOption => {
+    onTagChange({
+      target: {
+        value: selectedOption ? selectedOption.value : ''
+      }
+    });
+  };
+
+  const selectedCategoryOption = categoryOptions.find(option => option.value === selectedCategory);
+  const selectedTagOption = tagOptions.find(option => option.value === selectedTag);
+
+  return (
+    <div className={styles.controls}>
+      <button className={styles.sortButton} onClick={onSortByDate}>
+        Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
+      </button>
+      <div className={styles.filterGroup}>
+        <label htmlFor="categorySelect" className={styles.filterLabel}>Category:</label>
+        <div className={styles.selectContainer}>
+          <CustomSelect
+            id="categorySelect"
+            options={categoryOptions}
+            value={selectedCategoryOption}
+            onChange={handleCategoryChange}
+          />
+        </div>
+      </div>
+      <div className={styles.filterGroup}>
+        <label htmlFor="tagSelect" className={styles.filterLabel}>Tag:</label>
+        <div className={styles.selectContainer}>
+          <CustomSelect
+            id="tagSelect"
+            options={tagOptions}
+            value={selectedTagOption}
+            onChange={handleTagChange}
+          />
+        </div>
+      </div>
+      <input
+        type="text"
+        placeholder="Search by event title"
+        onKeyDown={onSearchKeyDown}
+        className={styles.searchInput}
+      />
     </div>
-    <div className={styles.filterGroup}>
-      <label htmlFor="tagSelect" className={styles.filterLabel}>Tag:</label>
-      <select
-        id="tagSelect"
-        className={styles.filterButton}
-        onChange={onTagChange}
-        value={selectedTag}
-      >
-        {uniqueTags.map((tag, index) => (
-          <option key={index} value={tag || "All"}>{tag}</option>
-        ))}
-      </select>
-    </div>
-    <input
-      type="text"
-      placeholder="Search by event title"
-      onKeyDown={onSearchKeyDown}
-      className={styles.searchInput}
-    />
-  </div>
-);
+  );
+};
 
 export default EventFilters;

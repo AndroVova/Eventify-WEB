@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import CustomSelect from "../utils/CustomSelect/CustomSelect"; // Adjust the path as necessary
 import { HexColorPicker } from "react-colorful";
 import styles from "./EventTags.module.css";
 
@@ -26,8 +27,8 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
     fetchTags();
   }, []);
 
-  const handleAddTag = (e) => {
-    const selectedTagId = e.target.value;
+  const handleAddTag = (selectedOption) => {
+    const selectedTagId = selectedOption.value;
     const selectedTag = availableTags.find((tag) => tag.id === selectedTagId);
     if (selectedTag && !tags.some((tag) => tag.id === selectedTagId)) {
       onAddTag({
@@ -77,6 +78,13 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
     onRemoveTag(tagId);
   };
 
+  const availableTagOptions = availableTags
+    .filter((tag) => !tags.some((t) => t.id === tag.id))
+    .map((tag) => ({
+      value: tag.id,
+      label: tag.name,
+    }));
+
   return (
     <div className={styles.settingItem}>
       <span>Event Tags:</span>
@@ -92,16 +100,13 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
       </div>
       {isEditing && (
         <div className={styles.addCategory}>
-          <select className={styles.selectField} onChange={handleAddTag} value="">
-            <option value="" disabled>Select Tag</option>
-            {availableTags
-              .filter((tag) => !tags.some((t) => t.id === tag.id))
-              .map((tag) => (
-                <option key={tag.id} value={tag.id}>
-                  {tag.name}
-                </option>
-              ))}
-          </select>
+          <CustomSelect
+            id="tagSelect"
+            options={availableTagOptions}
+            value={null}
+            onChange={handleAddTag}
+            isClearable={true}
+          />
         </div>
       )}
       <div className={styles.newTagContainer}>

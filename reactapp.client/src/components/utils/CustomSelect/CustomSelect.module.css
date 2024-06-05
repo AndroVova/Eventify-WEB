@@ -1,0 +1,39 @@
+/* CustomSelect.module.css */
+.select__control {
+    padding: 10px 20px;
+    border: none;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .select__control:hover {
+    background-color: #45a049;
+  }
+  
+  .select__single-value {
+    color: white;
+  }
+  
+  .select__menu {
+    color: black;
+  }
+  
+  .select__option {
+    background-color: white;
+    color: black;
+  }
+  
+  .select__option--is-selected {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .select__option:hover {
+    background-color: #45a049;
+    color: white;
+  }
+  

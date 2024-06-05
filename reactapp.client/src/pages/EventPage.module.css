@@ -325,3 +325,46 @@
   border: 1px solid #999;
   background-color: #f5f5f5;
 }
+
+
+.selectContainer {
+  position: relative;
+}
+
+.selectControl {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.selectControl:hover {
+  background-color: #45a049;
+}
+
+.selectSingleValue {
+  color: white;
+}
+
+.selectMenu {
+  color: black;
+}
+
+.selectOption {
+  background-color: white;
+  color: black;
+}
+
+.selectOption:hover {
+  background-color: #45a049;
+  color: white;
+}
+
+.selectOption.is-selected {
+  background-color: #4caf50;
+  color: white;
+}

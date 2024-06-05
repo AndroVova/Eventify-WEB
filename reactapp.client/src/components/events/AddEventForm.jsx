@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import CustomSelect from "../utils/CustomSelect/CustomSelect";
 import EventTags from "./EventTags";
 import EventTypes from "../../models/EventTypes";
 import ImageUploader from "./ImageUploader";
@@ -33,6 +34,14 @@ const AddEventForm = ({ onSubmit }) => {
     setForm((prevState) => ({
       ...prevState,
       [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (selectedOption, actionMeta) => {
+    console.log(selectedOption, actionMeta);
+    setForm((prevState) => ({
+      ...prevState,
+      type: selectedOption ? selectedOption.value : null,
     }));
   };
 
@@ -124,6 +133,11 @@ const AddEventForm = ({ onSubmit }) => {
     }
   };
 
+  const eventTypeOptions = Object.keys(EventTypes).map((key) => ({
+    value: EventTypes[key],
+    label: key,
+  }));
+
   return (
     <form className={styles.addEventForm} onSubmit={handleSubmit}>
       {error && <div className={styles.error}>{error}</div>}
@@ -148,23 +162,14 @@ const AddEventForm = ({ onSubmit }) => {
       </label>
       <label>
         Event Type
-        <select
+        <CustomSelect
           id="type"
-          className={styles.input}
           name="type"
-          value={form.type}
-          onChange={handleChange}
-          required
-        >
-          <option value={0} disabled>
-            Select Event Type
-          </option>
-          {Object.keys(EventTypes).map((key) => (
-            <option key={EventTypes[key]} value={EventTypes[key]}>
-              {key}
-            </option>
-          ))}
-        </select>
+          options={eventTypeOptions}
+          value={eventTypeOptions.find(option => option.value === form.type)}
+          onChange={handleSelectChange}
+          isClearable={false}
+        />
       </label>
       <ImageUploader onImageChange={handleImageChange} styles={styles} />
       <Input

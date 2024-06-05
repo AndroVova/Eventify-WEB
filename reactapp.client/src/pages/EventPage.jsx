@@ -23,6 +23,19 @@ const EventPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 9;
   const [totalPages, setTotalPages] = useState(1);
+  const [availableTags, setAvailableTags] = useState([]);
+
+  const fetchTags = async () => {
+    try {
+      const response = await fetch(
+        "https://eventify-backend.azurewebsites.net/api/Tag/get-all"
+      );
+      const data = await response.json();
+      setAvailableTags(data);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
 
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
@@ -64,10 +77,11 @@ const EventPage = () => {
 
   useEffect(() => {
     fetchEvents();
+    fetchTags();
   }, [fetchEvents]);
 
   const uniqueCategories = ["All", ...Object.keys(EventTypes)];
-  const uniqueTags = ["All"]; //TODO: tags from DB
+  const uniqueTags = ["All",  ...new Set(availableTags.map(tag => tag.name))];
 
   const handleSortByDate = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");

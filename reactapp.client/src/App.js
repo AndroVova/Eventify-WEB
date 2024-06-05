@@ -5,12 +5,14 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import AdminPage from "./pages/AdminPage";
+import AdminTagsPage from "./pages/AdminTagsPage";
 import ChatBot from "./components/chat/ChatBot";
 import EventPage from "./pages/EventPage";
 import { LoginPage } from "./pages/LoginPage";
 import MainPage from "./pages/Home/MainPage";
 import MapPage from "./pages/MapPage";
 import Modal from "react-modal";
+import MyEvents from "./pages/MyEvents";
 import ProfilePage from "./pages/ProfilePage";
 import { Register } from "./components/auth/Register/Register";
 import { events } from "./const_values";
@@ -67,7 +69,10 @@ const App = () => {
             <Route path="/" element={<MainPage />}>
               <Route path="map" element={<MapPage />} />
               <Route path="events" element={<EventPage />} />
-              <Route path="admin" element={<AdminPage />} />
+              <Route path="events/my" element={<MyEvents />} />
+              <Route path="admin/users" element={<AdminPage />} />
+              <Route path="admin/tags" element={<AdminTagsPage />} />
+               <Route path="admin/events" element={<p>EVENTS</p>} />
               <Route path="chat" element={<ChatBot></ChatBot>} />
               <Route
                 path="profile"

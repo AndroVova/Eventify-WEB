@@ -280,7 +280,6 @@ const Map = ({
           >
             <Event
               event={selectedMarker}
-              onClose={closeModal}
               setEventsData={setEventsData}
             />
           </DraggableModal>

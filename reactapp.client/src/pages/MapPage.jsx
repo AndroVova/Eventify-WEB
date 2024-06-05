@@ -4,7 +4,7 @@ import Map from "../components/map/Map";
 import axios from "axios";
 import styles from "./MapPage.module.css";
 
-const MapPage = ({ center }) => {
+const MapPage = () => {
   const [eventsData, setEventsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +38,6 @@ const MapPage = ({ center }) => {
       ) : (
         <div className={styles.mapWrapper}>
           <Map
-            center={center}
             markersData={eventsData}
             mapContainerStyle={{ width: "100%", height: "100%" }}
             options={{
