@@ -60,6 +60,7 @@ const AddEventForm = ({ onSubmit }) => {
   };
 
   const handleRemoveTag = (tagId) => {
+    debugger
     setForm((prevState) => ({
       ...prevState,
       tags: prevState.tags.filter((tag) => tag.id !== tagId),
@@ -82,7 +83,7 @@ const AddEventForm = ({ onSubmit }) => {
       setError("Please fill out all fields and select a location on the map.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("description", form.description);
@@ -94,18 +95,18 @@ const AddEventForm = ({ onSubmit }) => {
     formData.append("link", form.link);
     formData.append("locations[0].pointX", form.locations[0].pointX);
     formData.append("locations[0].pointY", form.locations[0].pointY);
-
+  
     form.tags.forEach((tag, index) => {
       formData.append(`tags[${index}].id`, tag.id);
       formData.append(`tags[${index}].name`, tag.name);
       formData.append(`tags[${index}].color`, tag.color);
     });
-
+  
     const config = {
       body: formData,
       headers: {},
     };
-
+  
     try {
       const response = await fetchPostEvent(
         "https://eventify-backend.azurewebsites.net/api/Event/create-events",
@@ -122,6 +123,7 @@ const AddEventForm = ({ onSubmit }) => {
       setError("Failed to add event. Please try again.");
     }
   };
+  
 
   return (
     <form className={styles.addEventForm} onSubmit={handleSubmit}>

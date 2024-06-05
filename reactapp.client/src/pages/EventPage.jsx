@@ -6,7 +6,7 @@ import Event from "../components/events/Event";
 import EventCard from "../components/events/EventCard";
 import EventFilters from "../components/events/EventFilters";
 import EventTypes from "../models/EventTypes";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import PaginationControls from "../components/events/PaginationControls";
 import axios from "axios";
 import styles from "./EventPage.module.css";
@@ -32,18 +32,24 @@ const EventPage = () => {
       pageSize: itemsPerPage,
       sortBy: "date",
       sortAscending: sortOrder === "asc",
-      types: selectedCategory !== "All" ? [EventTypes[selectedCategory]] : Object.values(EventTypes)
+      types:
+        selectedCategory !== "All"
+          ? [EventTypes[selectedCategory]]
+          : Object.values(EventTypes),
     };
 
     try {
-      const response = await axios.post("https://eventify-backend.azurewebsites.net/api/Event/get-events", postData);
+      const response = await axios.post(
+        "https://eventify-backend.azurewebsites.net/api/Event/get-events",
+        postData
+      );
       if (response.status !== 200) {
         throw new Error("Failed to fetch events");
       }
       const data = response.data;
       setEventsData(data);
 
-      const paginationHeader = response.headers['x-pagination'];
+      const paginationHeader = response.headers["x-pagination"];
       if (paginationHeader) {
         const paginationData = JSON.parse(paginationHeader);
         const totalPages = paginationData.totalPages;
@@ -61,7 +67,7 @@ const EventPage = () => {
   }, [fetchEvents]);
 
   const uniqueCategories = ["All", ...Object.keys(EventTypes)];
-  const uniqueTags = ["All"] //TODO: tags from DB
+  const uniqueTags = ["All"]; //TODO: tags from DB
 
   const handleSortByDate = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -84,17 +90,17 @@ const EventPage = () => {
   };
 
   const handleSearchKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       setSearchQuery(e.target.value);
     }
   };
 
   const handleNextPage = () => {
-    setCurrentPage(prevPage => prevPage + 1);
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   const handlePrevPage = () => {
-    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
   const handleAddEvent = (newEvent) => {
@@ -117,32 +123,48 @@ const EventPage = () => {
         styles={styles}
       />
       <div className={styles.addEventContainer}>
-        <button onClick={() => setShowAddEventModal(true)}>
-          Add Event
-        </button>
+        <button onClick={() => setShowAddEventModal(true)}>Add Event</button>
       </div>
       {showAddEventModal && (
         <Modal
           isOpen={showAddEventModal}
           onRequestClose={() => setShowAddEventModal(false)}
           contentLabel="Add New Event"
+          style={{
+            content: {
+              width: "50%",
+              margin: "0 auto",
+              borderRadius: "10px",
+            },
+          }}
         >
           <div className={styles.modalHeader}>Add New Event</div>
-          <AddEventForm onSubmit={handleAddEvent} className={styles.modalForm} />
-          <button onClick={() => setShowAddEventModal(false)} className={styles.closeButton}>Close</button>
+          <AddEventForm
+            onSubmit={handleAddEvent}
+            className={styles.modalForm}
+          />
+          <button
+            onClick={() => setShowAddEventModal(false)}
+            className={styles.closeButton}
+          >
+            Close
+          </button>
         </Modal>
       )}
       <div className={styles.eventsList}>
         {isLoading ? (
           <div className={styles.loader}></div>
+        ) : eventsData.length > 0 ? (
+          eventsData.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              onClick={handleEventClick}
+              styles={styles}
+            />
+          ))
         ) : (
-          eventsData.length > 0 ? (
-            eventsData.map((event) => (
-              <EventCard key={event.id} event={event} onClick={handleEventClick} styles={styles} />
-            ))
-          ) : (
-            <p className={styles.noEventsMessage}>No events found</p>
-          )
+          <p className={styles.noEventsMessage}>No events found</p>
         )}
       </div>
       <PaginationControls
@@ -153,8 +175,16 @@ const EventPage = () => {
         styles={styles}
       />
       {selectedEvent && (
-        <DraggableModal isVisible={true} onClose={closeModal} headerText="Event Details">
-          <Event event={selectedEvent} onClose={closeModal} setEventsData={setEventsData} />
+        <DraggableModal
+          isVisible={true}
+          onClose={closeModal}
+          headerText="Event Details"
+        >
+          <Event
+            event={selectedEvent}
+            onClose={closeModal}
+            setEventsData={setEventsData}
+          />
         </DraggableModal>
       )}
     </div>

@@ -104,3 +104,25 @@
   font-size: 20px;
   color: red;
 }
+
+.modalTags {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.tagsContainer {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom:10px;
+}
+
+.tag {
+  padding: 5px 10px;
+  border-radius: 15px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 0.9em;
+  white-space: nowrap;
+}

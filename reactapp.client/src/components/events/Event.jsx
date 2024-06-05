@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 
 import EventTypes from "../../models/EventTypes";
+import LocationInfo from "./LocationInfo";
 import Map from "../map/Map";
 import styles from "./Event.module.css";
 
 const Event = ({ event, onClose, setEventsData }) => {
   const [likes, setLikes] = useState(event.likes);
   const [liked, setLiked] = useState(event.isLiked);
-  const location = useState(event.locations[0]);
+  const location = event.locations[0];
+
   const toggleLike = () => {
     const newLikes = likes + (liked ? -1 : 1);
     event.likes = newLikes;
@@ -33,7 +35,6 @@ const Event = ({ event, onClose, setEventsData }) => {
     hour12: false,
   }).replace(',', '');
 
-
   if (!event) return null;
 
   return (
@@ -47,7 +48,16 @@ const Event = ({ event, onClose, setEventsData }) => {
               {Object.keys(EventTypes).find(key => EventTypes[key] === event.type)}
             </p>
             <p>{eventDate}</p>
-            <p>{`Lat: ${location[0].pointY}, Lng: ${location[0].pointX}`}</p>
+            <LocationInfo lat={location.pointY} lng={location.pointX} />
+            {event.tags && event.tags.length > 0 && (
+              <div className={styles.tagsContainer}>
+                {event.tags.map(tag => (
+                  <span key={tag.id} className={styles.tag} style={{ backgroundColor: tag.color }}>
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+            )}
             <div className={styles.likesContainer} onClick={toggleLike}>
               <span className={styles.likesCount}>{likes}</span>
               <span className={liked ? styles.liked : styles.likeButton}>❤</span>
@@ -65,7 +75,7 @@ const Event = ({ event, onClose, setEventsData }) => {
       </div>
       <div className={styles.modalMap}>
         <Map
-          center={{ lat: location[0].pointY, lng: location[0].pointX }}
+          center={{ lat: location.pointY, lng: location.pointX }}
           markersData={[event]}
           mapContainerStyle={{ width: "100%", height: "100%" }}
           options={{

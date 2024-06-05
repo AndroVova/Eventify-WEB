@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { ChromePicker } from "react-color";
+import { HexColorPicker } from "react-colorful";
 import styles from './EventTags.module.css'
 
 const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
@@ -10,19 +10,19 @@ const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await fetch(
-          "https://eventify-backend.azurewebsites.net/api/Tag/get-all"
-        );
-        const data = await response.json();
-        setAvailableTags(data);
-      } catch (error) {
-        console.error("Error fetching tags:", error);
-      }
-    };
+  const fetchTags = async () => {
+    try {
+      const response = await fetch(
+        "https://eventify-backend.azurewebsites.net/api/Tag/get-all"
+      );
+      const data = await response.json();
+      setAvailableTags(data);
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchTags();
   }, []);
 
@@ -58,13 +58,11 @@ const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
         }
       );
       if (response.ok) {
-        const createdTag = await response.json();
-        setAvailableTags((prev) => [...prev, createdTag]);
-        onAddTag(createdTag);
         setNewTagName("");
         setNewTagColor("#ffffff");
         setError("");
-        setShowColorPicker(false); // Скрываем палитру после создания тега
+        setShowColorPicker(false);
+        await fetchTags();
       } else {
         setError("Failed to create new tag");
       }
@@ -74,15 +72,19 @@ const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
     }
   };
 
+  const handleRemoveTag = (tagId) => {
+    onRemoveTag(tagId);
+  };
+
   return (
     <div className={styles.tagContainer}>
       <label>
         Event Tags
         <div className={styles.preferencesContainer}>
           {tags.map((tag) => (
-            <div key={tag.id} className={styles.preferenceItem}>
+            <div key={tag.id} className={styles.preferenceItem} style={{ backgroundColor: tag.color }}>
               {tag.name}
-              <button type="button" onClick={() => onRemoveTag(tag.id)}>
+              <button type="button" onClick={() => handleRemoveTag(tag.id)}>
                 x
               </button>
             </div>
@@ -110,13 +112,16 @@ const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
           value={newTagName}
           onChange={(e) => setNewTagName(e.target.value)}
         />
-        <button type="button" onClick={() => setShowColorPicker(!showColorPicker)}>
-          {showColorPicker ? "Close Color Picker" : "Pick Color"}
-        </button>
+        <div className={styles.colorPickerContainer}>
+          <button type="button" onClick={() => setShowColorPicker(!showColorPicker)}>
+            {showColorPicker ? "Close Color Picker" : "Pick Color"}
+          </button>
+          <div className={styles.selectedColor} style={{ backgroundColor: newTagColor }} />
+        </div>
         {showColorPicker && (
-          <ChromePicker
+          <HexColorPicker
             color={newTagColor}
-            onChangeComplete={(color) => setNewTagColor(color.hex)}
+            onChange={setNewTagColor}
           />
         )}
         <button type="button" onClick={handleCreateNewTag}>

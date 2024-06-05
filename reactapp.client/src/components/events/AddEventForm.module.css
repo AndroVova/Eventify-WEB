@@ -13,6 +13,12 @@
   border-radius: 5px;
 }
 
+.addEventForm input,
+.addEventForm textarea,
+.addEventForm select {
+  width:50%;
+}
+
 .addEventForm label {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,6 @@
 import EventTypes from "../../models/EventTypes";
-import React from 'react';
+import LocationInfo from "./LocationInfo";
+import React from "react";
 
 const EventCard = ({ event, onClick, styles }) => {
   if (!event) return null;
@@ -12,43 +13,50 @@ const EventCard = ({ event, onClick, styles }) => {
     event.tags = [{ id: "0", name: "Default Tag", color: "#ffffff" }];
   }
 
-  const eventDate = new Date(event.date).toLocaleString('en-GB', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).replace(',', '');
+  const eventDate = new Date(event.date)
+    .toLocaleString("en-GB", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+    .replace(",", "");
 
   return (
     <div className={styles.eventCard} onClick={() => onClick(event)}>
-      <img 
-        src={`data:image/jpeg;base64,${event.img}`} 
-        alt={event.name} 
-        className={styles.eventImage} 
+      <img
+        src={`data:image/jpeg;base64,${event.img}`}
+        alt={event.name}
+        className={styles.eventImage}
       />
       <div className={styles.eventDetails}>
         <p className={styles.eventCategory}>
-          {Object.keys(EventTypes).find(key => EventTypes[key] === event.type)}
+          {Object.keys(EventTypes).find(
+            (key) => EventTypes[key] === event.type
+          )}
         </p>
         <h2 className={styles.eventTitle}>{event.name}</h2>
-        <p className={styles.eventDate}>
-          {eventDate}
-        </p>
-        <p className={styles.eventLocation}>
-          {`Lat: ${event.locations[0].pointY}, Lng: ${event.locations[0].pointX}`}
-        </p>
+        <p className={styles.eventDate}>{eventDate}</p>
+        <div className={styles.eventLocation}>
+          <LocationInfo
+            lat={event.locations[0].pointY}
+            lng={event.locations[0].pointX}
+          />
+        </div>
         <div className={styles.eventTags}>
-          {event.tags.slice(0, 5).map(tag => (
-            <span key={tag.id} className={styles.tag} style={{ backgroundColor: tag.color }}>
+          {event.tags.slice(0, 5).map((tag) => (
+            <span
+              key={tag.id}
+              className={styles.tag}
+              style={{ backgroundColor: tag.color }}
+            >
               {tag.name}
             </span>
           ))}
-          {event.tags.length > 5 && (
-            <span className={styles.tagMore}>...</span>
-          )}
+          {event.tags.length > 5 && <span className={styles.tagMore}>...</span>}
         </div>
       </div>
     </div>
