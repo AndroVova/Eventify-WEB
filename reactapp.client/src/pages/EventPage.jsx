@@ -13,7 +13,6 @@ import styles from "./EventPage.module.css";
 
 const EventPage = () => {
   const [eventsData, setEventsData] = useState([]);
-  const [events, setEvents] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -21,12 +20,12 @@ const EventPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // состояние загрузки
+  const [isLoading, setIsLoading] = useState(false);
   const itemsPerPage = 9;
   const [totalPages, setTotalPages] = useState(1);
 
   const fetchEvents = useCallback(async () => {
-    setIsLoading(true); // Начало загрузки
+    setIsLoading(true);
     const postData = {
       searchText: searchQuery,
       page: currentPage,
@@ -43,7 +42,6 @@ const EventPage = () => {
       }
       const data = response.data;
       setEventsData(data);
-      setEvents(data);
 
       const paginationHeader = response.headers['x-pagination'];
       if (paginationHeader) {
@@ -55,7 +53,7 @@ const EventPage = () => {
     } catch (error) {
       console.error("Error fetching events:", error);
     } finally {
-      setIsLoading(false); // Конец загрузки
+      setIsLoading(false);
     }
   }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory]);
 
@@ -139,8 +137,8 @@ const EventPage = () => {
         {isLoading ? (
           <div className={styles.loader}></div>
         ) : (
-          events.length > 0 ? (
-            events.map((event) => (
+          eventsData.length > 0 ? (
+            eventsData.map((event) => (
               <EventCard key={event.id} event={event} onClick={handleEventClick} styles={styles} />
             ))
           ) : (

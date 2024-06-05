@@ -95,7 +95,6 @@ const AddEventForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Проверяем, что все поля заполнены
     if (
       !form.name ||
       !form.description ||

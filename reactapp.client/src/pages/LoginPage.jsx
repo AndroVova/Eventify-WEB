@@ -5,9 +5,6 @@ import { login } from "../reducers/auth.reducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-//import Center from "../components/layout/Center/Center";
-
-
 export const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

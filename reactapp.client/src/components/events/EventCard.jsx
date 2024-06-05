@@ -2,10 +2,8 @@ import EventTypes from "../../models/EventTypes";
 import React from 'react';
 
 const EventCard = ({ event, onClick, styles }) => {
-  // Проверяем, что все необходимые данные присутствуют
   if (!event || !event.locations || event.locations.length === 0) {
     event.locations = [{ pointX: 0, pointY: 0 }]
-    // return ;
   }
 
   const eventDate = new Date(event.date).toLocaleString('en-GB', {
