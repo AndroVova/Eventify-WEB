@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import { HexColorPicker } from "react-colorful";
-import styles from './EventTags.module.css'
+import styles from "./EventTags.module.css";
 
-const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
+const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
   const [availableTags, setAvailableTags] = useState([]);
   const [newTagName, setNewTagName] = useState("");
   const [newTagColor, setNewTagColor] = useState("#ffffff");
@@ -72,38 +72,38 @@ const EventTags = ({ tags, onAddTag, onRemoveTag}) => {
     }
   };
 
-  const handleRemoveTag = (tagId) => {
+  const handleRemoveTag = (tagId, e) => {
+    e.stopPropagation(); // Останавливаем всплытие события
     onRemoveTag(tagId);
   };
 
   return (
-    <div className={styles.tagContainer}>
-      <label>
-        Event Tags
-        <div className={styles.preferencesContainer}>
-          {tags.map((tag) => (
-            <div key={tag.id} className={styles.preferenceItem} style={{ backgroundColor: tag.color }}>
-              {tag.name}
-              <button type="button" onClick={() => handleRemoveTag(tag.id)}>
-                x
-              </button>
-            </div>
-          ))}
+    <div className={styles.settingItem}>
+      <span>Event Tags:</span>
+      <div className={styles.preferencesContainer}>
+        {tags.map((tag) => (
+          <div key={tag.id} className={styles.preferenceItem} style={{ backgroundColor: tag.color }}>
+            {tag.name}
+            {isEditing && (
+              <button onClick={(e) => handleRemoveTag(tag.id, e)}>x</button>
+            )}
+          </div>
+        ))}
+      </div>
+      {isEditing && (
+        <div className={styles.addCategory}>
+          <select className={styles.selectField} onChange={handleAddTag} value="">
+            <option value="" disabled>Select Tag</option>
+            {availableTags
+              .filter((tag) => !tags.some((t) => t.id === tag.id))
+              .map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+          </select>
         </div>
-        <select className={styles.selectField} onChange={handleAddTag} value="">
-          <option value="" disabled>
-            Select Tag
-          </option>
-          {availableTags
-            .filter((tag) => !tags.some((t) => t.id === tag.id))
-            .map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.name}
-              </option>
-            ))}
-        </select>
-      </label>
-
+      )}
       <div className={styles.newTagContainer}>
         <h4>Create New Tag</h4>
         <input
