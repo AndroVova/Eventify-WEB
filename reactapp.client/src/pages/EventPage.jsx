@@ -61,7 +61,7 @@ const EventPage = () => {
   }, [fetchEvents]);
 
   const uniqueCategories = ["All", ...Object.keys(EventTypes)];
-  const uniqueTags = ["All", ...new Set(eventsData.flatMap(event => event.tags))];
+  const uniqueTags = ["All"] //TODO: tags from DB
 
   const handleSortByDate = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");

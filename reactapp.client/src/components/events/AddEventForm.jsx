@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-import EventTypes from "../../models/EventTypes"; // Импортируем EventTypes
+import EventTags from "./EventTags";
+import EventTypes from "../../models/EventTypes";
+import ImageUploader from "./ImageUploader";
 import Input from "../utils/Input/Input";
-import Map from "../map/Map";
+import MapSelector from "./MapSelector";
 import { fetchPostEvent } from "../../clients/response";
 import styles from "./AddEventForm.module.css";
 import { useSelector } from "react-redux";
@@ -24,23 +26,6 @@ const AddEventForm = ({ onSubmit }) => {
     tags: [],
   });
   const [error, setError] = useState("");
-  const [tags, setTags] = useState([]);
-
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const response = await fetch(
-          "https://eventify-backend.azurewebsites.net/api/Tag/get-all"
-        );
-        const data = await response.json();
-        setTags(data);
-      } catch (error) {
-        console.error("Error fetching tags:", error);
-      }
-    };
-
-    fetchTags();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,17 +35,16 @@ const AddEventForm = ({ onSubmit }) => {
     }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (blob) => {
     setForm((prevState) => ({
       ...prevState,
-      imgUpload: e.target.files[0],
+      imgUpload: blob,
     }));
   };
 
   const handleMapClick = (position) => {
     if (position) {
-      const lat = position.lat;
-      const lng = position.lng;
+      const { lat, lng } = position;
       setForm((prevState) => ({
         ...prevState,
         locations: [{ pointX: lng, pointY: lat }],
@@ -68,22 +52,11 @@ const AddEventForm = ({ onSubmit }) => {
     }
   };
 
-  const handleAddTag = (e) => {
-    const selectedTagId = e.target.value;
-    const selectedTag = tags.find((tag) => tag.id === selectedTagId);
-    if (selectedTag && !form.tags.some((tag) => tag.id === selectedTagId)) {
-      setForm((prevState) => ({
-        ...prevState,
-        tags: [
-          ...prevState.tags,
-          {
-            id: selectedTag.id,
-            name: selectedTag.name,
-            color: selectedTag.color,
-          },
-        ],
-      }));
-    }
+  const handleAddTag = (tag) => {
+    setForm((prevState) => ({
+      ...prevState,
+      tags: [...prevState.tags, tag],
+    }));
   };
 
   const handleRemoveTag = (tagId) => {
@@ -109,8 +82,8 @@ const AddEventForm = ({ onSubmit }) => {
       setError("Please fill out all fields and select a location on the map.");
       return;
     }
-    const formData = new FormData();
 
+    const formData = new FormData();
     formData.append("name", form.name);
     formData.append("description", form.description);
     formData.append("type", form.type);
@@ -119,7 +92,6 @@ const AddEventForm = ({ onSubmit }) => {
     formData.append("ageLimit", form.ageLimit);
     formData.append("date", form.date);
     formData.append("link", form.link);
-
     formData.append("locations[0].pointX", form.locations[0].pointX);
     formData.append("locations[0].pointY", form.locations[0].pointY);
 
@@ -193,15 +165,7 @@ const AddEventForm = ({ onSubmit }) => {
           ))}
         </select>
       </label>
-      <Input
-        label="Event Image"
-        id="imgUpload"
-        type="file"
-        className={styles.input}
-        name="imgUpload"
-        onChange={handleImageChange}
-        required
-      />
+      <ImageUploader onImageChange={handleImageChange} styles={styles} />
       <Input
         label="Age Limit"
         id="ageLimit"
@@ -234,40 +198,13 @@ const AddEventForm = ({ onSubmit }) => {
         placeholder="Event Link"
         required
       />
-      <label>
-        Event Tags
-        <div className={styles.preferencesContainer}>
-          {form.tags.map((tag) => {
-            const tagDetails = tags.find((t) => t.id === tag.id);
-            return (
-              <div key={tag.id} className={styles.preferenceItem}>
-                {tagDetails.name}
-                <button type="button" onClick={() => handleRemoveTag(tag.id)}>
-                  x
-                </button>
-              </div>
-            );
-          })}
-        </div>
-        <select className={styles.selectField} onChange={handleAddTag} value="">
-          <option value="" disabled>
-            Select Tag
-          </option>
-          {tags
-            .filter((tag) => !form.tags.some((t) => t.id === tag.id))
-            .map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.name}
-              </option>
-            ))}
-        </select>
-      </label>
-      <label>
-        Event Location
-        <div className={styles.mapContainer}>
-          <Map markersData={[]} onMarkerPositionChange={handleMapClick} />
-        </div>
-      </label>
+      <EventTags
+        tags={form.tags}
+        onAddTag={handleAddTag}
+        onRemoveTag={handleRemoveTag}
+        styles={styles}
+      />
+      <MapSelector onMapClick={handleMapClick} styles={styles} />
       <button type="submit">Add Event</button>
     </form>
   );

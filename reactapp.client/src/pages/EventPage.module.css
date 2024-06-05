@@ -301,3 +301,27 @@
 .addEventContainer button:hover {
   background-color: #0056b3;
 }
+
+.eventTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tag, .tagMore {
+  padding: 5px 10px;
+  border-radius: 15px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.tag {
+  border: 1px solid #ccc;
+}
+
+.tagMore {
+  border: 1px solid #999;
+  background-color: #f5f5f5;
+}

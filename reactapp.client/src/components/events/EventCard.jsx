@@ -2,8 +2,14 @@ import EventTypes from "../../models/EventTypes";
 import React from 'react';
 
 const EventCard = ({ event, onClick, styles }) => {
-  if (!event || !event.locations || event.locations.length === 0) {
-    event.locations = [{ pointX: 0, pointY: 0 }]
+  if (!event) return null;
+
+  if (!event.locations || event.locations.length === 0) {
+    event.locations = [{ pointX: 0, pointY: 0 }];
+  }
+
+  if (!event.tags || event.tags.length === 0) {
+    event.tags = [{ id: "0", name: "Default Tag", color: "#ffffff" }];
   }
 
   const eventDate = new Date(event.date).toLocaleString('en-GB', {
@@ -34,6 +40,16 @@ const EventCard = ({ event, onClick, styles }) => {
         <p className={styles.eventLocation}>
           {`Lat: ${event.locations[0].pointY}, Lng: ${event.locations[0].pointX}`}
         </p>
+        <div className={styles.eventTags}>
+          {event.tags.slice(0, 5).map(tag => (
+            <span key={tag.id} className={styles.tag} style={{ backgroundColor: tag.color }}>
+              {tag.name}
+            </span>
+          ))}
+          {event.tags.length > 5 && (
+            <span className={styles.tagMore}>...</span>
+          )}
+        </div>
       </div>
     </div>
   );

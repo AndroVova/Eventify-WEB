@@ -77,3 +77,26 @@
 .addCategory selectField {
   margin-top: 10px;
 }
+
+.newTagContainer {
+  margin-top: 20px;
+}
+
+.newTagContainer h4 {
+  margin-bottom: 10px;
+}
+
+.newTagContainer input {
+  width: calc(100% - 20px);
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.newTagContainer button {
+  padding: 5px 10px;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}

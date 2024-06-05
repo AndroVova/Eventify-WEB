@@ -1,0 +1,57 @@
+.tagContainer {
+    margin-bottom: 20px;
+  }
+  
+  .preferencesContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .preferenceItem {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .preferenceItem button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .selectField {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .newTagContainer {
+    margin-top: 20px;
+  }
+  
+  .newTagContainer h4 {
+    margin-bottom: 10px;
+  }
+  
+  .newTagContainer input {
+    width: calc(100% - 20px);
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+  
+  .newTagContainer button {
+    padding: 5px 10px;
+    margin-right: 10px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  
