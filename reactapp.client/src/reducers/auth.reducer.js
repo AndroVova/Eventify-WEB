@@ -1,15 +1,24 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
 
 import defaultImage from "../resources/default.png";
+import { parseJwt } from "../clients/auth.client";
 
 const storageName = 'auth';
-
 
 let data = JSON.parse(localStorage.getItem(storageName));
 
 if (data && Date.now() > data.tokenExpirationTime) {
-    console.error("Local Data is deleted")
+    console.error("Local Data is deleted");
     data = null;
+}
+
+let userRole = "";
+
+if (data?.tokenValue) {
+    const decodedToken = parseJwt(data?.tokenValue);
+    if (decodedToken) {
+        userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || "";
+    }
 }
 
 const initialState = {
@@ -19,7 +28,8 @@ const initialState = {
         img: data?.user?.img === null || data?.user?.img === undefined ? defaultImage : data?.user?.img,
         userName: data?.user?.userName || '',
         phoneNumber: data?.user?.phoneNumber || '',
-        id: data?.user?.id || ''
+        id: data?.user?.id || '',
+        role: userRole,
     },
     tokenValue: data?.tokenValue || '',
     tokenExpirationTime: data?.tokenExpirationTime || 0,
@@ -32,6 +42,7 @@ export const login = createAction("LOGIN", (profile, token) => {
             user: {
                 ...profile,
                 img: profile.img === null || profile.img === undefined ? defaultImage : profile.img,
+                role: parseJwt(token)["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
             },
             tokenValue: token,
             tokenExpirationTime: expirationTime,

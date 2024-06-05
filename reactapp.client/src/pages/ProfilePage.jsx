@@ -80,6 +80,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
           setName={setName}
           setLogin={setLogin}
           setPhone={setPhone}
+          user={user}
         />
         <AvatarSection
           user={{ ...user, img: selectedAvatar }}

@@ -48,7 +48,6 @@ const EventPage = () => {
         const paginationData = JSON.parse(paginationHeader);
         const totalPages = paginationData.totalPages;
         setTotalPages(totalPages);
-        setTotalPages(3);
       }
     } catch (error) {
       console.error("Error fetching events:", error);

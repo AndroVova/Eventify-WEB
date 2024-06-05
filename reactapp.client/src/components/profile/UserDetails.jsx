@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../pages/ProfilePage.module.css";
 
-const UserDetails = ({ isEditing, name, login, phone, setName, setLogin, setPhone }) => (
+const UserDetails = ({ isEditing, name, login, phone, setName, setLogin, setPhone, user }) => (
   <div className={styles.userDetails}>
     {isEditing ? (
       <div>
@@ -38,6 +38,7 @@ const UserDetails = ({ isEditing, name, login, phone, setName, setLogin, setPhon
         <p>Name: {name}</p>
         <p>Login: {login}</p>
         <p>Phone: {phone}</p>
+        <p>{user.role}</p>
       </div>
     )}
   </div>
