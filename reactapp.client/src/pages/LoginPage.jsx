@@ -7,37 +7,38 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 export const LoginPage = () => {
-    const { t } = useTranslation();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    return (
-        <form onSubmit={e => handleSubmit(e, dispatch, navigate, t)}>
-            <Login />
-        </form>
-    );
-}
+  return (
+    <form onSubmit={(e) => handleSubmit(e, dispatch, navigate, t)}>
+      <Login />
+    </form>
+  );
+};
 
 async function handleSubmit(e, dispatch, navigate, t) {
-    e.preventDefault();
-    const userForm = new FormData(e.target);
+  e.preventDefault();
+  const userForm = new FormData(e.target);
 
-    const email = userForm.get('email');
-    const password = userForm.get('password');
+  const email = userForm.get("email");
+  const password = userForm.get("password");
 
-    const loginData = {
-        email: email,
-        password: password
-    };
+  const loginData = {
+    email: email,
+    password: password,
+  };
 
-    const tokenRespone = await fetchToken(loginData)
-    const token = tokenRespone.token;
-    if (token === undefined) {
-        alert(t("Incorrect e-mail address and (or) password."));
-        return;
-    }
-
-    const user = await fetchUser(token, loginData)
-    dispatch(login(user, token));
-    navigate('/map', { replace: true });
+  const tokenRespone = await fetchToken(loginData);
+  if (tokenRespone === undefined) {
+    
+    alert(t("Incorrect e-mail address and (or) password."));
+    return;
+  }
+  
+  const token = tokenRespone.token;
+  const user = await fetchUser(token, loginData);
+  dispatch(login(user, token));
+  navigate("/map", { replace: true });
 }
