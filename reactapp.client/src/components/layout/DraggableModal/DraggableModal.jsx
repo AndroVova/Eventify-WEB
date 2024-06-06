@@ -1,8 +1,13 @@
-import "./draggable.window.css"
+import "./draggable.window.css";
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-const DraggableModal = ({ isVisible, onClose, children, headerText=null }) => {
+const DraggableModal = ({
+  isVisible,
+  onClose,
+  children,
+  headerText = null,
+}) => {
   const modalRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -32,13 +37,16 @@ const DraggableModal = ({ isVisible, onClose, children, headerText=null }) => {
     });
   };
 
-  const handleMouseMove = useCallback((e) => {
-    if (isDragging) {
-      const newX = e.clientX - startPos.x;
-      const newY = e.clientY - startPos.y;
-      setPosition({ x: newX, y: newY });
-    }
-  }, [isDragging, startPos]);
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (isDragging) {
+        const newX = e.clientX - startPos.x;
+        const newY = e.clientY - startPos.y;
+        setPosition({ x: newX, y: newY });
+      }
+    },
+    [isDragging, startPos]
+  );
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -46,16 +54,16 @@ const DraggableModal = ({ isVisible, onClose, children, headerText=null }) => {
 
   useEffect(() => {
     if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
     } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
@@ -71,7 +79,15 @@ const DraggableModal = ({ isVisible, onClose, children, headerText=null }) => {
       >
         <div className="modal-header" onMouseDown={handleMouseDown}>
           {<label className="modal-header-text">{headerText}</label>}
-          <span className="close-button" onClick={(e) => { e.stopPropagation(); onClose(); }}>&times;</span>
+          <span
+            className="close-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+          >
+            &times;
+          </span>
         </div>
         {children}
       </div>

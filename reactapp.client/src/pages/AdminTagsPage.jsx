@@ -4,8 +4,10 @@ import { HexColorPicker } from 'react-colorful';
 import axios from 'axios';
 import styles from './AdminTagsPage.module.css';
 import { useTable } from 'react-table';
+import { useTranslation } from "react-i18next";
 
 const AdminTagsPage = () => {
+  const { t } = useTranslation();
   const [tags, setTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [editingTag, setEditingTag] = useState(null);
@@ -20,9 +22,9 @@ const AdminTagsPage = () => {
         setTags(response.data);
       })
       .catch(error => {
-        console.error("There was an error fetching the tags!", error);
+        console.error(t("There was an error fetching the tags!"), error);
       });
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     fetchTags();
@@ -42,10 +44,10 @@ const AdminTagsPage = () => {
       });
       fetchTags();
     } catch (error) {
-      console.error('Error deleting tag', error);
-      setError('There was an error deleting the tag.');
+      console.error(t('Error deleting tag'), error);
+      setError(t('There was an error deleting the tag.'));
     }
-  }, [fetchTags, setError]);
+  }, [fetchTags, t]);
 
   const handleSubmitUpdate = async () => {
     try {
@@ -57,8 +59,8 @@ const AdminTagsPage = () => {
       setEditingTag(null);
       fetchTags();
     } catch (error) {
-      console.error("There was an error updating the tag!", error);
-      setError('There was an error updating the tag.');
+      console.error(t("There was an error updating the tag!"), error);
+      setError(t('There was an error updating the tag.'));
     }
   };
 
@@ -69,32 +71,32 @@ const AdminTagsPage = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: t('Name'),
         accessor: 'name',
       },
       {
-        Header: 'Color',
+        Header: t('Color'),
         accessor: 'color',
         Cell: ({ value }) => (
           <div style={{ backgroundColor: value, width: '20px', height: '20px', borderRadius: '4px' }}></div>
         ),
       },
       {
-        Header: 'ID',
+        Header: t('ID'),
         accessor: 'id',
       },
       {
-        Header: 'Actions',
+        Header: t('Actions'),
         id: 'actions',
         Cell: ({ row }) => (
           <div className={styles.actions}>
-            <button onClick={() => handleUpdate(row.original)}>Update</button>
-            <button onClick={() => handleDelete(row.original.id)}>Delete</button>
+            <button onClick={() => handleUpdate(row.original)}>{t('Update')}</button>
+            <button onClick={() => handleDelete(row.original.id)}>{t('Delete')}</button>
           </div>
         ),
       },
     ],
-    [handleDelete]
+    [handleDelete, t]
   );
 
   const {
@@ -107,26 +109,26 @@ const AdminTagsPage = () => {
 
   return (
     <div className={styles.tableContainer}>
-      <h2>Tags</h2>
+      <h2>{t('Tags')}</h2>
       <input
         type="text"
-        placeholder="Search by tag name"
+        placeholder={t('Search by tag name')}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         className={styles.searchInput}
       />
       {editingTag && (
         <div className={styles.updateTagContainer}>
-          <h4>Update Tag</h4>
+          <h4>{t('Update Tag')}</h4>
           <input
             type="text"
-            placeholder="Tag Name"
+            placeholder={t('Tag Name')}
             value={updatedTagName}
             onChange={(e) => setUpdatedTagName(e.target.value)}
           />
           <div className={styles.colorPickerContainer}>
             <button type="button" onClick={() => setShowColorPicker(!showColorPicker)}>
-              {showColorPicker ? "Close Color Picker" : "Pick Color"}
+              {showColorPicker ? t("Close Color Picker") : t("Pick Color")}
             </button>
             <div className={styles.selectedColor} style={{ backgroundColor: updatedTagColor }} />
           </div>
@@ -137,10 +139,10 @@ const AdminTagsPage = () => {
             />
           )}
           <button type="button" onClick={handleSubmitUpdate}>
-            Submit
+            {t('Submit')}
           </button>
           <button type="button" onClick={() => setEditingTag(null)}>
-            Cancel
+            {t('Cancel')}
           </button>
           {error && <p className={styles.error}>{error}</p>}
         </div>

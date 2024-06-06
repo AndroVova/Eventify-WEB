@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import axios from "axios";
 import { changeProfile } from "../reducers/auth.reducer";
 import styles from "./AdminPage.module.css";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const AdminPage = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [users, setUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,20 +15,20 @@ const AdminPage = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const response = await axios.get(
         "https://eventify-backend.azurewebsites.net/api/Profile/get-all"
       );
       setUsers(response.data);
     } catch (error) {
-      setError("Failed to fetch users");
+      setError(t("Failed to fetch users"));
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleDelete = async (userId) => {
     try {
@@ -35,7 +37,7 @@ const AdminPage = () => {
       );
       setUsers(users.filter((user) => user.id !== userId));
     } catch (error) {
-      setError("Failed to delete user");
+      setError(t("Failed to delete user"));
     }
   };
 
@@ -50,9 +52,9 @@ const AdminPage = () => {
       );
       setShowUpdateModal(false);
       setSelectedUser(null);
-      dispatch(changeProfile(updatedUser))
+      dispatch(changeProfile(updatedUser));
     } catch (error) {
-      setError("Failed to update user");
+      setError(t("Failed to update user"));
     }
   };
 
@@ -67,10 +69,10 @@ const AdminPage = () => {
 
   return (
     <div className={styles.adminPage}>
-      <h2>All Users</h2>
+      <h2>{t("All Users")}</h2>
       <input
         type="text"
-        placeholder="Search by user name"
+        placeholder={t("Search by user name")}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         className={styles.searchInput}
@@ -79,12 +81,12 @@ const AdminPage = () => {
       <table className={styles.userTable}>
         <thead>
           <tr>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Image</th>
-            <th>Liked Events</th>
-            <th>Actions</th>
+            <th>{t("User Name")}</th>
+            <th>{t("Email")}</th>
+            <th>{t("Phone Number")}</th>
+            <th>{t("Image")}</th>
+            <th>{t("Liked Events")}</th>
+            <th>{t("Actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -101,15 +103,21 @@ const AdminPage = () => {
                     className={styles.userImage}
                   />
                 ) : (
-                  "No Image"
+                  t("No Image")
                 )}
               </td>
               <td>
-                {user.likedEvents ? user.likedEvents.length : "No Liked Events"}
+                {user.likedEvents
+                  ? user.likedEvents.length
+                  : t("No Liked Events")}
               </td>
               <td>
-                <button onClick={() => openUpdateModal(user)}>Update</button>
-                <button onClick={() => handleDelete(user.id)}>Delete</button>
+                <button onClick={() => openUpdateModal(user)}>
+                  {t("Update")}
+                </button>
+                <button onClick={() => handleDelete(user.id)}>
+                  {t("Delete")}
+                </button>
               </td>
             </tr>
           ))}
@@ -128,6 +136,7 @@ const AdminPage = () => {
 };
 
 const UpdateUserModal = ({ user, onClose, onSave }) => {
+  const { t } = useTranslation();
   const [updatedUser, setUpdatedUser] = useState({ ...user });
 
   const handleChange = (e) => {
@@ -146,10 +155,10 @@ const UpdateUserModal = ({ user, onClose, onSave }) => {
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
-        <h2>Update User</h2>
+        <h2>{t("Update User")}</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            User Name
+            {t("User Name")}
             <input
               type="text"
               name="userName"
@@ -158,7 +167,7 @@ const UpdateUserModal = ({ user, onClose, onSave }) => {
             />
           </label>
           <label>
-            Email
+            {t("Email")}
             <input
               type="email"
               name="email"
@@ -167,7 +176,7 @@ const UpdateUserModal = ({ user, onClose, onSave }) => {
             />
           </label>
           <label>
-            Phone Number
+            {t("Phone Number")}
             <input
               type="text"
               name="phoneNumber"
@@ -175,9 +184,9 @@ const UpdateUserModal = ({ user, onClose, onSave }) => {
               onChange={handleChange}
             />
           </label>
-          <button type="submit">Save</button>
+          <button type="submit">{t("Save")}</button>
           <button type="button" onClick={onClose}>
-            Cancel
+            {t("Cancel")}
           </button>
         </form>
       </div>

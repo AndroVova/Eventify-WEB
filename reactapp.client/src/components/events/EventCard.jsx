@@ -1,8 +1,10 @@
 import EventTypes from "../../models/EventTypes";
 import LocationInfo from "./LocationInfo";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const EventCard = ({ event, onClick, styles }) => {
+  const { t } = useTranslation();
   if (!event) return null;
 
   if (!event.locations || event.locations.length === 0) {
@@ -10,8 +12,9 @@ const EventCard = ({ event, onClick, styles }) => {
   }
 
   if (!event.tags || event.tags.length === 0) {
-    event.tags = [{ id: "0", name: "Default Tag", color: "#ffffff" }];
+    event.tags = [{ id: "0", name: t("Default Tag"), color: "#ffffff" }];
   }
+  
 
   const eventDate = new Date(event.date)
     .toLocaleString("en-GB", {

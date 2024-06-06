@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { Typewriter } from "react-simple-typewriter";
 import styles from "./ChatBot.module.css";
+import { useTranslation } from "react-i18next";
 
 const Message = ({ msg, isLastBotMessage }) => {
+  const { t } = useTranslation();
   const [isTypewriterFinished, setIsTypewriterFinished] = useState(false);
 
   useEffect(() => {
@@ -14,7 +16,7 @@ const Message = ({ msg, isLastBotMessage }) => {
 
   return (
     <div className={`${styles.message} ${styles[msg.role]}`}>
-      <strong>{msg.role === "user" ? "User" : "Bot"}:</strong>
+      <strong>{msg.role === "user" ? t("User") : t("Bot")}:</strong>
       <div className={styles.userText}>
         {msg.role === "bot" ? (
           isTypewriterFinished ? (

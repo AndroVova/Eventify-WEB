@@ -9,8 +9,10 @@ import MapSelector from "./MapSelector";
 import { fetchPostEvent } from "../../clients/response";
 import styles from "./AddEventForm.module.css";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const AddEventForm = ({ onSubmit }) => {
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.tokenValue.token);
 
@@ -89,7 +91,7 @@ const AddEventForm = ({ onSubmit }) => {
       form.locations[0].pointX === 0 ||
       form.locations[0].pointY === 0
     ) {
-      setError("Please fill out all fields and select a location on the map.");
+      setError(t("Please fill out all fields and select a location on the map."));
       return;
     }
 
@@ -125,11 +127,11 @@ const AddEventForm = ({ onSubmit }) => {
       if (!response.isError) {
         onSubmit(response.data);
       } else {
-        setError("Failed to add event. Please try again.");
+        setError(t("Failed to add event. Please try again."));
       }
     } catch (error) {
-      console.error("Error adding event:", error);
-      setError("Failed to add event. Please try again.");
+      console.error(t("Error adding event"), error);
+      setError(t("Failed to add event. Please try again."));
     }
   };
 
@@ -142,17 +144,17 @@ const AddEventForm = ({ onSubmit }) => {
     <form className={styles.addEventForm} onSubmit={handleSubmit}>
       {error && <div className={styles.error}>{error}</div>}
       <Input
-        label="Event Name"
+        label={t("Event Name")}
         id="name"
         className={styles.input}
         name="name"
         value={form.name}
         onChange={handleChange}
-        placeholder="Event Name"
+        placeholder={t("Event Name")}
         required
       />
       <label>
-        Event Description
+        {t("Event Description")}
         <textarea
           name="description"
           value={form.description}
@@ -161,7 +163,7 @@ const AddEventForm = ({ onSubmit }) => {
         ></textarea>
       </label>
       <label>
-        Event Type
+        {t("Event Type")}
         <CustomSelect
           id="type"
           name="type"
@@ -173,35 +175,35 @@ const AddEventForm = ({ onSubmit }) => {
       </label>
       <ImageUploader onImageChange={handleImageChange} styles={styles} />
       <Input
-        label="Age Limit"
+        label={t("Age Limit")}
         id="ageLimit"
         type="number"
         className={styles.input}
         name="ageLimit"
         value={form.ageLimit}
         onChange={handleChange}
-        placeholder="Age Limit"
+        placeholder={t("Age Limit")}
         required
       />
       <Input
-        label="Event Date and Time"
+        label={t("Event Date and Time")}
         id="date"
         type="datetime-local"
         className={styles.input}
         name="date"
         value={form.date}
         onChange={handleChange}
-        placeholder="Event Date and Time"
+        placeholder={t("Event Date and Time")}
         required
       />
       <Input
-        label="Event Link"
+        label={t("Event Link")}
         id="link"
         className={styles.input}
         name="link"
         value={form.link}
         onChange={handleChange}
-        placeholder="Event Link"
+        placeholder={t("Event Link")}
         required
       />
       <EventTags
@@ -211,7 +213,7 @@ const AddEventForm = ({ onSubmit }) => {
         onRemoveTag={handleRemoveTag}
       />
       <MapSelector onMapClick={handleMapClick} styles={styles} />
-      <button type="submit">Add Event</button>
+      <button type="submit">{t("Add Event")}</button>
     </form>
   );
 };

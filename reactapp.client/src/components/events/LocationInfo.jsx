@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import { useSelector } from "react-redux";
+
 const LocationInfo = ({ lat, lng }) => {
   const [locationInfo, setLocationInfo] = useState("");
+  const user = useSelector((state) => state.auth.user);
 
   const fetchLocationInfo = useCallback(async () => {
-    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API; // Замените на ваш API ключ
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}&language=en`; // TODO: ua
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API;
+    const localization = user.settings.language === 0 ? "en" : "ua" 
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}&language=${localization}`;
 
     try {
       const response = await fetch(url);
@@ -33,7 +37,7 @@ const LocationInfo = ({ lat, lng }) => {
       console.error("Request failed:", error);
       setLocationInfo("Request failed");
     }
-  }, [lat, lng]);
+  }, [lat, lng, user.settings.language ]);
 
   useEffect(() => {
     fetchLocationInfo();

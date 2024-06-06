@@ -4,19 +4,21 @@ import { Login } from "../components/auth/Login/Login";
 import { login } from "../reducers/auth.reducer";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const LoginPage = () => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     return (
-        <form onSubmit={e => handleSubmit(e, dispatch, navigate)}>
+        <form onSubmit={e => handleSubmit(e, dispatch, navigate, t)}>
             <Login />
         </form>
     );
 }
 
-async function handleSubmit(e, dispatch, navigate) {
+async function handleSubmit(e, dispatch, navigate, t) {
     e.preventDefault();
     const userForm = new FormData(e.target);
 
@@ -28,10 +30,10 @@ async function handleSubmit(e, dispatch, navigate) {
         password: password
     };
 
-     const tokenRespone = await fetchToken(loginData)
-     const token = tokenRespone.token;
+    const tokenRespone = await fetchToken(loginData)
+    const token = tokenRespone.token;
     if (token === undefined) {
-        alert("Incorrect e-mail address and (or) password.");
+        alert(t("Incorrect e-mail address and (or) password."));
         return;
     }
 

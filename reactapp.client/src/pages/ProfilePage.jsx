@@ -12,15 +12,17 @@ import avatar3 from "../resources/3.png";
 import axios from "axios";
 import defaultAvatar from "../resources/default.png";
 import styles from "./ProfilePage.module.css";
+import { useTranslation } from "react-i18next";
 
 const avatars = [defaultAvatar, avatar1, avatar2, avatar3];
 
 const ProfilePage = ({ eventsData, setEventsData }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState(user.userName || "Default Name");
+  const [name, setName] = useState(user.userName || t("Default Name"));
   const [login, setLogin] = useState(user.email);
   const [phone, setPhone] = useState(user.phoneNumber || "");
   const [selectedCategories, setSelectedCategories] = useState(user.types || []);
@@ -52,7 +54,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
       dispatch(changeProfile(updatedProfile));
       setIsEditing(false);
     } catch (error) {
-      console.error("Failed to update profile", error);
+      console.error(t("Failed to update profile"), error);
     }
   };
 
@@ -102,11 +104,11 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
       </div>
       {isEditing ? (
         <button className={styles.saveButton} onClick={handleSave}>
-          Save & Exit
+          {t("Save & Exit")}
         </button>
       ) : (
         <button className={styles.editButton} onClick={() => setIsEditing(true)}>
-          Edit Profile
+          {t("Edit Profile")}
         </button>
       )}
     </div>

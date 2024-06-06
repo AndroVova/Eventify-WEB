@@ -1,6 +1,7 @@
 import CustomSelect from "../utils/CustomSelect/CustomSelect";
 import React from 'react';
 import UserTypes from "../../models/UserTypes";
+import { useTranslation } from "react-i18next";
 
 const EventFilters = ({ 
   uniqueCategories, 
@@ -16,6 +17,8 @@ const EventFilters = ({
   user,
   setShowAddEventModal
 }) => {
+
+  const { t } = useTranslation();
   const categoryOptions = uniqueCategories.map(category => ({
     value: category,
     label: category
@@ -48,10 +51,10 @@ const EventFilters = ({
   return (
     <div className={styles.controls}>
       <button className={styles.sortButton} onClick={onSortByDate}>
-        Sort by Date {sortOrder === "asc" ? "↑" : "↓"}
+        {t("Sort by Date")} {sortOrder === "asc" ? "↑" : "↓"}
       </button>
       <div className={styles.filterGroup}>
-        <label htmlFor="categorySelect" className={styles.filterLabel}>Category:</label>
+        <label htmlFor="categorySelect" className={styles.filterLabel}>{t("Category")}:</label>
         <div className={styles.selectContainer}>
           <CustomSelect
             id="categorySelect"
@@ -62,7 +65,7 @@ const EventFilters = ({
         </div>
       </div>
       <div className={styles.filterGroup}>
-        <label htmlFor="tagSelect" className={styles.filterLabel}>Tag:</label>
+        <label htmlFor="tagSelect" className={styles.filterLabel}>{t("Tag")}:</label>
         <div className={styles.selectContainer}>
           <CustomSelect
             id="tagSelect"
@@ -74,13 +77,13 @@ const EventFilters = ({
       </div>
       <input
         type="text"
-        placeholder="Search by event title"
+        placeholder={t("Search by event title")}
         onKeyDown={onSearchKeyDown}
         className={styles.searchInput}
       />
       {user.role !== UserTypes.User && (
         <div className={styles.addEventContainer}>
-          <button onClick={() => setShowAddEventModal(true)}>Add Event</button>
+          <button onClick={() => setShowAddEventModal(true)}>{t("Add Event")}</button>
         </div>
       )}
     </div>

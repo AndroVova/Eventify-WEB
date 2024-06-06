@@ -1,14 +1,17 @@
 import Input from "../utils/Input/Input";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ImageUploader = ({ onImageChange, styles }) => {
+  const { t } = useTranslation();
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
         const base64String = e.target.result.split(",")[1];
-        resizeImage(base64String, 200, 200); // Example dimensions
+        resizeImage(base64String, 200, 200);
       };
       reader.readAsDataURL(file);
     }
@@ -37,7 +40,7 @@ const ImageUploader = ({ onImageChange, styles }) => {
 
   return (
     <Input
-      label="Event Image"
+      label={t("Event Image")}
       id="imgUpload"
       type="file"
       className={styles.input}

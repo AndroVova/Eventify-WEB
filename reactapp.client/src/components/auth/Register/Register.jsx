@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { SERVICE_URL } from "../../../clients/app.const";
-import {fetchPost} from "../../../clients/response"
+import { fetchPost } from "../../../clients/response";
 import styles from '../Login/login.module.css';
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,11 +28,11 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.userName || !form.phoneNumber || !form.email || !form.password || !form.confirmPassword) {
-      setError("All fields are required");
+      setError(t("All fields are required"));
       return;
     }
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("Passwords do not match"));
       return;
     }
 
@@ -46,9 +46,9 @@ export const Register = () => {
     const response = await fetchPost(`${SERVICE_URL}/Auth/register`, null, config);
 
     if (response.isError) {
-      setError(response.data.message || "Registration failed");
+      setError(response.data.message || t("Registration failed"));
     } else {
-      alert(response.data.message || "User created successfully!");
+      alert(response.data.message || t("User created successfully!"));
     }
   };
 

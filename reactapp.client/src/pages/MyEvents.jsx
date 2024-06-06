@@ -4,8 +4,10 @@ import axios from 'axios';
 import styles from './MyEvents.module.css';
 import { useSelector } from "react-redux";
 import { useTable } from 'react-table';
+import { useTranslation } from "react-i18next";
 
 const MyEvents = () => {
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [events, setEvents] = useState([]);
 
@@ -34,41 +36,41 @@ const MyEvents = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: t('Name'),
         accessor: 'name',
       },
       {
-        Header: 'Description',
+        Header: t('Description'),
         accessor: 'description',
       },
       {
-        Header: 'Type',
+        Header: t('Type'),
         accessor: 'type',
       },
       {
-        Header: 'Age Limit',
+        Header: t('Age Limit'),
         accessor: 'ageLimit',
       },
       {
-        Header: 'Date',
+        Header: t('Date'),
         accessor: 'date',
       },
       {
-        Header: 'Link',
+        Header: t('Link'),
         accessor: 'link',
       },
       {
-        Header: 'Actions',
+        Header: t('Actions'),
         accessor: 'id',
         Cell: ({ value }) => (
           <div className={styles.actions}>
-            <button onClick={() => handleView(value)}>View</button>
-            <button onClick={() => handleUpdate(value)}>Update</button>
+            <button onClick={() => handleView(value)}>{t('View')}</button>
+            <button onClick={() => handleUpdate(value)}>{t('Update')}</button>
           </div>
         ),
       },
     ],
-    []
+    [t]
   );
 
   const {
@@ -81,7 +83,7 @@ const MyEvents = () => {
 
   return (
     <div className={styles.tableContainer}>
-      <h2>My Events</h2>
+      <h2>{t('My Events')}</h2>
       <table {...getTableProps()} className={styles.table}>
         <thead>
           {headerGroups.map(headerGroup => {

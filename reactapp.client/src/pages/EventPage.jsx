@@ -11,8 +11,10 @@ import PaginationControls from "../components/events/PaginationControls";
 import axios from "axios";
 import styles from "./EventPage.module.css";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const EventPage = () => {
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [eventsData, setEventsData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
@@ -27,7 +29,7 @@ const EventPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [availableTags, setAvailableTags] = useState([]);
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const response = await fetch(
         "https://eventify-backend.azurewebsites.net/api/Tag/get-all"
@@ -35,9 +37,9 @@ const EventPage = () => {
       const data = await response.json();
       setAvailableTags(data);
     } catch (error) {
-      console.error("Error fetching tags:", error);
+      console.error(t("Error fetching tags"), error);
     }
-  };
+  }, [t]);
 
   const fetchEvents = useCallback(async () => {
     setIsLoading(true);
@@ -59,7 +61,7 @@ const EventPage = () => {
         postData
       );
       if (response.status !== 200) {
-        throw new Error("Failed to fetch events");
+        throw new Error(t("Failed to fetch events"));
       }
       const data = response.data;
       setEventsData(data);
@@ -71,16 +73,16 @@ const EventPage = () => {
         setTotalPages(totalPages);
       }
     } catch (error) {
-      console.error("Error fetching events:", error);
+      console.error(t("Error fetching events"), error);
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory]);
+  }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory,t]);
 
   useEffect(() => {
     fetchEvents();
     fetchTags();
-  }, [fetchEvents]);
+  }, [fetchEvents, fetchTags, t]);
 
   const uniqueCategories = ["All", ...Object.keys(EventTypes)];
   const uniqueTags = ["All", ...new Set(availableTags.map((tag) => tag.name))];
@@ -106,7 +108,7 @@ const EventPage = () => {
   };
 
   const handleSearchKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if ( e.key === "Enter") {
       setSearchQuery(e.target.value);
     }
   };
@@ -144,7 +146,7 @@ const EventPage = () => {
         <Modal
           isOpen={showAddEventModal}
           onRequestClose={() => setShowAddEventModal(false)}
-          contentLabel="Add New Event"
+          contentLabel={t("Add New Event")}
           style={{
             content: {
               width: "50%",
@@ -153,7 +155,7 @@ const EventPage = () => {
             },
           }}
         >
-          <div className={styles.modalHeader}>Add New Event</div>
+          <div className={styles.modalHeader}>{t("Add New Event")}</div>
           <AddEventForm
             onSubmit={handleAddEvent}
             className={styles.modalForm}
@@ -162,7 +164,7 @@ const EventPage = () => {
             onClick={() => setShowAddEventModal(false)}
             className={styles.closeButton}
           >
-            Close
+            {t("Close")}
           </button>
         </Modal>
       )}
@@ -179,7 +181,7 @@ const EventPage = () => {
             />
           ))
         ) : (
-          <p className={styles.noEventsMessage}>No events found</p>
+          <p className={styles.noEventsMessage}>{t("No events found")}</p>
         )}
       </div>
       <PaginationControls
@@ -193,7 +195,7 @@ const EventPage = () => {
         <DraggableModal
           isVisible={true}
           onClose={closeModal}
-          headerText="Event Details"
+          headerText={t("Event Details")}
         >
           <Event
             event={selectedEvent}

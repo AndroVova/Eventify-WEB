@@ -19,6 +19,7 @@ import styles from "./map.module.css";
 import techIcon from "../../resources/icons/computer-code-svgrepo-com.svg";
 import theaterIcon from "../../resources/icons/theater-svgrepo-com.svg";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const libraries = ["places", "marker"];
 
@@ -35,7 +36,8 @@ const Map = ({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries,
   });
-
+  
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [map, setMap] = useState(null);
@@ -86,12 +88,12 @@ const Map = ({
 
           const markerElement = document.createElement("div");
           markerElement.className = styles["marker-icon"];
-          markerElement.innerHTML = `<img src=${defaultIcon} alt="Event Location" />`;
+          markerElement.innerHTML = `<img src=${defaultIcon} alt=${t("Event Location")} />`;
 
           new window.google.maps.marker.AdvancedMarkerElement({
             position: { lat, lng },
             map: map,
-            title: "Event Location",
+            title: t("Event Location"),
             content: markerElement,
           });
 
@@ -123,13 +125,13 @@ const Map = ({
 
             const img = document.createElement("img");
             img.src = user.img;
-            img.alt = "Your location";
+            img.alt = t("Your location");
 
             iconElement.appendChild(img);
 
             new window.google.maps.marker.AdvancedMarkerElement({
               position: userLocation,
-              title: "You are here",
+              title: t("You are here"),
               map,
               content: iconElement,
             });
@@ -140,7 +142,7 @@ const Map = ({
         }
       );
     }
-  }, [map, user.img, center]);
+  }, [map, user.img, center, t]);
 
   useEffect(() => {
     if (isLoaded && map && window.google && markersData) {
@@ -206,12 +208,12 @@ const Map = ({
 
       const markerElement = document.createElement("div");
       markerElement.className = styles["marker-icon"];
-      markerElement.innerHTML = `<img src="${defaultIcon}" alt="Event Location" />`;
+      markerElement.innerHTML = `<img src="${defaultIcon}" alt=${t("Event Location")} />`;
 
       window.marker = new window.google.maps.marker.AdvancedMarkerElement({
         position: { lat, lng },
         map: map,
-        title: "Event Location",
+        title: t("Event Location"),
         content: markerElement,
       });
 
@@ -222,7 +224,7 @@ const Map = ({
   };
 
   if (loadError) {
-    return <div>Map loading error</div>;
+    return <div>{t("Map loading error")}</div>;
   }
 
   const mapId =
@@ -241,8 +243,8 @@ const Map = ({
         value={mapStyle}
         className={styles.styleSelector}
       >
-        <option value="light">Light Mode</option>
-        <option value="styled">Night Mode</option>
+        <option value="light">{t("Light Mode")}</option>
+        <option value="styled">{t("Night Mode")}</option>
       </select>
       {(isMapLoading || isMarkersLoading) && (
         <div className={styles.loadingOverlay}>
@@ -253,7 +255,7 @@ const Map = ({
         <input
           style={{ width: "50%" }}
           type="text"
-          placeholder="Search for places"
+          placeholder={t("Search for places")}
           className={styles.searchBox}
         />
       </Autocomplete>
@@ -276,7 +278,7 @@ const Map = ({
           <DraggableModal
             isVisible={true}
             onClose={closeModal}
-            headerText="Event Details"
+            headerText={t("Event Details")}
           >
             <Event
               event={selectedMarker}
@@ -287,7 +289,7 @@ const Map = ({
       </GoogleMap>
     </div>
   ) : (
-    <div>Loading...</div>
+    <div>{t("Loading")}...</div>
   );
 };
 

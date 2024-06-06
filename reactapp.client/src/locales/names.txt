@@ -1,0 +1,187 @@
+navbar.jsx
+t("map")
+t("events")
+t("all_events")
+t("my_events")
+t("chat")
+t("admin")
+t("admin_users")
+t("admin_tags")
+t("admin_events")
+t("profile")
+t("log_out")
+
+map.jsx
+t("Event Location")
+t("Your location")
+t("You are here")
+t("Map loading error")
+t("Loading")
+t("Search for places")
+t("Light Mode")
+t("Night Mode")
+t("Event Details")
+
+events.jsx
+t("Go to ticket")
+
+eventspage.jsx
+t("Error fetching tags")
+t("Failed to fetch events")
+t("Error fetching events")
+t("Add New Event")
+t("Close")
+t("No events found")
+t("Event Details")
+
+eventcard.jsx
+t("Default Tag")
+
+filters
+t("Sort by Date")
+t("Category")
+t("Tag")
+t("Search by event title")
+t("Add Event")
+
+pagination
+t("Previous")
+t("Page")
+t("Next")
+
+myevents.jsx
+t('Name')
+t('Description')
+t('Type')
+t('Age Limit')
+t('Date')
+t('Link')
+t('Actions')
+t('View')
+t('Update')
+t('My Events')
+
+loginpage
+t("Incorrect e-mail address and (or) password.")
+
+login
+t('username')
+t('password')
+t('login')
+t('support')
+t('sign_up')
+
+register
+t("All fields are required")
+t("Passwords do not match")
+t("Registration failed")
+t("User created successfully!")
+t('person_name')
+t('phone_number')
+t('email')
+t('password')
+t('confirm_password')
+t('register')
+t('login')
+
+message.jsx
+t("User")
+t("Bot")
+
+inputmessage
+t("Send")
+
+chatbot
+t("Bot")
+
+eventtags
+t("Error fetching tags")
+t("Tag name is required")
+t("Failed to create new tag")
+t("Error creating new tag")
+t("Event Tags")
+t("Create New Tag")
+t("Tag Name")
+t("Close Color Picker")
+t("Pick Color")
+t("Create Tag")
+
+addeventform
+t("Please fill out all fields and select a location on the map.")
+t("Failed to add event. Please try again.")
+t("Error adding event")
+t("Event Name")
+t("Event Description")
+t("Event Type")
+t("Age Limit")
+t("Event Date and Time")
+t("Event Link")
+t("Add Event")
+
+imageuploader
+t("Event Image")
+
+adminpage
+t("Failed to fetch users")
+t("Failed to delete user")
+t("Failed to update user")
+t("All Users")
+t("Search by user name")
+t("User Name")
+t("Email")
+t("Phone Number")
+t("Image")
+t("Liked Events")
+t("Actions")
+t("No Image")
+t("No Liked Events")
+t("Update")
+t("Delete")
+t("Update User")
+t("Save")
+t("Cancel")
+
+Admintagspage
+t("There was an error fetching the tags!")
+t("Error deleting tag")
+t("There was an error deleting the tag.")
+t("There was an error updating the tag!")
+t('There was an error updating the tag.')
+t('Name')
+t('Color')
+t('ID')
+t('Actions')
+t('Update')
+t('Delete')
+t('Tags')
+t('Search by tag name')
+t('Update Tag')
+t('Tag Name')
+t("Close Color Picker")
+t("Pick Color")
+t('Submit')
+t('Cancel')
+
+profilepage
+t("Default Name")
+t("Failed to update profile")
+t("Save & Exit")
+t("Edit Profile")
+
+likedevents
+t("Liked Events")
+t("No liked events")
+t("Event Details")
+
+preferences
+t("Preferences")
+t("Select Category")
+
+userdetails
+t("Name")
+t("Login")
+t("Phone")
+t("Role")
+t("Language")
+t("Liked Events")
+t("Tags")

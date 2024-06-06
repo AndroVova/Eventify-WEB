@@ -7,8 +7,10 @@ import Map from "../map/Map";
 import axios from "axios";
 import { changeProfile } from "../../reducers/auth.reducer";
 import styles from "./Event.module.css";
+import { useTranslation } from "react-i18next";
 
 const Event = ({ event, setEventsData }) => {
+  const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(event.isLiked);
@@ -177,7 +179,7 @@ const Event = ({ event, setEventsData }) => {
             className={styles.ticketButton}
             onClick={() => window.open(event.link, "_blank")}
           >
-            Перейти к билету
+            {t("Go to ticket")}
           </button>
         </div>
       </div>

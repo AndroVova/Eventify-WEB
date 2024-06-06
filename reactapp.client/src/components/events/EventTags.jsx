@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import CustomSelect from "../utils/CustomSelect/CustomSelect"; // Adjust the path as necessary
 import { HexColorPicker } from "react-colorful";
 import styles from "./EventTags.module.css";
+import { useTranslation } from "react-i18next";
 
 const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
+  const { t } = useTranslation();
   const [availableTags, setAvailableTags] = useState([]);
   const [newTagName, setNewTagName] = useState("");
   const [newTagColor, setNewTagColor] = useState("#ffffff");
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchTags = async () => {
+  const fetchTags = useCallback(async () => {
     try {
       const response = await fetch(
         "https://eventify-backend.azurewebsites.net/api/Tag/get-all"
@@ -19,13 +21,13 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
       const data = await response.json();
       setAvailableTags(data);
     } catch (error) {
-      console.error("Error fetching tags:", error);
+      console.error(t("Error fetching tags"), error);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     fetchTags();
-  }, []);
+  }, [fetchTags]);
 
   const handleAddTag = (selectedOption) => {
     const selectedTagId = selectedOption.value;
@@ -41,7 +43,7 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
 
   const handleCreateNewTag = async () => {
     if (!newTagName) {
-      setError("Tag name is required");
+      setError(t("Tag name is required"));
       return;
     }
 
@@ -65,11 +67,11 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
         setShowColorPicker(false);
         await fetchTags();
       } else {
-        setError("Failed to create new tag");
+        setError(t("Failed to create new tag"));
       }
     } catch (error) {
-      console.error("Error creating new tag:", error);
-      setError("Failed to create new tag");
+      console.error(t("Error creating new tag"), error);
+      setError(t("Failed to create new tag"));
     }
   };
 
@@ -87,10 +89,14 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
 
   return (
     <div className={styles.settingItem}>
-      <span>Event Tags:</span>
+      <span>{t("Event Tags")}:</span>
       <div className={styles.preferencesContainer}>
         {tags.map((tag) => (
-          <div key={tag.id} className={styles.preferenceItem} style={{ backgroundColor: tag.color }}>
+          <div
+            key={tag.id}
+            className={styles.preferenceItem}
+            style={{ backgroundColor: tag.color }}
+          >
             {tag.name}
             {isEditing && (
               <button onClick={(e) => handleRemoveTag(tag.id, e)}>x</button>
@@ -110,27 +116,30 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
         </div>
       )}
       <div className={styles.newTagContainer}>
-        <h4>Create New Tag</h4>
+        <h4>{t("Create New Tag")}</h4>
         <input
           type="text"
-          placeholder="Tag Name"
+          placeholder={t("Tag Name")}
           value={newTagName}
           onChange={(e) => setNewTagName(e.target.value)}
         />
         <div className={styles.colorPickerContainer}>
-          <button type="button" onClick={() => setShowColorPicker(!showColorPicker)}>
-            {showColorPicker ? "Close Color Picker" : "Pick Color"}
+          <button
+            type="button"
+            onClick={() => setShowColorPicker(!showColorPicker)}
+          >
+            {showColorPicker ? t("Close Color Picker") : t("Pick Color")}
           </button>
-          <div className={styles.selectedColor} style={{ backgroundColor: newTagColor }} />
+          <div
+            className={styles.selectedColor}
+            style={{ backgroundColor: newTagColor }}
+          />
         </div>
         {showColorPicker && (
-          <HexColorPicker
-            color={newTagColor}
-            onChange={setNewTagColor}
-          />
+          <HexColorPicker color={newTagColor} onChange={setNewTagColor} />
         )}
         <button type="button" onClick={handleCreateNewTag}>
-          Create Tag
+          {t("Create Tag")}
         </button>
         {error && <p className={styles.error}>{error}</p>}
       </div>
