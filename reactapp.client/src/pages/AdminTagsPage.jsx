@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { HexColorPicker } from 'react-colorful';
 import axios from 'axios';
@@ -12,13 +12,9 @@ const AdminTagsPage = () => {
   const [updatedTagName, setUpdatedTagName] = useState('');
   const [updatedTagColor, setUpdatedTagColor] = useState('');
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const error = useState('');
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchTags();
-  }, []);
-
-  const fetchTags = () => {
+  const fetchTags = useCallback(() => {
     axios.get('https://eventify-backend.azurewebsites.net/api/Tag/get-all')
       .then(response => {
         setTags(response.data);
@@ -26,7 +22,11 @@ const AdminTagsPage = () => {
       .catch(error => {
         console.error("There was an error fetching the tags!", error);
       });
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchTags();
+  }, [fetchTags]);
 
   const handleUpdate = (tag) => {
     setEditingTag(tag);
@@ -35,24 +35,31 @@ const AdminTagsPage = () => {
     setShowColorPicker(false);
   };
 
-  const handleDelete = (tagId) => {
-    console.log(`Delete tag ${tagId}`);
-    // Add delete logic here
-  };
-
-  const handleSubmitUpdate = () => {
-    axios.patch('https://eventify-backend.azurewebsites.net/api/Tag/update', {
-      id: editingTag.id,
-      name: updatedTagName,
-      color: updatedTagColor
-    })
-      .then(response => {
-        setEditingTag(null);
-        fetchTags();
-      })
-      .catch(error => {
-        console.error("There was an error updating the tag!", error);
+  const handleDelete = useCallback(async (tagId) => {
+    try {
+      await axios.delete(`https://eventify-backend.azurewebsites.net/api/Tag/delete`, {
+        params: { id: tagId },
       });
+      fetchTags();
+    } catch (error) {
+      console.error('Error deleting tag', error);
+      setError('There was an error deleting the tag.');
+    }
+  }, [fetchTags, setError]);
+
+  const handleSubmitUpdate = async () => {
+    try {
+      await axios.patch('https://eventify-backend.azurewebsites.net/api/Tag/update', {
+        id: editingTag.id,
+        name: updatedTagName,
+        color: updatedTagColor
+      });
+      setEditingTag(null);
+      fetchTags();
+    } catch (error) {
+      console.error("There was an error updating the tag!", error);
+      setError('There was an error updating the tag.');
+    }
   };
 
   const filteredTags = tags.filter(tag => tag.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -69,7 +76,7 @@ const AdminTagsPage = () => {
         Header: 'Color',
         accessor: 'color',
         Cell: ({ value }) => (
-          <div style={{ backgroundColor: value, width: '50px', height: '20px', borderRadius: '4px' }}></div>
+          <div style={{ backgroundColor: value, width: '20px', height: '20px', borderRadius: '4px' }}></div>
         ),
       },
       {
@@ -78,7 +85,7 @@ const AdminTagsPage = () => {
       },
       {
         Header: 'Actions',
-        id: 'actions', // Use a unique id for this column
+        id: 'actions',
         Cell: ({ row }) => (
           <div className={styles.actions}>
             <button onClick={() => handleUpdate(row.original)}>Update</button>
@@ -87,7 +94,7 @@ const AdminTagsPage = () => {
         ),
       },
     ],
-    []
+    [handleDelete]
   );
 
   const {

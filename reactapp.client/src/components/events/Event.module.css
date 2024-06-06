@@ -89,20 +89,44 @@
   width: fit-content;
 }
 
-.likesCount {
-  font-size: 16px;
-  margin-right: 5px;
-  color: #333;
+.reactionsContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.likeButton {
-  font-size: 20px;
-  color: #777;
+.likeButton, .dislikeButton {
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px; /* Ensure both icons are the same size */
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.likeButton:hover, .dislikeButton:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.liked, .disliked, .unliked, .undisliked {
+  font-size: 24px; /* Ensure both icons are the same size */
 }
 
 .liked {
-  font-size: 20px;
   color: red;
+}
+
+.disliked {
+  color: blue;
+}
+
+.unliked, .undisliked {
+  color: grey;
 }
 
 .modalTags {
