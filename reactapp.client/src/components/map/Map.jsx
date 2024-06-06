@@ -162,8 +162,8 @@ const Map = ({
           const advancedMarker =
             new window.google.maps.marker.AdvancedMarkerElement({
               position: {
-                lat: marker.locations[0].pointY,
-                lng: marker.locations[0].pointX,
+                lat: marker.locations[marker.locations.length - 1].pointY,
+                lng: marker.locations[marker.locations.length - 1].pointX,
               },
               title: marker.name,
               map,

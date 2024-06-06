@@ -88,8 +88,8 @@ const AddEventForm = ({ onSubmit }) => {
       form.ageLimit === 0 ||
       !form.date ||
       !form.link ||
-      form.locations[0].pointX === 0 ||
-      form.locations[0].pointY === 0
+      form.locations[form.locations.length - 1].pointX === 0 ||
+      form.locations[form.locations.length - 1].pointY === 0
     ) {
       setError(t("Please fill out all fields and select a location on the map."));
       return;
@@ -104,8 +104,8 @@ const AddEventForm = ({ onSubmit }) => {
     formData.append("ageLimit", form.ageLimit);
     formData.append("date", form.date);
     formData.append("link", form.link);
-    formData.append("locations[0].pointX", form.locations[0].pointX);
-    formData.append("locations[0].pointY", form.locations[0].pointY);
+    formData.append("locations[0].pointX", form.locations[form.locations.length - 1].pointX);
+    formData.append("locations[0].pointY", form.locations[form.locations.length - 1].pointY);
 
     form.tags.forEach((tag, index) => {
       formData.append(`tags[${index}].id`, tag.id);

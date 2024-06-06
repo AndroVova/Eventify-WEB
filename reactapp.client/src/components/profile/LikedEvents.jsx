@@ -58,7 +58,7 @@ const LikedEvents = ({ events, setEventsData }) => {
             <div className={styles.eventDetails}>
               <h4>{event.name}</h4>
               <p>{eventDate(event)}</p>
-              <LocationInfo lat={event.locations[0].pointY} lng={event.locations[0].pointX}/>
+              <LocationInfo lat={event.locations[event.locations.length - 1].pointY} lng={event.locations[event.locations.length - 1].pointX}/>
             </div>
           </div>
         ))

@@ -45,8 +45,8 @@ const EventCard = ({ event, onClick, styles }) => {
         <p className={styles.eventDate}>{eventDate}</p>
         <div className={styles.eventLocation}>
           <LocationInfo
-            lat={event.locations[0].pointY}
-            lng={event.locations[0].pointX}
+            lat={event.locations[event.locations.length - 1].pointY}
+            lng={event.locations[event.locations.length - 1].pointX}
           />
         </div>
         <div className={styles.eventTags}>
