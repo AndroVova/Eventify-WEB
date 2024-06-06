@@ -67,7 +67,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
     setSelectedCategories(selectedCategories.filter(cat => cat !== category));
   };
 
-  const likedEvents = eventsData.filter(event => event.isLiked); // TODO: get reacted events request
+  const likedEvents = user.likedEvents;
 
   return (
     <div className={styles.profileContainer}>
@@ -88,6 +88,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
           showAvatarOptions={showAvatarOptions}
           handleAvatarClick={handleAvatarClick}
           handleAvatarSelect={handleAvatarSelect}
+          isEditing={isEditing}
         />
       </div>
       <div className={styles.settings}>
@@ -97,7 +98,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
           handleAddCategory={handleAddCategory}
           handleRemoveCategory={handleRemoveCategory}
         />
-        <LikedEvents events={likedEvents} setEventsData={setEventsData} />
+        <LikedEvents events={likedEvents} />
       </div>
       {isEditing ? (
         <button className={styles.saveButton} onClick={handleSave}>

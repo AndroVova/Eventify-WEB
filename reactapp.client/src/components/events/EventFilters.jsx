@@ -1,5 +1,6 @@
-import CustomSelect from "../utils/CustomSelect/CustomSelect"
+import CustomSelect from "../utils/CustomSelect/CustomSelect";
 import React from 'react';
+import UserTypes from "../../models/UserTypes";
 
 const EventFilters = ({ 
   uniqueCategories, 
@@ -11,7 +12,9 @@ const EventFilters = ({
   onSearchKeyDown,
   onSortByDate,
   sortOrder,
-  styles
+  styles,
+  user,
+  setShowAddEventModal
 }) => {
   const categoryOptions = uniqueCategories.map(category => ({
     value: category,
@@ -75,6 +78,11 @@ const EventFilters = ({
         onKeyDown={onSearchKeyDown}
         className={styles.searchInput}
       />
+      {user.role !== UserTypes.User && (
+        <div className={styles.addEventContainer}>
+          <button onClick={() => setShowAddEventModal(true)}>Add Event</button>
+        </div>
+      )}
     </div>
   );
 };

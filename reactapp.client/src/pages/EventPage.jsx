@@ -10,8 +10,10 @@ import Modal from "react-modal";
 import PaginationControls from "../components/events/PaginationControls";
 import axios from "axios";
 import styles from "./EventPage.module.css";
+import { useSelector } from "react-redux";
 
 const EventPage = () => {
+  const user = useSelector((state) => state.auth.user);
   const [eventsData, setEventsData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -81,7 +83,7 @@ const EventPage = () => {
   }, [fetchEvents]);
 
   const uniqueCategories = ["All", ...Object.keys(EventTypes)];
-  const uniqueTags = ["All",  ...new Set(availableTags.map(tag => tag.name))];
+  const uniqueTags = ["All", ...new Set(availableTags.map((tag) => tag.name))];
 
   const handleSortByDate = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -135,10 +137,9 @@ const EventPage = () => {
         onSortByDate={handleSortByDate}
         sortOrder={sortOrder}
         styles={styles}
+        user={user}
+        setShowAddEventModal={setShowAddEventModal}
       />
-      <div className={styles.addEventContainer}>
-        <button onClick={() => setShowAddEventModal(true)}>Add Event</button>
-      </div>
       {showAddEventModal && (
         <Modal
           isOpen={showAddEventModal}
@@ -204,5 +205,4 @@ const EventPage = () => {
     </div>
   );
 };
-
 export default EventPage;

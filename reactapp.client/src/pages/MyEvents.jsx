@@ -10,7 +10,7 @@ const MyEvents = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-all-by-сreator?userId=${user.id}`)
+    axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-all-by-creator?userId=${user.id}`)
       .then(response => {
         setEvents(response.data);
       })

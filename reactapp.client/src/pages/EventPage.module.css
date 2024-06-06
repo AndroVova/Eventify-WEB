@@ -10,7 +10,16 @@
 .controls {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap; 
   margin-bottom: 20px;
+  align-items: center;
+}
+
+.searchInput{
+  height: 35px;
+  border-radius: 15px;
+  border: #5e5b5b 1px solid;
+  width: 35%;
 }
 
 .sortButton,
@@ -284,7 +293,6 @@
 
 .addEventContainer {
   text-align: center;
-  margin-bottom: 20px;
 }
 
 .addEventContainer button {

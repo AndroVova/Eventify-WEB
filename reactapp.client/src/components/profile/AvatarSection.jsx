@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../pages/ProfilePage.module.css";
 
-const AvatarSection = ({ user, avatars, showAvatarOptions, handleAvatarClick, handleAvatarSelect,}) => {
+const AvatarSection = ({ user, avatars, showAvatarOptions, handleAvatarClick, handleAvatarSelect, isEditing}) => {
   return (
     <div className={styles.avatarSection}>
       <img
@@ -10,7 +10,7 @@ const AvatarSection = ({ user, avatars, showAvatarOptions, handleAvatarClick, ha
         className={styles.profileImage}
         onClick={handleAvatarClick}
       />
-      {showAvatarOptions && (
+      {isEditing && showAvatarOptions && (
         <div className={styles.avatarOptions}>
           {avatars.map((avatar, index) => (
             <img
