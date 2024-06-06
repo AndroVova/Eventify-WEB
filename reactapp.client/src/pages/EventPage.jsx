@@ -53,6 +53,7 @@ const EventPage = () => {
         selectedCategory !== "All"
           ? [EventTypes[selectedCategory]]
           : Object.values(EventTypes),
+      userid: user.id,
     };
 
     try {
@@ -77,7 +78,7 @@ const EventPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory,t]);
+  }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory, t, user.id]);
 
   useEffect(() => {
     fetchEvents();
