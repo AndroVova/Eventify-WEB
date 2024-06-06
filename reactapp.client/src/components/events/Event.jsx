@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import EventTypes from "../../models/EventTypes";
 import LocationInfo from "./LocationInfo";
 import Map from "../map/Map";
 import axios from "axios";
+import { changeProfile } from "../../reducers/auth.reducer";
 import styles from "./Event.module.css";
-import { useSelector } from "react-redux";
 
 const Event = ({ event, setEventsData }) => {
   const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const [liked, setLiked] = useState(event.isLiked);
-  const [disliked, setDisliked] = useState(event.isDisliked); // Initialize dislike state
+  const [disliked, setDisliked] = useState(event.isDisliked);
   const location = event.locations[0];
 
   const endpoints = {
@@ -51,6 +53,17 @@ const Event = ({ event, setEventsData }) => {
     }
   };
 
+  const updateUserProfile = (likedEvents) => {
+    const updatedUser = {
+      ...user,
+      likedEvents,
+    };
+    dispatch(changeProfile(updatedUser));
+    const updatedState = JSON.parse(localStorage.getItem("auth"));
+    updatedState.user = updatedUser;
+    localStorage.setItem("auth", JSON.stringify(updatedState));
+  };
+
   const toggleLike = async () => {
     if (liked) {
       await handleReaction(0, "delete");
@@ -63,6 +76,11 @@ const Event = ({ event, setEventsData }) => {
       }
     }
     setLiked(!liked);
+
+    const updatedLikedEvents = liked
+      ? user.likedEvents.filter((likedEvent) => likedEvent.id !== event.id)
+      : [...user.likedEvents, event];
+    updateUserProfile(updatedLikedEvents);
 
     setEventsData((prevEvents) => {
       const updatedEvents = prevEvents.map((ev) =>
