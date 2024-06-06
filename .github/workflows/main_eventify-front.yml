@@ -22,6 +22,10 @@ jobs:
         run: |
           npm install
           npm run build --if-present
+        env:
+          REACT_APP_GOOGLE_MAPS_API: ${{ secrets.REACT_APP_GOOGLE_MAPS_API }}
+          REACT_APP_MAP_ID: ${{ secrets.REACT_APP_MAP_ID }}
+          REACT_APP_NIGHT_MAP_ID: ${{ secrets.REACT_APP_NIGHT_MAP_ID }}
         working-directory: reactapp.client
       
       - name: Upload artifact for deployment job
@@ -59,7 +63,3 @@ jobs:
           app-name: 'eventify-front'
           slot-name: 'Production'
           package: .
-        env:
-          REACT_APP_GOOGLE_MAPS_API: ${{ secrets.REACT_APP_GOOGLE_MAPS_API }}
-          REACT_APP_MAP_ID: ${{ secrets.REACT_APP_MAP_ID }}
-          REACT_APP_NIGHT_MAP_ID: ${{ secrets.REACT_APP_NIGHT_MAP_ID }}
