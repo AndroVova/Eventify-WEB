@@ -13,9 +13,9 @@ const Event = ({ event, setEventsData }) => {
   const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(event.isLiked);
-  const [disliked, setDisliked] = useState(event.isDisliked);
-  const location = event.locations[0];
+  const [liked, setLiked] = useState(event.reaction === 0 ? true : false);
+  const [disliked, setDisliked] = useState(event.reaction === 1 ? true : false);
+  const location = event.locations[event.locations.length - 1];
 
   const endpoints = {
     post: {
