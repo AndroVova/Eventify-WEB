@@ -20,9 +20,8 @@ const ProfilePage = () => {
   const [name, setName] = useState(user.userName || t("Default Name"));
   const [login, setLogin] = useState(user.email);
   const [phone, setPhone] = useState(user.phoneNumber || "");
-  const [selectedCategories, setSelectedCategories] = useState(user.types || []);
+  const [selectedCategories, setSelectedCategories] = useState(user.tags || []);
   const [selectedAvatar, setSelectedAvatar] = useState(user.img ?? ImagesTypes.defaultAvatar);
-
   if (!user) return null;
 
   const handleAvatarClick = () => {
@@ -43,25 +42,42 @@ const ProfilePage = () => {
       img: selectedAvatar, 
       id: user.id 
     };
+  
+    const tagsPayload = {
+      userId: user.id,
+      tags: selectedCategories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        color: category.color,
+      })),
+    };
     
     try {
-      await axios.post("https://eventify-backend.azurewebsites.net/api/Profile/update-profile", updatedProfile);
+      await axios.post(
+        "https://eventify-backend.azurewebsites.net/api/Profile/update-profile",
+        updatedProfile
+      );
       dispatch(changeProfile(updatedProfile));
+  
+      await axios.post(
+        "https://eventify-backend.azurewebsites.net/api/Profile/add-tags",
+        tagsPayload
+      );
+  
       setIsEditing(false);
     } catch (error) {
-      console.error(t("Failed to update profile"), error);
+      console.error(t("Failed to update profile or add tags"), error);
     }
   };
 
-  const handleAddCategory = (event) => {
-    const newCategory = event.target.value;
-    if (newCategory && !selectedCategories.includes(newCategory)) {
-      setSelectedCategories([...selectedCategories, newCategory]);
+  const handleAddCategory = (selectedTag) => {
+    if (selectedTag && !selectedCategories.some(tag => tag.id === selectedTag.id)) {
+      setSelectedCategories([...selectedCategories, selectedTag]);
     }
   };
 
-  const handleRemoveCategory = (category) => {
-    setSelectedCategories(selectedCategories.filter(cat => cat !== category));
+  const handleRemoveCategory = (tagId) => {
+    setSelectedCategories(selectedCategories.filter(tag => tag.id !== tagId));
   };
 
   const likedEvents = user.likedEvents;
@@ -87,15 +103,6 @@ const ProfilePage = () => {
           isEditing={isEditing}
         />
       </div>
-      <div className={styles.settings}>
-        <Preferences
-          isEditing={isEditing}
-          selectedCategories={selectedCategories}
-          handleAddCategory={handleAddCategory}
-          handleRemoveCategory={handleRemoveCategory}
-        />
-        <LikedEvents events={likedEvents} />
-      </div>
       {isEditing ? (
         <button className={styles.saveButton} onClick={handleSave}>
           {t("Save & Exit")}
@@ -105,6 +112,16 @@ const ProfilePage = () => {
           {t("Edit Profile")}
         </button>
       )}
+      <div className={styles.settings}>
+        <Preferences
+          isEditing={isEditing}
+          selectedCategories={selectedCategories}
+          handleAddCategory={handleAddCategory}
+          handleRemoveCategory={handleRemoveCategory}
+        />
+        <LikedEvents events={likedEvents} />
+      </div>
+      
     </div>
   );
 };

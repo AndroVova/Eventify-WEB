@@ -82,7 +82,6 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
 
   const handleMapClick = (position) => {
     console.log(position);
-    debugger
     if (position) {
       const { lat, lng } = position;
       setForm((prevState) => ({
