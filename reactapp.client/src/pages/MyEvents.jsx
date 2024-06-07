@@ -18,7 +18,7 @@ const MyEvents = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [modalUrl, setModalUrl] = useState('');
 
-  useEffect(() => {
+  const fetchEvents = useCallback(() => {
     axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-all-by-creator?userId=${user.id}`)
       .then(response => {
         setEvents(response.data);
@@ -27,6 +27,10 @@ const MyEvents = () => {
         console.error("There was an error fetching the events!", error);
       });
   }, [user.id]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   const handleView = useCallback((eventId) => {
     axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-by-id?eventId=${eventId}`)
@@ -73,15 +77,7 @@ const MyEvents = () => {
   }, []);
 
   const handleFormSubmit = (updatedEvent) => {
-    if (isEditing) {
-      setEvents(prevEvents =>
-        prevEvents.map(event =>
-          event.id === updatedEvent.id ? updatedEvent : event
-        )
-      );
-    } else {
-      setEvents(prevEvents => [...prevEvents, updatedEvent]);
-    }
+    fetchEvents(); // Refresh events after form submission
     closeModal();
   };
 

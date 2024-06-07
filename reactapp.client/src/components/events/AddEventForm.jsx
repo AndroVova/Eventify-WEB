@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import CustomSelect from "../utils/CustomSelect/CustomSelect";
 import EventTags from "./EventTags";
@@ -15,26 +15,48 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
   const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.tokenValue.token);
+  const imageUploaderRef = useRef();
 
   const [form, setForm] = useState({
     name: "",
     description: "",
     type: 0,
     userId: user.id,
-    imgUpload: null,
+    imgUpload: null, // Ensure this will be a File object
     ageLimit: 0,
     date: "",
     link: "",
     locations: [{ pointX: 0, pointY: 0 }],
     tags: [],
   });
+  const [initialFile, setInitialFile] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (initialForm) {
       setForm(initialForm);
+      if (initialForm.img) {
+        const blob = base64ToBlob(initialForm.img);
+        const file = new File([blob], "event-image.jpeg", { type: blob.type });
+        setInitialFile(file);
+        handleImageChange(file);
+      }
     }
   }, [initialForm]);
+
+  const base64ToBlob = (base64Str) => {
+    if (!base64Str.startsWith("data:image/jpeg;base64,")) {
+      base64Str = "data:image/jpeg;base64," + base64Str;
+    }
+
+    const byteCharacters = atob(base64Str.split(",")[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: "image/jpeg" });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,10 +73,10 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
     }));
   };
 
-  const handleImageChange = (blob) => {
+  const handleImageChange = (file) => {
     setForm((prevState) => ({
       ...prevState,
-      imgUpload: blob,
+      imgUpload: file, // Store the File object directly
     }));
   };
 
@@ -84,11 +106,12 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (
       !form.name ||
       !form.description ||
       form.type === 0 ||
-      !form.imgUpload ||
+      !form.imgUpload || // Ensure imgUpload is a File object
       form.ageLimit === 0 ||
       !form.date ||
       !form.link ||
@@ -104,7 +127,7 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
     formData.append("description", form.description);
     formData.append("type", form.type);
     formData.append("userId", form.userId);
-    formData.append("imgUpload", form.imgUpload);
+    formData.append("imgUpload", form.imgUpload); // Append the File object directly
     formData.append("ageLimit", form.ageLimit);
     formData.append("date", form.date);
     formData.append("link", form.link);
@@ -116,6 +139,10 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
       formData.append(`tags[${index}].name`, tag.name);
       formData.append(`tags[${index}].color`, tag.color);
     });
+
+    if (form.id) {
+      formData.append("id", form.id);
+    }
 
     const config = {
       body: formData,
@@ -173,7 +200,12 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
           isClearable={false}
         />
       </label>
-      <ImageUploader onImageChange={handleImageChange} styles={styles} />
+      <ImageUploader
+        onImageChange={handleImageChange}
+        styles={styles}
+        initialFile={initialFile} // Pass the initial file to ImageUploader
+        ref={imageUploaderRef} // Use ref
+      />
       <Input
         label={t("Age Limit")}
         id="ageLimit"
@@ -212,7 +244,7 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
         onAddTag={handleAddTag}
         onRemoveTag={handleRemoveTag}
       />
-      <MapSelector onMapClick={handleMapClick} styles={styles} />
+      <MapSelector onMapClick={handleMapClick} styles={styles} event={initialForm}/>
       <button type="submit">{initialForm ? t("Update Event") : t("Add Event")}</button>
     </form>
   );

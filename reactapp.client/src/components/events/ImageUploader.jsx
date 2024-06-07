@@ -1,9 +1,18 @@
-import Input from "../utils/Input/Input";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
 import { useTranslation } from "react-i18next";
 
-const ImageUploader = ({ onImageChange, styles }) => {
+const ImageUploader = React.forwardRef(({ onImageChange, styles, initialFile }, ref) => {
   const { t } = useTranslation();
+  const fileInputRef = useRef();
+
+  useEffect(() => {
+    if (initialFile && fileInputRef.current) {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(initialFile);
+      fileInputRef.current.files = dataTransfer.files;
+    }
+  }, [initialFile]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -39,16 +48,25 @@ const ImageUploader = ({ onImageChange, styles }) => {
   };
 
   return (
-    <Input
-      label={t("Event Image")}
-      id="imgUpload"
-      type="file"
-      className={styles.input}
-      name="imgUpload"
-      onChange={handleImageChange}
-      required
-    />
+    <div className={styles.input}>
+      <label htmlFor="imgUpload">{t("Event Image")}</label>
+      <input
+        id="imgUpload"
+        type="file"
+        name="imgUpload"
+        onChange={handleImageChange}
+        ref={(node) => {
+          fileInputRef.current = node; // Internal ref for handling initial file
+          if (typeof ref === 'function') {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+        }}
+        required
+      />
+    </div>
   );
-};
+});
 
 export default ImageUploader;
