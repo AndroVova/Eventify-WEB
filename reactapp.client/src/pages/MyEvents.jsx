@@ -77,7 +77,7 @@ const MyEvents = () => {
   }, []);
 
   const handleFormSubmit = (updatedEvent) => {
-    fetchEvents(); // Refresh events after form submission
+    fetchEvents();
     closeModal();
   };
 
