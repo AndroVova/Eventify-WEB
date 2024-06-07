@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import CustomSelect from "../utils/CustomSelect/CustomSelect";
 import EventTags from "./EventTags";
@@ -11,7 +11,7 @@ import styles from "./AddEventForm.module.css";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-const AddEventForm = ({ onSubmit }) => {
+const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
   const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.tokenValue.token);
@@ -29,7 +29,12 @@ const AddEventForm = ({ onSubmit }) => {
     tags: [],
   });
   const [error, setError] = useState("");
-  const isEditing = useState(true);
+
+  useEffect(() => {
+    if (initialForm) {
+      setForm(initialForm);
+    }
+  }, [initialForm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,8 +44,7 @@ const AddEventForm = ({ onSubmit }) => {
     }));
   };
 
-  const handleSelectChange = (selectedOption, actionMeta) => {
-    console.log(selectedOption, actionMeta);
+  const handleSelectChange = (selectedOption) => {
     setForm((prevState) => ({
       ...prevState,
       type: selectedOption ? selectedOption.value : null,
@@ -119,19 +123,15 @@ const AddEventForm = ({ onSubmit }) => {
     };
 
     try {
-      const response = await fetchPostEvent(
-        "https://eventify-backend.azurewebsites.net/api/Event/create-events",
-        token,
-        config
-      );
+      const response = await fetchPostEvent(url, token, config);
       if (!response.isError) {
         onSubmit(response.data);
       } else {
-        setError(t("Failed to add event. Please try again."));
+        setError(t("Failed to submit event. Please try again."));
       }
     } catch (error) {
-      console.error(t("Error adding event"), error);
-      setError(t("Failed to add event. Please try again."));
+      console.error(t("Error submitting event"), error);
+      setError(t("Failed to submit event. Please try again."));
     }
   };
 
@@ -207,13 +207,13 @@ const AddEventForm = ({ onSubmit }) => {
         required
       />
       <EventTags
-        isEditing={isEditing}
+        isEditing={true}
         tags={form.tags}
         onAddTag={handleAddTag}
         onRemoveTag={handleRemoveTag}
       />
       <MapSelector onMapClick={handleMapClick} styles={styles} />
-      <button type="submit">{t("Add Event")}</button>
+      <button type="submit">{initialForm ? t("Update Event") : t("Add Event")}</button>
     </form>
   );
 };

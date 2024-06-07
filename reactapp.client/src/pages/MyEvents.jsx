@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import AddEventForm from '../components/events/AddEventForm';
 import DraggableModal from '../components/layout/DraggableModal/DraggableModal';
 import Event from '../components/events/Event';
 import axios from 'axios';
@@ -14,6 +15,8 @@ const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [modalUrl, setModalUrl] = useState('');
 
   useEffect(() => {
     axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-all-by-creator?userId=${user.id}`)
@@ -29,6 +32,7 @@ const MyEvents = () => {
     axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-by-id?eventId=${eventId}`)
       .then(response => {
         setSelectedEvent(response.data);
+        setIsEditing(false);
         setIsModalVisible(true);
       })
       .catch(error => {
@@ -37,15 +41,22 @@ const MyEvents = () => {
   }, []);
 
   const handleUpdate = useCallback((eventId) => {
-    // Add logic to update the event
-    console.log(`Update event ${eventId}`);
+    axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-by-id?eventId=${eventId}`)
+      .then(response => {
+        setSelectedEvent(response.data);
+        setModalUrl('https://eventify-backend.azurewebsites.net/api/Event/update-event');
+        setIsEditing(true);
+        setIsModalVisible(true);
+      })
+      .catch(error => {
+        console.error("There was an error fetching the event details!", error);
+      });
   }, []);
 
   const handleDelete = useCallback((eventId) => {
     if (window.confirm(t("Are you sure you want to delete this event?"))) {
       axios.delete(`https://eventify-backend.azurewebsites.net/api/Event/delete-event?eventId=${eventId}`)
         .then(() => {
-          // Update the events state to remove the deleted event
           setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
           console.log(`Event ${eventId} deleted successfully`);
         })
@@ -58,7 +69,21 @@ const MyEvents = () => {
   const closeModal = useCallback(() => {
     setIsModalVisible(false);
     setSelectedEvent(null);
+    setIsEditing(false);
   }, []);
+
+  const handleFormSubmit = (updatedEvent) => {
+    if (isEditing) {
+      setEvents(prevEvents =>
+        prevEvents.map(event =>
+          event.id === updatedEvent.id ? updatedEvent : event
+        )
+      );
+    } else {
+      setEvents(prevEvents => [...prevEvents, updatedEvent]);
+    }
+    closeModal();
+  };
 
   const data = React.useMemo(() => events, [events]);
 
@@ -147,16 +172,24 @@ const MyEvents = () => {
           })}
         </tbody>
       </table>
-      {isModalVisible && selectedEvent && (
+      {isModalVisible && (
         <DraggableModal
           isVisible={isModalVisible}
           onClose={closeModal}
-          headerText={t("Event Details")}
+          headerText={isEditing ? t("Update Event") : t("Event Details")}
         >
-          <Event
-            event={selectedEvent}
-            setEventsData={setEvents}
-          />
+          {isEditing ? (
+            <AddEventForm
+              url={modalUrl}
+              initialForm={selectedEvent}
+              onSubmit={handleFormSubmit}
+            />
+          ) : (
+            <Event
+              event={selectedEvent}
+              setEventsData={setEvents}
+            />
+          )}
         </DraggableModal>
       )}
     </div>

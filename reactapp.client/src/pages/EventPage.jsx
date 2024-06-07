@@ -54,6 +54,7 @@ const EventPage = () => {
           ? [EventTypes[selectedCategory]]
           : Object.values(EventTypes),
       userid: user.id,
+      tags:[]
     };
 
     try {
@@ -158,6 +159,7 @@ const EventPage = () => {
         >
           <div className={styles.modalHeader}>{t("Add New Event")}</div>
           <AddEventForm
+            url="https://eventify-backend.azurewebsites.net/api/Event/create-events"
             onSubmit={handleAddEvent}
             className={styles.modalForm}
           />
