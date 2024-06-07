@@ -46,6 +46,7 @@ const MyEvents = () => {
 
   const handleUpdate = useCallback((eventId) => {
     axios.get(`https://eventify-backend.azurewebsites.net/api/Event/get-by-id?eventId=${eventId}`)
+
       .then(response => {
         setSelectedEvent(response.data);
         setModalUrl('https://eventify-backend.azurewebsites.net/api/Event/update-event');

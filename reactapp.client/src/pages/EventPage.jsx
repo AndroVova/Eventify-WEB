@@ -124,6 +124,7 @@ const EventPage = () => {
 
   const handleSortByDate = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    setCurrentPage(1);
   };
 
   const handleEventClick = (event) => {
@@ -136,15 +137,18 @@ const EventPage = () => {
 
   const handleCategoryChange = (e) => {
     setSelectedCategory(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleTagChange = (e) => {
     setSelectedTag(e.target.value);
+    setCurrentPage(1);
   };
 
   const handleSearchKeyDown = (e) => {
     if (e.key === "Enter") {
       setSearchQuery(e.target.value);
+      setCurrentPage(1);
     }
   };
 
@@ -226,7 +230,6 @@ const EventPage = () => {
         totalPages={totalPages}
         onNextPage={handleNextPage}
         onPrevPage={handlePrevPage}
-        styles={styles}
       />
       {selectedEvent && (
         <DraggableModal

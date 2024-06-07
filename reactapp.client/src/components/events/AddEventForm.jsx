@@ -22,7 +22,7 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
     description: "",
     type: 0,
     userId: user.id,
-    imgUpload: null, // Ensure this will be a File object
+    imgUpload: null,
     ageLimit: 0,
     date: "",
     link: "",
@@ -76,16 +76,24 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
   const handleImageChange = (file) => {
     setForm((prevState) => ({
       ...prevState,
-      imgUpload: file, // Store the File object directly
+      imgUpload: file,
     }));
   };
 
   const handleMapClick = (position) => {
+    console.log(position);
+    debugger
     if (position) {
       const { lat, lng } = position;
       setForm((prevState) => ({
         ...prevState,
-        locations: [{ pointX: lng, pointY: lat }],
+        locations: [
+          {
+            id: prevState.locations[0]?.id || null,
+            pointX: lng,
+            pointY: lat,
+          },
+        ],
       }));
     }
   };
@@ -115,8 +123,8 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
       form.ageLimit === 0 ||
       !form.date ||
       !form.link ||
-      form.locations[form.locations.length - 1].pointX === 0 ||
-      form.locations[form.locations.length - 1].pointY === 0
+      form.locations[0].pointX === 0 ||
+      form.locations[0].pointY === 0
     ) {
       setError(
         t("Please fill out all fields and select a location on the map.")
@@ -133,14 +141,11 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
     formData.append("ageLimit", form.ageLimit);
     formData.append("date", form.date);
     formData.append("link", form.link);
-    formData.append(
-      "locations[0].pointX",
-      form.locations[form.locations.length - 1].pointX
-    );
-    formData.append(
-      "locations[0].pointY",
-      form.locations[form.locations.length - 1].pointY
-    );
+    if (form.locations[0]?.id) {
+      formData.append("locations[0].id", form.locations[0].id);
+    }
+    formData.append("locations[0].pointX", form.locations[0].pointX);
+    formData.append("locations[0].pointY", form.locations[0].pointY);;
 
     form.tags.forEach((tag, index) => {
       formData.append(`tags[${index}].id`, tag.id);

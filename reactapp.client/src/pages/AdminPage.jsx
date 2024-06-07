@@ -96,7 +96,6 @@ const AdminPage = () => {
 
   const handleRoleUpdate = async (userId, newRole) => {
     const data = { role: newRole, userId };
-    debugger 
     try {
       await axios.post(
         "https://eventify-backend.azurewebsites.net/api/Profile/update-role",

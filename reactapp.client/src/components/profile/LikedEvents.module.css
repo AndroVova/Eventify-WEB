@@ -29,19 +29,4 @@
     flex: 1;
   }
   
-  .paginationControls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
   
-  .paginationControls button {
-    margin: 0 10px;
-    padding: 5px 10px;
-  }
-  
-  .paginationControls span {
-    margin: 0 10px;
-    font-size: 1.2em;
-  }

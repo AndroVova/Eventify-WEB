@@ -4,17 +4,15 @@ import { useTranslation } from "react-i18next";
 
 const MapSelector = ({ onMapClick, styles, event=null }) => {
   const { t } = useTranslation();
-  
+
   return (
     <label>
       {t("Event Location")}
       <div className={styles.mapContainer}>
-        {event !== null &&
-        <Map markersData={[event]} onMarkerPositionChange={onMapClick} />
-        }
-        {event === null &&
-        <Map markersData={[]} onMarkerPositionChange={onMapClick} />
-        }
+        <Map
+          markersData={event ? [event] : []}
+          onMarkerPositionChange={onMapClick}
+        />
       </div>
     </label>
   );

@@ -75,7 +75,6 @@ const LikedEvents = ({ events, setEventsData }) => {
         totalPages={totalPages} 
         onNextPage={handleNextPage} 
         onPrevPage={handlePrevPage} 
-        styles={styles} 
       />
     </div>
   );

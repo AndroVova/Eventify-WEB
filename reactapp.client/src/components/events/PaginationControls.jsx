@@ -1,7 +1,8 @@
 import React from 'react';
+import styles from "./PaginationControls.module.css"
 import { useTranslation } from "react-i18next";
 
-const PaginationControls = ({ currentPage, totalPages, onNextPage, onPrevPage, styles}) => {
+const PaginationControls = ({ currentPage, totalPages, onNextPage, onPrevPage}) => {
   const { t } = useTranslation();
 
   return (

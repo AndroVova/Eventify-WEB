@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import AdminEventsPage from "./pages/AdminEventsPage";
 import AdminPage from "./pages/AdminPage";
 import AdminTagsPage from "./pages/AdminTagsPage";
 import ChatBot from "./components/chat/ChatBot";
@@ -72,7 +73,7 @@ const App = () => {
               <Route path="events/my" element={<MyEvents />} />
               <Route path="admin/users" element={<AdminPage />} />
               <Route path="admin/tags" element={<AdminTagsPage />} />
-               <Route path="admin/events" element={<p>EVENTS</p>} />
+               <Route path="admin/events" element={<AdminEventsPage />} />
               <Route path="chat" element={<ChatBot></ChatBot>} />
               <Route
                 path="profile"
