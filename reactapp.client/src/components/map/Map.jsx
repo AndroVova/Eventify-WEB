@@ -7,10 +7,15 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import DraggableModal from "../layout/DraggableModal/DraggableModal";
 import Event from "../events/Event";
+import ImagesTypes from "../../models/imagesTypes";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import artIcon from "../../resources/icons/art-design-paint-pallet-format-text-svgrepo-com.svg";
+import avatar1 from "../../resources/1.png";
+import avatar2 from "../../resources/2.png";
+import avatar3 from "../../resources/3.png";
 import carnivalIcon from "../../resources/icons/carnival-symbol-svgrepo-com.svg";
 import concertIcon from "../../resources/icons/concert-piano-orchestra-classic-instrument-svgrepo-com.svg";
+import defaultAvatar from "../../resources/default.png";
 import defaultIcon from "../../resources/icons/marker-pin-01-svgrepo-com.svg";
 import foodIcon from "../../resources/icons/food-restaurant-svgrepo-com.svg";
 import musicIcon from "../../resources/icons/music-notes-svgrepo-com.svg";
@@ -20,6 +25,14 @@ import techIcon from "../../resources/icons/computer-code-svgrepo-com.svg";
 import theaterIcon from "../../resources/icons/theater-svgrepo-com.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+
+// Сопоставление значений енама с изображениями
+const avatars = {
+  [ImagesTypes.defaultAvatar]: defaultAvatar,
+  [ImagesTypes.avatar1]: avatar1,
+  [ImagesTypes.avatar2]: avatar2,
+  [ImagesTypes.avatar3]: avatar3,
+};
 
 const libraries = ["places", "marker"];
 
@@ -124,7 +137,7 @@ const Map = ({
             iconElement.className = styles["marker-icon"];
 
             const img = document.createElement("img");
-            img.src = user.img;
+            img.src = avatars[user.img] || defaultAvatar;
             img.alt = t("Your location");
 
             iconElement.appendChild(img);
@@ -264,7 +277,7 @@ const Map = ({
         mapContainerStyle={
           mapContainerStyle || { width: "100%", height: "100%" }
         }
-        center={mapCenter !== null ? mapCenter : userLocation }
+        center={mapCenter !== null ? mapCenter : userLocation}
         zoom={10.5}
         onLoad={onLoad}
         onClick={handleMapClick}
@@ -280,10 +293,7 @@ const Map = ({
             onClose={closeModal}
             headerText={t("Event Details")}
           >
-            <Event
-              event={selectedMarker}
-              setEventsData={setEventsData}
-            />
+            <Event event={selectedMarker} setEventsData={setEventsData} />
           </DraggableModal>
         )}
       </GoogleMap>

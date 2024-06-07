@@ -2,12 +2,25 @@ import { Link, useLocation } from "react-router-dom";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import ImagesTypes from "../../../models/imagesTypes";
 import { SelectLang } from "../SelectLang/SelectLang";
 import { SelectTheme } from "../SelectTheme/SelectTheme";
 import UserTypes from "../../../models/UserTypes";
+import avatar1 from "../../../resources/1.png";
+import avatar2 from "../../../resources/2.png";
+import avatar3 from "../../../resources/3.png";
+import defaultAvatar from "../../../resources/default.png";
 import { logout } from "../../../reducers/auth.reducer";
 import styles from "./nav.bar.module.css";
 import { useTranslation } from "react-i18next";
+
+// Сопоставление значений енама с изображениями
+const avatars = {
+  [ImagesTypes.defaultAvatar]: defaultAvatar,
+  [ImagesTypes.avatar1]: avatar1,
+  [ImagesTypes.avatar2]: avatar2,
+  [ImagesTypes.avatar3]: avatar3,
+};
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -57,9 +70,7 @@ const NavBar = () => {
       </div>
       <div className={styles.centerLinks}>
         <Link
-          className={`${styles.navLink} ${
-            isActive("map") ? styles.active : ""
-          }`}
+          className={`${styles.navLink} ${isActive("map") ? styles.active : ""}`}
           onClick={handleLinkCkick}
           to={"../map"}
           replace={true}
@@ -69,9 +80,7 @@ const NavBar = () => {
 
         <div className={styles.navLinkContainer}>
           <div
-            className={`${styles.navLink} ${
-              isActive("events") ? styles.active : ""
-            }`}
+            className={`${styles.navLink} ${isActive("events") ? styles.active : ""}`}
             onClick={handleEventsMenuToggle}
           >
             {t("events")}
@@ -100,9 +109,7 @@ const NavBar = () => {
           )}
         </div>
         <Link
-          className={`${styles.navLink} ${
-            isActive("chat") ? styles.active : ""
-          }`}
+          className={`${styles.navLink} ${isActive("chat") ? styles.active : ""}`}
           onClick={handleLinkCkick}
           to={"../chat"}
           replace={true}
@@ -112,17 +119,13 @@ const NavBar = () => {
         {user.role === UserTypes.Admin && (
           <div className={styles.navLinkContainer}>
             <div
-              className={`${styles.navLink} ${
-                isActive("admin") ? styles.active : ""
-              }`}
+              className={`${styles.navLink} ${isActive("admin") ? styles.active : ""}`}
               onClick={handleAdminMenuToggle}
             >
               {t("admin")}
             </div>
             {isAdminMenuOpen && (
-              <div
-                className={`${styles.dropdownMenu} ${styles.adminDropdownMenu}`}
-              >
+              <div className={`${styles.dropdownMenu} ${styles.adminDropdownMenu}`}>
                 <Link
                   className={styles.dropdownItem}
                   to={"../admin/users"}
@@ -154,7 +157,11 @@ const NavBar = () => {
       </div>
       <div className={styles.rightSide}>
         <div className={styles.profileLink} onClick={handleMenuToggle}>
-          <img src={user.img} alt="Profile" className={styles.profileImage} />
+          <img
+            src={avatars[user.img] || defaultAvatar} // Использование значения енама для аватара
+            alt="Profile"
+            className={styles.profileImage}
+          />
         </div>
         {isMenuOpen && (
           <div className={styles.dropdownMenu}>

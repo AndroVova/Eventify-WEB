@@ -25,7 +25,7 @@ const initialState = {
     user: {
         email: data?.user?.email || '',
         password: data?.user?.password || '',
-        img: data?.user?.img === null || data?.user?.img === undefined ? defaultImage : data?.user?.img,
+        img: data?.user?.img === null || data?.user?.img === undefined  || data?.user?.img === 0? defaultImage : data?.user?.img,
         userName: data?.user?.userName || '',
         phoneNumber: data?.user?.phoneNumber || '',
         id: data?.user?.id || '',

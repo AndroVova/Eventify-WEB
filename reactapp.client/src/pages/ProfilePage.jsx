@@ -3,20 +3,15 @@ import { changeProfile, updateUserImage } from "../reducers/auth.reducer";
 import { useDispatch, useSelector } from "react-redux";
 
 import AvatarSection from "../components/profile/AvatarSection";
+import ImagesTypes from "../models/imagesTypes";
 import LikedEvents from "../components/profile/LikedEvents";
 import Preferences from "../components/profile/Preferences";
 import UserDetails from "../components/profile/UserDetails";
-import avatar1 from "../resources/1.png";
-import avatar2 from "../resources/2.png";
-import avatar3 from "../resources/3.png";
 import axios from "axios";
-import defaultAvatar from "../resources/default.png";
 import styles from "./ProfilePage.module.css";
 import { useTranslation } from "react-i18next";
 
-const avatars = [defaultAvatar, avatar1, avatar2, avatar3];
-
-const ProfilePage = ({ eventsData, setEventsData }) => {
+const ProfilePage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -26,7 +21,7 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
   const [login, setLogin] = useState(user.email);
   const [phone, setPhone] = useState(user.phoneNumber || "");
   const [selectedCategories, setSelectedCategories] = useState(user.types || []);
-  const [selectedAvatar, setSelectedAvatar] = useState(user.img || defaultAvatar);
+  const [selectedAvatar, setSelectedAvatar] = useState(user.img ?? ImagesTypes.defaultAvatar);
 
   if (!user) return null;
 
@@ -86,7 +81,6 @@ const ProfilePage = ({ eventsData, setEventsData }) => {
         />
         <AvatarSection
           user={{ ...user, img: selectedAvatar }}
-          avatars={avatars}
           showAvatarOptions={showAvatarOptions}
           handleAvatarClick={handleAvatarClick}
           handleAvatarSelect={handleAvatarSelect}
