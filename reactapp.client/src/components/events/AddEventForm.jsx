@@ -118,7 +118,9 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
       form.locations[form.locations.length - 1].pointX === 0 ||
       form.locations[form.locations.length - 1].pointY === 0
     ) {
-      setError(t("Please fill out all fields and select a location on the map."));
+      setError(
+        t("Please fill out all fields and select a location on the map.")
+      );
       return;
     }
 
@@ -131,8 +133,14 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
     formData.append("ageLimit", form.ageLimit);
     formData.append("date", form.date);
     formData.append("link", form.link);
-    formData.append("locations[0].pointX", form.locations[form.locations.length - 1].pointX);
-    formData.append("locations[0].pointY", form.locations[form.locations.length - 1].pointY);
+    formData.append(
+      "locations[0].pointX",
+      form.locations[form.locations.length - 1].pointX
+    );
+    formData.append(
+      "locations[0].pointY",
+      form.locations[form.locations.length - 1].pointY
+    );
 
     form.tags.forEach((tag, index) => {
       formData.append(`tags[${index}].id`, tag.id);
@@ -195,7 +203,7 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
           id="type"
           name="type"
           options={eventTypeOptions}
-          value={eventTypeOptions.find(option => option.value === form.type)}
+          value={eventTypeOptions.find((option) => option.value === form.type)}
           onChange={handleSelectChange}
           isClearable={false}
         />
@@ -244,8 +252,26 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
         onAddTag={handleAddTag}
         onRemoveTag={handleRemoveTag}
       />
-      <MapSelector onMapClick={handleMapClick} styles={styles} event={initialForm}/>
-      <button type="submit">{initialForm ? t("Update Event") : t("Add Event")}</button>
+      {initialForm !== null && (
+        <>
+          <MapSelector
+            onMapClick={handleMapClick}
+            styles={styles}
+            event={initialForm}
+          />
+        </>
+      )}
+      {initialForm === null && (
+        <>
+          <MapSelector
+            onMapClick={handleMapClick}
+            styles={styles}
+          />
+        </>
+      )}
+      <button type="submit">
+        {initialForm ? t("Update Event") : t("Add Event")}
+      </button>
     </form>
   );
 };

@@ -100,7 +100,7 @@ const AdminPage = () => {
     try {
       await axios.post(
         "https://eventify-backend.azurewebsites.net/api/Profile/update-role",
-        data  // Используем объект data
+        data
       );
       setUsers(
         users.map((user) =>
@@ -162,7 +162,7 @@ const AdminPage = () => {
               <td>{user.userName}</td>
               <td>{user.email}</td>
               <td>{user.phoneNumber}</td>
-              <td>{user.role}</td> {/* Отображаем текстовое значение роли */}
+              <td>{user.role}</td>
               <td>{user.img}</td>
               <td>
                 {user.likedEvents

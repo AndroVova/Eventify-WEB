@@ -15,9 +15,9 @@ const EventFilters = ({
   sortOrder,
   styles,
   user,
-  setShowAddEventModal
+  setShowAddEventModal,
+  onTagSelect // Добавляем новую пропс
 }) => {
-
   const { t } = useTranslation();
   const categoryOptions = uniqueCategories.map(category => ({
     value: category,
@@ -38,11 +38,15 @@ const EventFilters = ({
   };
 
   const handleTagChange = selectedOption => {
+    const tagName = selectedOption ? selectedOption.value : '';
     onTagChange({
       target: {
-        value: selectedOption ? selectedOption.value : ''
+        value: tagName
       }
     });
+    if (onTagSelect) {
+      onTagSelect(tagName);
+    }
   };
 
   const selectedCategoryOption = categoryOptions.find(option => option.value === selectedCategory);

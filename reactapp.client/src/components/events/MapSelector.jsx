@@ -9,7 +9,12 @@ const MapSelector = ({ onMapClick, styles, event=null }) => {
     <label>
       {t("Event Location")}
       <div className={styles.mapContainer}>
+        {event !== null &&
         <Map markersData={[event]} onMarkerPositionChange={onMapClick} />
+        }
+        {event === null &&
+        <Map markersData={[]} onMarkerPositionChange={onMapClick} />
+        }
       </div>
     </label>
   );

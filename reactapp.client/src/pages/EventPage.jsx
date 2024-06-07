@@ -41,7 +41,7 @@ const EventPage = () => {
     }
   }, [t]);
 
-  const fetchEvents = useCallback(async () => {
+  const fetchEvents = useCallback(async (tags = []) => {
     setIsLoading(true);
     const postData = {
       searchText: searchQuery,
@@ -54,7 +54,7 @@ const EventPage = () => {
           ? [EventTypes[selectedCategory]]
           : Object.values(EventTypes),
       userid: user.id,
-      tags:[]
+      tags,
     };
 
     try {
@@ -79,12 +79,45 @@ const EventPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery, currentPage, itemsPerPage, sortOrder, selectedCategory, t, user.id]);
+  }, [
+    searchQuery,
+    currentPage,
+    itemsPerPage,
+    sortOrder,
+    selectedCategory,
+    t,
+    user.id,
+  ]);
+
+  const fetchEventsByTag = async (tagName) => {
+    if (!tagName || tagName === "All") {
+      await fetchEvents();
+      return;
+    }
+  
+    try {
+      const response = await axios.get(
+        `https://eventify-backend.azurewebsites.net/api/Tag/get-by-name?name=${tagName}`
+      );
+      if (response.status !== 200) {
+        throw new Error(t("Failed to fetch tag details"));
+      }
+      const tagData = response.data;
+  
+      await fetchEvents([{
+        name: tagData.name,
+        color: tagData.color,
+        id: tagData.id,
+      }]);
+    } catch (error) {
+      console.error(t("Error fetching tag details"), error);
+    }
+  };
 
   useEffect(() => {
     fetchEvents();
     fetchTags();
-  }, [fetchEvents, fetchTags, t]);
+  }, [fetchEvents, fetchTags]);
 
   const uniqueCategories = ["All", ...Object.keys(EventTypes)];
   const uniqueTags = ["All", ...new Set(availableTags.map((tag) => tag.name))];
@@ -110,7 +143,7 @@ const EventPage = () => {
   };
 
   const handleSearchKeyDown = (e) => {
-    if ( e.key === "Enter") {
+    if (e.key === "Enter") {
       setSearchQuery(e.target.value);
     }
   };
@@ -143,6 +176,7 @@ const EventPage = () => {
         styles={styles}
         user={user}
         setShowAddEventModal={setShowAddEventModal}
+        onTagSelect={fetchEventsByTag} // Передаем новую функцию
       />
       {showAddEventModal && (
         <Modal
@@ -210,4 +244,5 @@ const EventPage = () => {
     </div>
   );
 };
+
 export default EventPage;
