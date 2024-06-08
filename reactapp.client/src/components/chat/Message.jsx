@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const Message = ({ msg, isLastBotMessage, onEventClick }) => {
   const { t } = useTranslation();
-  const [isTypewriterFinished, setIsTypewriterFinished] = useState(true);
+  const [isTypewriterFinished, setIsTypewriterFinished] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   useEffect(() => {
@@ -19,7 +19,6 @@ const Message = ({ msg, isLastBotMessage, onEventClick }) => {
   }, [isLastBotMessage]);
 
   useEffect(() => {
-    debugger
     if (msg.role === "bot") {
       const jsonPattern = /\[.*\]/;
       const match = msg.content.match(jsonPattern);
@@ -65,7 +64,7 @@ const Message = ({ msg, isLastBotMessage, onEventClick }) => {
           ) : (
             <Typewriter
               words={[msg.content]}
-              typeSpeed={1}
+              typeSpeed={20} 
               deleteSpeed={0}
               loop={1}
               cursor={false}

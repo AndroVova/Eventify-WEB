@@ -199,7 +199,7 @@ const AdminEventsPage = () => {
 
   return (
     <div className={styles.tableContainer}>
-      <h2>{t("My Events")}</h2>
+      <h2>{t("All Events")}</h2>
       <div className={styles.searchContainer}>
         <input
           type="text"

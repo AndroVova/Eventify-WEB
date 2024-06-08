@@ -4,6 +4,13 @@ import { useTranslation } from "react-i18next";
 
 const InputMessageBox = ({ message, setMessage, sendMessage }) => {
   const { t } = useTranslation();
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
   return (
     <div className={styles.inputContainer}>
       <input
@@ -11,6 +18,7 @@ const InputMessageBox = ({ message, setMessage, sendMessage }) => {
         className={styles.inputBox}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyPress={handleKeyPress} // Обработчик нажатия клавиш
       />
       <button className={styles.sendButton} onClick={sendMessage}>
         {t("Send")}
