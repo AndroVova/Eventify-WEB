@@ -1,10 +1,36 @@
+import React, { useEffect, useState } from "react";
+
 import EventTypes from "../../models/EventTypes";
 import LocationInfo from "./LocationInfo";
-import React from "react";
+import axios from "axios"; // Необходим axios для HTTP-запросов
 import { useTranslation } from "react-i18next";
 
 const EventCard = ({ event, onClick, styles }) => {
   const { t } = useTranslation();
+  const [eventImage, setEventImage] = useState(null); // Состояние для изображения
+
+  useEffect(() => {
+    const fetchEventImage = async () => {
+      if (!event.img) {
+        try {
+          const response = await axios.get(
+            `https://eventify-backend.azurewebsites.net/api/Event/get-by-id`,
+            {
+              params: { eventId: event.id },
+            }
+          );
+          setEventImage(response.data.img);
+        } catch (error) {
+          console.error("Ошибка при получении изображения:", error);
+        }
+      } else {
+        setEventImage(event.img);
+      }
+    };
+
+    fetchEventImage();
+  }, [event.img, event.id]);
+
   if (!event) return null;
 
   if (!event.locations || event.locations.length === 0) {
@@ -14,7 +40,6 @@ const EventCard = ({ event, onClick, styles }) => {
   if (!event.tags || event.tags.length === 0) {
     event.tags = [{ id: "0", name: t("Default Tag"), color: "#ffffff" }];
   }
-  
 
   const eventDate = new Date(event.date)
     .toLocaleString("en-GB", {
@@ -31,7 +56,7 @@ const EventCard = ({ event, onClick, styles }) => {
   return (
     <div className={styles.eventCard} onClick={() => onClick(event)}>
       <img
-        src={`data:image/jpeg;base64,${event.img}`}
+        src={`data:image/jpeg;base64,${eventImage}`}
         alt={event.name}
         className={styles.eventImage}
       />

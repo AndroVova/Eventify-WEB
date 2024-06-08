@@ -52,8 +52,18 @@ const ChatBot = () => {
     }
   };
 
+  const resetChat = () => {
+    setConversation([]);
+    localStorage.removeItem("conversation");
+  };
+
   return (
     <div className={styles.chatContainer}>
+      <div className={styles.chatHeader}>
+        <button onClick={resetChat} className={styles.resetButton}>
+          {t("Reset Chat")}
+        </button>
+      </div>
       <div className={styles.chatBox}>
         {conversation.map((msg, index) => (
           <Message key={index} msg={msg} isLastBotMessage={index === conversation.length - 1 && msg.role === 'bot'} />

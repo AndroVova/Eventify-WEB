@@ -207,7 +207,6 @@
   background-color: #f5f5f5;
 }
 
-/* Основной контейнер модального окна */
 .ReactModal__Overlay {
   position: fixed;
   top: 0;

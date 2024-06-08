@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import EventTypes from "../../models/EventTypes";
@@ -13,9 +13,31 @@ const Event = ({ event, setEventsData }) => {
   const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const [liked, setLiked] = useState(event.reaction === 0 ? true : false);
-  const [disliked, setDisliked] = useState(event.reaction === 1 ? true : false);
+  const [liked, setLiked] = useState(event.reaction === 0);
+  const [disliked, setDisliked] = useState(event.reaction === 1);
+  const [eventImage, setEventImage] = useState(event.img); // Состояние для изображения
   const location = event.locations[event.locations.length - 1];
+
+  useEffect(() => {
+    const fetchEventImage = async () => {
+      if (!event.img) {
+        try {
+          const response = await axios.get(
+            `https://eventify-backend.azurewebsites.net/api/Event/get-by-id`,
+            {
+              params: { eventId: event.id },
+            }
+          );
+          setEventImage(response.data.img || ''); // Установить загруженное изображение или пустую строку
+        } catch (error) {
+          console.error("Ошибка при получении изображения:", error);
+          setEventImage(''); // Установить пустую строку, если произошла ошибка
+        }
+      }
+    };
+
+    fetchEventImage();
+  }, [event.img, event.id]);
 
   const endpoints = {
     post: {
@@ -45,7 +67,7 @@ const Event = ({ event, setEventsData }) => {
           reaction: reaction,
         },
       });
-      if (response.data["isSuccess"]) {
+      if (response.data.isSuccess) {
         console.log(response.data.message);
       } else {
         console.error("Error: ", response.data.message);
@@ -135,7 +157,11 @@ const Event = ({ event, setEventsData }) => {
     <div className={styles.modalContent}>
       <div className={styles.eventHeader}>
         <img
-          src={`data:image/jpeg;base64,${event.img}`}
+          src={
+            eventImage
+              ? `data:image/jpeg;base64,${eventImage}`
+              : '/path/to/placeholder.jpg' // Путь к резервному изображению
+          }
           alt={event.name}
           className={styles.modalImage}
         />
