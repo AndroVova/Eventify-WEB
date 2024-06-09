@@ -26,7 +26,6 @@ import theaterIcon from "../../resources/icons/theater-svgrepo-com.svg";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
-// Сопоставление значений енама с изображениями
 const avatars = {
   [ImagesTypes.defaultAvatar]: defaultAvatar,
   [ImagesTypes.avatar1]: avatar1,
@@ -49,7 +48,7 @@ const Map = ({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
     libraries,
   });
-  
+
   const { t } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -101,7 +100,9 @@ const Map = ({
 
           const markerElement = document.createElement("div");
           markerElement.className = styles["marker-icon"];
-          markerElement.innerHTML = `<img src=${defaultIcon} alt=${t("Event Location")} />`;
+          markerElement.innerHTML = `<img src=${defaultIcon} alt=${t(
+            "Event Location"
+          )} />`;
 
           new window.google.maps.marker.AdvancedMarkerElement({
             position: { lat, lng },
@@ -221,7 +222,9 @@ const Map = ({
 
       const markerElement = document.createElement("div");
       markerElement.className = styles["marker-icon"];
-      markerElement.innerHTML = `<img src="${defaultIcon}" alt=${t("Event Location")} />`;
+      markerElement.innerHTML = `<img src="${defaultIcon}" alt=${t(
+        "Event Location"
+      )} />`;
 
       window.marker = new window.google.maps.marker.AdvancedMarkerElement({
         position: { lat, lng },
