@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import EventTypes from "../../models/EventTypes";
 import LocationInfo from "./LocationInfo";
-import axios from "axios"; // Необходим axios для HTTP-запросов
+import axios from "axios";
 import { useTranslation } from "react-i18next";
 
 const EventCard = ({ event, onClick, styles }) => {
   const { t } = useTranslation();
-  const [eventImage, setEventImage] = useState(null); // Состояние для изображения
+  const [eventImage, setEventImage] = useState(null);
 
   useEffect(() => {
     const fetchEventImage = async () => {

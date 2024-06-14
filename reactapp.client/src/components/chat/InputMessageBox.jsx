@@ -18,7 +18,7 @@ const InputMessageBox = ({ message, setMessage, sendMessage }) => {
         className={styles.inputBox}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        onKeyPress={handleKeyPress} // Обработчик нажатия клавиш
+        onKeyPress={handleKeyPress}
       />
       <button className={styles.sendButton} onClick={sendMessage}>
         {t("Send")}

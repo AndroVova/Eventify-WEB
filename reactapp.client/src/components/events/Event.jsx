@@ -15,7 +15,7 @@ const Event = ({ event, setEventsData }) => {
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(event.reaction === 0);
   const [disliked, setDisliked] = useState(event.reaction === 1);
-  const [eventImage, setEventImage] = useState(event.img); // Состояние для изображения
+  const [eventImage, setEventImage] = useState(event.img);
   const location = event.locations[event.locations.length - 1];
 
   useEffect(() => {
@@ -28,10 +28,10 @@ const Event = ({ event, setEventsData }) => {
               params: { eventId: event.id },
             }
           );
-          setEventImage(response.data.img || ''); // Установить загруженное изображение или пустую строку
+          setEventImage(response.data.img || '');
         } catch (error) {
           console.error("Ошибка при получении изображения:", error);
-          setEventImage(''); // Установить пустую строку, если произошла ошибка
+          setEventImage('');
         }
       }
     };
@@ -159,7 +159,7 @@ const Event = ({ event, setEventsData }) => {
           src={
             eventImage
               ? `data:image/jpeg;base64,${eventImage}`
-              : '/path/to/placeholder.jpg' // Путь к резервному изображению
+              : '/path/to/placeholder.jpg'
           }
           alt={event.name}
           className={styles.modalImage}

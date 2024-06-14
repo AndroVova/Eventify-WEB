@@ -5,6 +5,8 @@ import { parseJwt } from "../clients/auth.client";
 
 const storageName = 'auth';
 
+const rolePath = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+
 let data = JSON.parse(localStorage.getItem(storageName));
 
 if (data && Date.now() > data.tokenExpirationTime) {
@@ -17,7 +19,7 @@ let userRole = "";
 if (data?.tokenValue) {
     const decodedToken = parseJwt(data?.tokenValue);
     if (decodedToken) {
-        userRole = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || "";
+        userRole = decodedToken[rolePath] || "";
     }
 }
 
@@ -45,7 +47,7 @@ export const login = createAction("LOGIN", (profile, token) => {
             user: {
                 ...profile,
                 img: profile.img === null || profile.img === undefined ? defaultImage : profile.img,
-                role: parseJwt(token)["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+                role: parseJwt(token)[rolePath]
             },
             tokenValue: token,
             tokenExpirationTime: expirationTime,

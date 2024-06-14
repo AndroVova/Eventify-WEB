@@ -26,11 +26,11 @@ const UpdateUserRoleModal = ({
             {t("Role")}
             <select
               value={newRole}
-              onChange={(e) => setNewRole(Number(e.target.value))} // Конвертируем в число при изменении
+              onChange={(e) => setNewRole(Number(e.target.value))} 
             >
               {Object.entries(roleReverseMap).map(([value, label]) => (
-                <option key={value} value={value}> {/* Значение option - число */}
-                  {label} {/* Текстовое значение option */}
+                <option key={value} value={value}> 
+                  {label} 
                 </option>
               ))}
             </select>

@@ -15,7 +15,6 @@ export const Login = () => {
         <input className={styles.loginInput} type="text" name="email" placeholder={t('username')} />
         <input className={styles.loginInput} type="password" name="password" placeholder={t('password')} />
         <button className={styles.loginButton} type="submit">{t('login')}</button>
-        {/* <Link className={styles.loginLink} to="../support" replace={true}>{t('support')}</Link> */}
         <Link className={styles.loginLink} to="../registration" replace={true}>{t("sign_up")}</Link>
       </div>
     </div>

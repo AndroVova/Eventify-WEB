@@ -43,9 +43,6 @@ const UserDetails = ({ isEditing, name, login, phone, setName, setLogin, setPhon
           <p>{t("Login")}: {login}</p>
           <p>{t("Phone")}: {phone}</p>
           <p>{t("Role")}: {user.role}</p>
-          <p>{t("Language")}: {user.settings.language}</p>
-          <p>{t("Liked Events")}: {user.likedEvents.length}</p>
-          <p>{t("Tags")}: {user.tags.length}</p>
         </div>
       )}
     </div>

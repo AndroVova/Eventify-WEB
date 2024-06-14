@@ -56,7 +56,7 @@ const ImageUploader = React.forwardRef(({ onImageChange, styles, initialFile }, 
         name="imgUpload"
         onChange={handleImageChange}
         ref={(node) => {
-          fileInputRef.current = node; // Internal ref for handling initial file
+          fileInputRef.current = node;
           if (typeof ref === 'function') {
             ref(node);
           } else if (ref) {

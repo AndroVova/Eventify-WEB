@@ -180,7 +180,7 @@ const EventPage = () => {
         styles={styles}
         user={user}
         setShowAddEventModal={setShowAddEventModal}
-        onTagSelect={fetchEventsByTag} // Передаем новую функцию
+        onTagSelect={fetchEventsByTag}
       />
       {showAddEventModal && (
         <Modal

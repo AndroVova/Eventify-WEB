@@ -14,7 +14,6 @@ import { logout } from "../../../reducers/auth.reducer";
 import styles from "./nav.bar.module.css";
 import { useTranslation } from "react-i18next";
 
-// Сопоставление значений енама с изображениями
 const avatars = {
   [ImagesTypes.defaultAvatar]: defaultAvatar,
   [ImagesTypes.avatar1]: avatar1,
@@ -158,7 +157,7 @@ const NavBar = () => {
       <div className={styles.rightSide}>
         <div className={styles.profileLink} onClick={handleMenuToggle}>
           <img
-            src={avatars[user.img] || defaultAvatar} // Использование значения енама для аватара
+            src={avatars[user.img] || defaultAvatar}
             alt="Profile"
             className={styles.profileImage}
           />
@@ -176,9 +175,9 @@ const NavBar = () => {
             <div className={styles.dropdownItem}>
               <SelectLang />
             </div>
-            <div className={styles.dropdownItem}>
+            {/* <div className={styles.dropdownItem}>
               <SelectTheme />
-            </div>
+            </div> */}
             <div className={styles.dropdownItem} onClick={handleLogOut}>
               {t("log_out")}
             </div>

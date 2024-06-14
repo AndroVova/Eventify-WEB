@@ -16,7 +16,7 @@ const EventFilters = ({
   styles,
   user,
   setShowAddEventModal,
-  onTagSelect // Добавляем новую пропс
+  onTagSelect
 }) => {
   const { t } = useTranslation();
   const categoryOptions = uniqueCategories.map(category => ({

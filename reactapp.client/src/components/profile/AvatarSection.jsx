@@ -17,7 +17,7 @@ const AvatarSection = ({ user, showAvatarOptions, handleAvatarClick, handleAvata
   return (
     <div className={styles.avatarSection}>
       <img
-        src={avatars[user.img] || defaultAvatar} // Получение изображения из массива по енаму
+        src={avatars[user.img] || defaultAvatar}
         alt="User Avatar"
         className={styles.profileImage}
         onClick={handleAvatarClick}
@@ -30,7 +30,7 @@ const AvatarSection = ({ user, showAvatarOptions, handleAvatarClick, handleAvata
               src={avatars[key]}
               alt={`Avatar ${index}`}
               className={styles.avatarOption}
-              onClick={() => handleAvatarSelect(parseInt(key, 10))} // Передача значения енама
+              onClick={() => handleAvatarSelect(parseInt(key, 10))}
             />
           ))}
         </div>

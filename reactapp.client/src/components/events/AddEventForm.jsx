@@ -118,7 +118,7 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
       !form.name ||
       !form.description ||
       form.type === 0 ||
-      !form.imgUpload || // Ensure imgUpload is a File object
+      !form.imgUpload || 
       form.ageLimit === 0 ||
       !form.date ||
       !form.link ||
@@ -136,7 +136,7 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
     formData.append("description", form.description);
     formData.append("type", form.type);
     formData.append("userId", form.userId);
-    formData.append("imgUpload", form.imgUpload); // Append the File object directly
+    formData.append("imgUpload", form.imgUpload);
     formData.append("ageLimit", form.ageLimit);
     formData.append("date", form.date);
     formData.append("link", form.link);
@@ -215,8 +215,8 @@ const AddEventForm = ({ onSubmit, url, initialForm = null }) => {
       <ImageUploader
         onImageChange={handleImageChange}
         styles={styles}
-        initialFile={initialFile} // Pass the initial file to ImageUploader
-        ref={imageUploaderRef} // Use ref
+        initialFile={initialFile} 
+        ref={imageUploaderRef} 
       />
       <Input
         label={t("Age Limit")}

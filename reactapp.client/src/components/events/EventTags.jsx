@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import CustomSelect from "../utils/CustomSelect/CustomSelect"; // Adjust the path as necessary
+import CustomSelect from "../utils/CustomSelect/CustomSelect";
 import { HexColorPicker } from "react-colorful";
 import styles from "./EventTags.module.css";
 import { useTranslation } from "react-i18next";
@@ -76,7 +76,7 @@ const EventTags = ({ isEditing, tags, onAddTag, onRemoveTag }) => {
   };
 
   const handleRemoveTag = (tagId, e) => {
-    e.stopPropagation(); // Останавливаем всплытие события
+    e.stopPropagation();
     onRemoveTag(tagId);
   };
 
