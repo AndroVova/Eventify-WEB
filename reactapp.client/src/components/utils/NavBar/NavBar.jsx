@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import ImagesTypes from "../../../models/imagesTypes";
 import { SelectLang } from "../SelectLang/SelectLang";
-import { SelectTheme } from "../SelectTheme/SelectTheme";
 import UserTypes from "../../../models/UserTypes";
 import avatar1 from "../../../resources/1.png";
 import avatar2 from "../../../resources/2.png";
@@ -175,9 +174,6 @@ const NavBar = () => {
             <div className={styles.dropdownItem}>
               <SelectLang />
             </div>
-            {/* <div className={styles.dropdownItem}>
-              <SelectTheme />
-            </div> */}
             <div className={styles.dropdownItem} onClick={handleLogOut}>
               {t("log_out")}
             </div>
