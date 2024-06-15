@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AvatarSection from "../components/profile/AvatarSection";
 import ImagesTypes from "../models/imagesTypes";
 import LikedEvents from "../components/profile/LikedEvents";
-import Preferences from "../components/profile/Preferences";
+// import Preferences from "../components/profile/Preferences";
 import UserDetails from "../components/profile/UserDetails";
 import axios from "axios";
 import styles from "./ProfilePage.module.css";
@@ -20,7 +20,7 @@ const ProfilePage = () => {
   const [name, setName] = useState(user.userName || t("Default Name"));
   const [login, setLogin] = useState(user.email);
   const [phone, setPhone] = useState(user.phoneNumber || "");
-  const [selectedCategories, setSelectedCategories] = useState(user.tags || []);
+  // const [selectedCategories, setSelectedCategories] = useState(user.tags || []);
   const [selectedAvatar, setSelectedAvatar] = useState(user.img ?? ImagesTypes.defaultAvatar);
   if (!user) return null;
 
@@ -43,44 +43,44 @@ const ProfilePage = () => {
       id: user.id 
     };
   
-    const tagsPayload = {
-      userId: user.id,
-      tags: selectedCategories.map((category) => ({
-        id: category.id,
-        name: category.name,
-        color: category.color,
-      })),
-    };
+    // const tagsPayload = {
+    //   userId: user.id,
+    //   tags: selectedCategories.map((category) => ({
+    //     id: category.id,
+    //     name: category.name,
+    //     color: category.color,
+    //   })),
+    // };
     
     try {
       await axios.post(
         "https://eventify-backend.azurewebsites.net/api/Profile/update-profile",
         updatedProfile
       );
+  
+      // await axios.post(
+      //   "https://eventify-backend.azurewebsites.net/api/Profile/add-tags",
+      //   tagsPayload
+      // );
+
       dispatch(changeProfile(updatedProfile));
-  
-      await axios.post(
-        "https://eventify-backend.azurewebsites.net/api/Profile/add-tags",
-        tagsPayload
-      );
-  
       setIsEditing(false);
     } catch (error) {
       console.error(t("Failed to update profile or add tags"), error);
     }
   };
 
-  const handleAddCategory = (selectedTag) => {
-    if (selectedTag && !selectedCategories.some(tag => tag.id === selectedTag.id)) {
-      setSelectedCategories([...selectedCategories, selectedTag]);
-    }
-  };
+  // const handleAddCategory = (selectedTag) => {
+  //   if (selectedTag && !selectedCategories.some(tag => tag.id === selectedTag.id)) {
+  //     setSelectedCategories([...selectedCategories, selectedTag]);
+  //   }
+  // };
 
-  const handleRemoveCategory = (tagId) => {
-    setSelectedCategories(selectedCategories.filter(tag => tag.id !== tagId));
-  };
+  // const handleRemoveCategory = (tagId) => {
+  //   setSelectedCategories(selectedCategories.filter(tag => tag.id !== tagId));
+  // };
 
-  const likedEvents = user.likedEvents;
+  const likedEvents = user.likedEvents; //TODO: maybe bug with events
 
   return (
     <div className={styles.profileContainer}>
@@ -113,12 +113,12 @@ const ProfilePage = () => {
         </button>
       )}
       <div className={styles.settings}>
-        <Preferences
+        {/* <Preferences
           isEditing={isEditing}
           selectedCategories={selectedCategories}
           handleAddCategory={handleAddCategory}
           handleRemoveCategory={handleRemoveCategory}
-        />
+        /> */}
         <LikedEvents events={likedEvents} />
       </div>
       
