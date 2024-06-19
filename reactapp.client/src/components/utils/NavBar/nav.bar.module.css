@@ -11,10 +11,24 @@
   align-items: center;
 }
 
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: var(--main-light-background-color);
+  cursor: pointer;
+  margin-left: 10px;
+}
+
 .centerLinks {
   display: flex;
   align-items: center;
   column-gap: 30px;
+}
+
+.centerLinks.showMenu {
+  display: flex;
 }
 
 .navLinkContainer {
@@ -90,10 +104,82 @@
   color: var(--main-color);
   cursor: pointer;
   text-decoration: none;
-  
 }
 
 .dropdownItem:hover {
   background-color: var(--main-color);
   color: var(--main-light-background-color);
+}
+
+@media (max-width: 768px) {
+  .navContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .leftSide {
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .centerLinks {
+    flex-direction: column;
+    align-items: flex-start;
+    display: none;
+    width: 100%;
+  }
+
+  .centerLinks.showMenu {
+    display: flex;
+  }
+
+  .navLink {
+    font-size: 28px;
+    padding: 5px 0;
+  }
+
+  .navLink:hover, .active {
+    font-size: 32px;
+    padding: 0;
+  }
+
+  .rightSide {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .profileImage {
+    width: 50px;
+    height: 50px;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .navContainer {
+    padding: 5px;
+  }
+
+  .logo {
+    font-size: 36px;
+  }
+
+  .navLink {
+    font-size: 24px;
+  }
+
+  .navLink:hover, .active {
+    font-size: 28px;
+  }
+
+  .profileImage {
+    width: 40px;
+    height: 40px;
+  }
 }

@@ -34,27 +34,31 @@ const NavBar = () => {
   };
 
   const handleMenuToggle = () => {
-    setIsMenuOpen(!isMenuOpen);
-    setIsEventsMenuOpen(false);
-    setIsAdminMenuOpen(false);
+    setIsMenuOpen((prev) => !prev);
+    if (isMenuOpen) {
+      setIsEventsMenuOpen(false);
+      setIsAdminMenuOpen(false);
+    }
   };
 
   const handleEventsMenuToggle = () => {
-    setIsEventsMenuOpen(!isEventsMenuOpen);
-    setIsAdminMenuOpen(false);
-    setIsMenuOpen(false);
+    setIsEventsMenuOpen((prev) => !prev);
+    if (!isEventsMenuOpen) {
+      setIsAdminMenuOpen(false);
+    }
   };
 
   const handleAdminMenuToggle = () => {
-    setIsAdminMenuOpen(!isAdminMenuOpen);
-    setIsEventsMenuOpen(false);
-    setIsMenuOpen(false);
+    setIsAdminMenuOpen((prev) => !prev);
+    if (!isAdminMenuOpen) {
+      setIsEventsMenuOpen(false);
+    }
   };
 
-  const handleLinkCkick = () => {
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
     setIsAdminMenuOpen(false);
     setIsEventsMenuOpen(false);
-    setIsMenuOpen(false);
   };
 
   const isActive = (path) => location.pathname.includes(path);
@@ -62,20 +66,22 @@ const NavBar = () => {
   return (
     <nav className={styles.navContainer}>
       <div className={styles.leftSide}>
-        <Link to={"../map"} className={styles.logo}>
+        <Link to={"../map"} className={styles.logo} onClick={handleLinkClick}>
           Eventify
         </Link>
+        <button className={styles.hamburger} onClick={handleMenuToggle}>
+          ☰
+        </button>
       </div>
-      <div className={styles.centerLinks}>
+      <div className={`${styles.centerLinks} ${isMenuOpen ? styles.showMenu : ''}`}>
         <Link
           className={`${styles.navLink} ${isActive("map") ? styles.active : ""}`}
-          onClick={handleLinkCkick}
+          onClick={handleLinkClick}
           to={"../map"}
           replace={true}
         >
           {t("map")}
         </Link>
-
         <div className={styles.navLinkContainer}>
           <div
             className={`${styles.navLink} ${isActive("events") ? styles.active : ""}`}
@@ -89,7 +95,7 @@ const NavBar = () => {
                 className={styles.dropdownItem}
                 to={"../events"}
                 replace={true}
-                onClick={handleEventsMenuToggle}
+                onClick={handleLinkClick}
               >
                 {t("all_events")}
               </Link>
@@ -98,7 +104,7 @@ const NavBar = () => {
                   className={styles.dropdownItem}
                   to={"../events/my"}
                   replace={true}
-                  onClick={handleEventsMenuToggle}
+                  onClick={handleLinkClick}
                 >
                   {t("my_events")}
                 </Link>
@@ -108,7 +114,7 @@ const NavBar = () => {
         </div>
         <Link
           className={`${styles.navLink} ${isActive("chat") ? styles.active : ""}`}
-          onClick={handleLinkCkick}
+          onClick={handleLinkClick}
           to={"../chat"}
           replace={true}
         >
@@ -128,7 +134,7 @@ const NavBar = () => {
                   className={styles.dropdownItem}
                   to={"../admin/users"}
                   replace={true}
-                  onClick={handleAdminMenuToggle}
+                  onClick={handleLinkClick}
                 >
                   {t("admin_users")}
                 </Link>
@@ -136,7 +142,7 @@ const NavBar = () => {
                   className={styles.dropdownItem}
                   to={"../admin/tags"}
                   replace={true}
-                  onClick={handleAdminMenuToggle}
+                  onClick={handleLinkClick}
                 >
                   {t("admin_tags")}
                 </Link>
@@ -144,7 +150,7 @@ const NavBar = () => {
                   className={styles.dropdownItem}
                   to={"../admin/events"}
                   replace={true}
-                  onClick={handleAdminMenuToggle}
+                  onClick={handleLinkClick}
                 >
                   {t("admin_events")}
                 </Link>
@@ -167,7 +173,7 @@ const NavBar = () => {
               className={styles.dropdownItem}
               to={"../profile"}
               replace={true}
-              onClick={handleMenuToggle}
+              onClick={handleLinkClick}
             >
               {t("profile")}
             </Link>

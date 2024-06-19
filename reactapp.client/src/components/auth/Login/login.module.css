@@ -106,3 +106,46 @@
   background-color: #ffffff;
   z-index: 3;
 }
+
+@media (max-width: 768px) {
+  .loginContainer {
+    padding: 10px;
+  }
+
+  .loginCircle2 {
+    width: 600px;
+    height: 600px;
+  }
+
+  .loginCircle3 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .loginForm {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .loginLogo {
+    width: 80%;
+    font-size: 40px;
+    padding: 10px;
+  }
+
+  .loginInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .loginButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .loginLink {
+    font-size: 14px;
+  }
+}

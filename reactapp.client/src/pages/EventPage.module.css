@@ -46,7 +46,15 @@
 .eventsList {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  justify-content: space-around;
+}
+
+.eventsList .eventCard:nth-child(3n) {
+  margin-right: 0;
+}
+
+.eventsList .eventCard:nth-child(3n+1) {
+  margin-left: 0;
 }
 
 .eventCard {
@@ -58,6 +66,7 @@
   flex-direction: column;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
+  margin: 0 10px 20px;
 }
 
 .eventCard:hover {
@@ -376,4 +385,47 @@
 .selectOption.is-selected {
   background-color: #4caf50;
   color: white;
+}
+
+@media (max-width: 768px) {
+  .eventCard {
+    width: calc(50% - 20px); /* Две карточки в строке */
+    margin: 10px 10px 20px; /* Отступы */
+  }
+  
+  .eventsList .eventCard:nth-child(2n) {
+    margin-right: 0; /* Убираем правый отступ для каждой второй карточки */
+  }
+  
+  .eventsList .eventCard:nth-child(2n+1) {
+    margin-left: 0; /* Убираем левый отступ для первой карточки в каждой строке */
+  }
+}
+
+/* Адаптация для экранов шириной 480px и меньше */
+@media (max-width: 480px) {
+  .eventCard {
+    width: calc(100% - 20px); /* Одна карточка в строке */
+    margin: 10px 0 20px; /* Убираем горизонтальные отступы */
+  }
+  
+  .eventsList .eventCard {
+    margin-left: 0;
+    margin-right: 0; /* Убираем отступы */
+  }
+  
+  .searchInput {
+    width: 100%; /* Увеличиваем поле поиска на всю ширину */
+  }
+  
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .sortButton,
+  .filterButton {
+    width: 100%;
+    margin-bottom: 10px; /* Полная ширина и отступы для кнопок */
+  }
 }

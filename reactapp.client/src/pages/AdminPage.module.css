@@ -175,3 +175,98 @@
     transform: scale(1);
   }
 }
+
+@media (max-width: 768px) {
+  .adminPage {
+    padding: 10px;
+  }
+
+  .userTable {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .userTable th,
+  .userTable td {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .userImage {
+    width: 40px;
+    height: 40px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .actions button {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .userTable {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .userTable th,
+  .userTable td {
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  .userImage {
+    width: 30px;
+    height: 30px;
+  }
+
+  .searchInput {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .actions button {
+    width: 100%;
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .modalContent {
+    width: 90%;
+  }
+
+  .modalContent h2 {
+    font-size: 1.2rem;
+  }
+
+  .modalContent input[type="text"],
+  .modalContent input[type="email"],
+  .modalContent select {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .modalContent button {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .modalActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modalActions button {
+    width: 100%;
+  }
+}
