@@ -32,7 +32,6 @@ const avatars = {
   [ImagesTypes.avatar2]: avatar2,
   [ImagesTypes.avatar3]: avatar3,
 };
-
 const libraries = ["places", "marker"];
 
 const Map = ({
@@ -43,6 +42,7 @@ const Map = ({
   isModal = false,
   setEventsData,
   onMarkerPositionChange,
+  isCreateOrUpdate = false,
 }) => {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API,
@@ -98,18 +98,21 @@ const Map = ({
           map.setCenter({ lat, lng });
           map.setZoom(15);
 
-          const markerElement = document.createElement("div");
-          markerElement.className = styles["marker-icon"];
-          markerElement.innerHTML = `<img src=${defaultIcon} alt=${t(
-            "Event Location"
-          )} />`;
+          if(isCreateOrUpdate){
+            const markerElement = document.createElement("div");
+            markerElement.className = styles["marker-icon"];
+            markerElement.innerHTML = `<img src=${defaultIcon} alt=${t(
+              "Event Location"
+            )} />`;
 
-          new window.google.maps.marker.AdvancedMarkerElement({
-            position: { lat, lng },
-            map: map,
-            title: t("Event Location"),
-            content: markerElement,
-          });
+            new window.google.maps.marker.AdvancedMarkerElement({
+              position: { lat, lng },
+              map: map,
+              title: t("Event Location"),
+              content: markerElement,
+            });
+          }
+          
 
           if (onMarkerPositionChange) {
             onMarkerPositionChange({ lat, lng });
@@ -219,20 +222,20 @@ const Map = ({
       if (window.marker) {
         window.marker.setMap(null);
       }
-
-      const markerElement = document.createElement("div");
-      markerElement.className = styles["marker-icon"];
-      markerElement.innerHTML = `<img src="${defaultIcon}" alt=${t(
-        "Event Location"
-      )} />`;
-
-      window.marker = new window.google.maps.marker.AdvancedMarkerElement({
-        position: { lat, lng },
-        map: map,
-        title: t("Event Location"),
-        content: markerElement,
-      });
-
+      if(isCreateOrUpdate){
+        const markerElement = document.createElement("div");
+        markerElement.className = styles["marker-icon"];
+        markerElement.innerHTML = `<img src="${defaultIcon}" alt=${t(
+          "Event Location"
+        )} />`;
+  
+        window.marker = new window.google.maps.marker.AdvancedMarkerElement({
+          position: { lat, lng },
+          map: map,
+          title: t("Event Location"),
+          content: markerElement,
+        });
+      }
       if (onMarkerPositionChange) {
         onMarkerPositionChange({ lat, lng });
       }

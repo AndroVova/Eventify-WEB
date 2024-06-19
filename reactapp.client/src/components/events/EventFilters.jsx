@@ -16,7 +16,8 @@ const EventFilters = ({
   styles,
   user,
   setShowAddEventModal,
-  onTagSelect
+  onTagSelect,
+  showAddEventModal
 }) => {
   const { t } = useTranslation();
   const categoryOptions = uniqueCategories.map(category => ({
@@ -32,13 +33,13 @@ const EventFilters = ({
   const handleCategoryChange = selectedOption => {
     onCategoryChange({
       target: {
-        value: selectedOption ? selectedOption.value : ''
+        value: selectedOption ? selectedOption.value : 'All'
       }
     });
   };
 
   const handleTagChange = selectedOption => {
-    const tagName = selectedOption ? selectedOption.value : '';
+    const tagName = selectedOption ? selectedOption.value : 'All';
     onTagChange({
       target: {
         value: tagName
@@ -51,6 +52,8 @@ const EventFilters = ({
 
   const selectedCategoryOption = categoryOptions.find(option => option.value === selectedCategory);
   const selectedTagOption = tagOptions.find(option => option.value === selectedTag);
+
+  if (showAddEventModal) return null;
 
   return (
     <div className={styles.controls}>
@@ -65,6 +68,7 @@ const EventFilters = ({
             options={categoryOptions}
             value={selectedCategoryOption}
             onChange={handleCategoryChange}
+            isFilter={true}
           />
         </div>
       </div>
@@ -76,6 +80,7 @@ const EventFilters = ({
             options={tagOptions}
             value={selectedTagOption}
             onChange={handleTagChange}
+            isFilter={true}
           />
         </div>
       </div>

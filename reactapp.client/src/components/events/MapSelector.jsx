@@ -12,6 +12,7 @@ const MapSelector = ({ onMapClick, styles, event=null }) => {
         <Map
           markersData={event ? [event] : []}
           onMarkerPositionChange={onMapClick}
+          isCreateOrUpdate={true}
         />
       </div>
     </label>

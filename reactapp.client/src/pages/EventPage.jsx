@@ -181,6 +181,7 @@ const EventPage = () => {
         user={user}
         setShowAddEventModal={setShowAddEventModal}
         onTagSelect={fetchEventsByTag}
+        showAddEventModal={showAddEventModal} 
       />
       {showAddEventModal && (
         <Modal
@@ -192,6 +193,7 @@ const EventPage = () => {
               width: "50%",
               margin: "0 auto",
               borderRadius: "10px",
+              zIndex:"100",
             },
           }}
         >
