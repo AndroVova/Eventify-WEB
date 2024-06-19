@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { useSelector } from "react-redux";
-
 const LocationInfo = ({ lat, lng }) => {
   const [locationInfo, setLocationInfo] = useState("");
-  const user = useSelector((state) => state.auth.user);
 
   const fetchLocationInfo = useCallback(async () => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API;
@@ -37,7 +34,7 @@ const LocationInfo = ({ lat, lng }) => {
       console.error("Request failed:", error);
       setLocationInfo("Request failed");
     }
-  }, [lat, lng, user.settings.language ]);
+  }, [lat, lng ]);
 
   useEffect(() => {
     fetchLocationInfo();
