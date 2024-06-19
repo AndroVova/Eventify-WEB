@@ -20,10 +20,15 @@ const EventFilters = ({
   showAddEventModal
 }) => {
   const { t } = useTranslation();
-  const categoryOptions = uniqueCategories.map(category => ({
-    value: category,
-    label: category
-  }));
+  const categoryOptions = uniqueCategories.map(category => {
+    if (typeof category === 'string') {
+      return { value: category, label: category };
+    }
+    return {
+      value: category.value,
+      label: t(`EventTypes.${category.value}`) || category.value
+    };
+  });
 
   const tagOptions = uniqueTags.map(tag => ({
     value: tag,
@@ -33,13 +38,13 @@ const EventFilters = ({
   const handleCategoryChange = selectedOption => {
     onCategoryChange({
       target: {
-        value: selectedOption ? selectedOption.value : 'All'
+        value: selectedOption ? selectedOption.value : t("All")
       }
     });
   };
-
+  
   const handleTagChange = selectedOption => {
-    const tagName = selectedOption ? selectedOption.value : 'All';
+    const tagName = selectedOption ? selectedOption.value : t("All");
     onTagChange({
       target: {
         value: tagName

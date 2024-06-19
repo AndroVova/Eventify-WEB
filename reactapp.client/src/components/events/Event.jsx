@@ -17,6 +17,7 @@ const Event = ({ event, setEventsData }) => {
   const [disliked, setDisliked] = useState(event.reaction === 1);
   const [eventImage, setEventImage] = useState(event.img);
   const location = event.locations[event.locations.length - 1];
+  const translatedEventType = t(`EventTypes.${Object.keys(EventTypes).find(key => EventTypes[key] === event.type)}`) || '';
 
   useEffect(() => {
     const fetchEventImage = async () => {
@@ -168,9 +169,7 @@ const Event = ({ event, setEventsData }) => {
           <div>
             <h2>{event.name}</h2>
             <p className={styles.eventCategory}>
-              {Object.keys(EventTypes).find(
-                (key) => EventTypes[key] === event.type
-              )}
+              {translatedEventType}
             </p>
             <p>{eventDate}</p>
             <LocationInfo lat={location.pointY} lng={location.pointX} />

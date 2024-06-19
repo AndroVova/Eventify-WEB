@@ -116,5 +116,16 @@
   "Login": "Login",
   "Phone": "Phone",
   "Role": "Role",
-  "Language": "Language"
+  "Language": "Language",
+  "All": "All",
+  "EventTypes": {
+    "Music": "Music",
+    "Art": "Art",
+    "Theater": "Theater",
+    "Carnival": "Carnival",
+    "Technology": "Technology",
+    "Concert": "Concert",
+    "Sport": "Sport",
+    "Food": "Food"
+  }
 }

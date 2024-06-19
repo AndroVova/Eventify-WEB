@@ -41,8 +41,10 @@ const EventCard = ({ event, onClick, styles }) => {
     event.tags = [{ id: "0", name: t("Default Tag"), color: "#ffffff" }];
   }
 
+  const localization = localStorage.getItem("LANG_KEY") 
+
   const eventDate = new Date(event.date)
-    .toLocaleString("en-GB", {
+    .toLocaleString(localization === null ? 'en' : localization, {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -51,6 +53,11 @@ const EventCard = ({ event, onClick, styles }) => {
       hour12: false,
     })
     .replace(",", "");
+
+    const getTranslatedEventType = (typeId) => {
+      const typeKey = Object.keys(EventTypes).find(key => EventTypes[key] === typeId);
+      return t(`EventTypes.${typeKey}`);
+    };
 
   return (
     <div className={styles.eventCard} onClick={() => onClick(event)}>
@@ -61,9 +68,7 @@ const EventCard = ({ event, onClick, styles }) => {
       />
       <div className={styles.eventDetails}>
         <p className={styles.eventCategory}>
-          {Object.keys(EventTypes).find(
-            (key) => EventTypes[key] === event.type
-          )}
+          {getTranslatedEventType(event.type)}
         </p>
         <h2 className={styles.eventTitle}>{event.name}</h2>
         <p className={styles.eventDate}>{eventDate}</p>

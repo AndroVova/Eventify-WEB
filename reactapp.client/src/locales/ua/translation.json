@@ -116,5 +116,16 @@
   "Login": "Логін",
   "Phone": "Телефон",
   "Role": "Роль",
-  "Language": "Мова"
+  "Language": "Мова",
+  "All": "Усі",
+  "EventTypes": {
+    "Music": "Музика",
+    "Art": "Мистецтво",
+    "Theater": "Театр",
+    "Carnival": "Карнавал",
+    "Technology": "Технології",
+    "Concert": "Концерт",
+    "Sport": "Спорт",
+    "Food": "Їжа"
+  }
 }

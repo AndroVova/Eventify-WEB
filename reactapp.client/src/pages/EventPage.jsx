@@ -14,13 +14,13 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 const EventPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const user = useSelector((state) => state.auth.user);
   const [eventsData, setEventsData] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedTag, setSelectedTag] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState(t("All"));
+  const [selectedTag, setSelectedTag] = useState(t("All"));
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
@@ -50,7 +50,7 @@ const EventPage = () => {
       sortBy: "date",
       sortAscending: sortOrder === "asc",
       types:
-        selectedCategory !== "All"
+        selectedCategory !== t("All")
           ? [EventTypes[selectedCategory]]
           : Object.values(EventTypes),
       userid: user.id,
@@ -90,11 +90,11 @@ const EventPage = () => {
   ]);
 
   const fetchEventsByTag = async (tagName) => {
-    if (!tagName || tagName === "All") {
+    if (!tagName || tagName === t("All")) {
       await fetchEvents();
       return;
     }
-  
+
     try {
       const response = await axios.get(
         `https://eventify-backend.azurewebsites.net/api/Tag/get-by-name?name=${tagName}`
@@ -103,7 +103,7 @@ const EventPage = () => {
         throw new Error(t("Failed to fetch tag details"));
       }
       const tagData = response.data;
-  
+
       await fetchEvents([{
         name: tagData.name,
         color: tagData.color,
@@ -119,8 +119,23 @@ const EventPage = () => {
     fetchTags();
   }, [fetchEvents, fetchTags]);
 
-  const uniqueCategories = ["All", ...Object.keys(EventTypes)];
-  const uniqueTags = ["All", ...new Set(availableTags.map((tag) => tag.name))];
+  useEffect(() => {
+    const updateTranslation = () => {
+      setSelectedCategory(t("All"));
+      setSelectedTag(t("All"));
+    };
+    i18n.on('languageChanged', updateTranslation);
+    return () => {
+      i18n.off('languageChanged', updateTranslation);
+    };
+  }, [t, i18n]);
+
+  const uniqueCategories = [t("All"), ...Object.keys(EventTypes).map(key => ({
+    value: key,
+    label: t(`EventTypes.${key}`)
+  }))];
+
+  const uniqueTags = [t("All"), ...new Set(availableTags.map((tag) => tag.name))];
 
   const handleSortByDate = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");

@@ -5,7 +5,7 @@ const LocationInfo = ({ lat, lng }) => {
 
   const fetchLocationInfo = useCallback(async () => {
     const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API;
-    const localization = localStorage.getItem("LANG_KEY") === "en" ? "en" : "uk" 
+    const localization = localStorage.getItem("LANG_KEY") === "ua" ? "uk" : "en"
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}&language=${localization}`;
 
     try {
